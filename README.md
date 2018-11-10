@@ -1,4 +1,4 @@
-# Who is on my Netowrk?
+# Who is on my Network?
 This command line tool allows you to keep records of who is on your network and when. Only Windows is supported (I recommend using nmap for Linux) and all data is saved in a sqlite database.
 
 ## How Does This Work?
