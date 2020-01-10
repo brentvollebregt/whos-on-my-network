@@ -2,7 +2,7 @@
 This command line tool allows you to keep records of who is on your network and when. Only Windows is supported (I recommend using nmap for Linux) and all data is saved in a sqlite database.
 
 ## How Does This Work?
-This works by trying to ping all hosts using a given network id (default is 192.168.0.1/24). When a host responds, it mac and hostname are obtained and an entry is written to an sqlite database with a timestamp.
+This works by trying to ping all hosts using a given network id (default is 192.168.1.0/24). When a host responds, it mac and hostname are obtained and an entry is written to an sqlite database with a timestamp.
 
 ## Command Line Arguments
 ### watch
