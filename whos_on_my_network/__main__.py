@@ -26,7 +26,7 @@ def start(host, port):
 @click.option('-a', '--amount', default=int, help="Amount of times to scan network. Default is no limit.")
 def watch(refresh_time: int, network_id: str, amount: Optional[int]):
     """ Watch and record who is on a network periodically """
-    print("Scanning. Press Ctrl+C to stop.")
+    print("Scanning... Press Ctrl+C to stop.")
     try:
         service.repeatedly_scan_network(network_id, refresh_time, amount)
     except KeyboardInterrupt:
@@ -37,6 +37,7 @@ def watch(refresh_time: int, network_id: str, amount: Optional[int]):
 @click.option('-n', '--network-id', metavar='view', default='192.168.1.0/24', help="Network id to scan. Default is 192.168.1.0/24.")
 def current(network_id: str):
     """ Look at who is currently on the network """
+    print("Scanning...")
     scan_id = service.scan_network(network_id)
     devices = service.get_devices_from_scan(scan_id)
 
