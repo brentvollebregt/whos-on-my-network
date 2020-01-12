@@ -1,3 +1,4 @@
+from datetime import datetime
 import socket
 import time
 from typing import Optional, List
@@ -7,7 +8,7 @@ from scapy.all import arping, ARP, Ether
 from . import models
 
 
-def scan_network(network_id: str) -> int:
+def scan_network(network_id: str, verbose: bool = False) -> int:
     """ Scan the provided network id once """
     scan = models.Scan.create(
         network_id=network_id
@@ -25,15 +26,24 @@ def scan_network(network_id: str) -> int:
             hostname=hostname,
         )
 
+        if verbose:
+            print(f'{mac_address} : {ip_address} : {hostname}')
+
     return scan.id
 
 
-def repeatedly_scan_network(network_id: str, delay: int, amount: Optional[int]):
+def repeatedly_scan_network(network_id: str, delay: int, amount: Optional[int], verbose: bool = False):
     """ Repeatedly scan the provided network """
     scan_count = 0
 
+    if amount == 0:
+        return
+
     while True:
-        scan_network(network_id)
+        if verbose:
+            print(f'Scan at {datetime.now().strftime("%d-%m-%y %H:%M:%S")}')
+
+        scan_network(network_id, verbose)
         scan_count += 1
 
         if amount is None or scan_count < amount:

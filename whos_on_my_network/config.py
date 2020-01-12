@@ -7,3 +7,6 @@ DATABASE_SQLITE_FILE_LOCATION = os.getenv('DATABASE_SQLITE_FILE_LOCATION', Path(
 # Web interface
 HOST = os.getenv('HOST', '0.0.0.0')
 PORT = int(os.getenv('PORT', 8080))
+
+# General Application
+VERBOSE = False
