@@ -1,5 +1,4 @@
-import datetime
-
+import arrow
 import peewee
 
 from . import config
@@ -21,7 +20,7 @@ class BaseModel(peewee.Model):
 class Scan(BaseModel):
     """ Scans done on a network """
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
-    scan_time = peewee.DateTimeField(default=datetime.datetime.now)
+    scan_time = peewee.DateTimeField(default=arrow.now().datetime)
     network_id = peewee.TextField()
 
 
@@ -34,5 +33,12 @@ class Discovery(BaseModel):
     hostname = peewee.TextField(null=True)
 
 
+class NamedDevice(BaseModel):
+    id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
+    mac_address = peewee.TextField(unique=True)
+    name = peewee.TextField()
+    note = peewee.TextField()
+
+
 database.connect()
-database.create_tables([Scan, Discovery])
+database.create_tables([Scan, Discovery, NamedDevice])
