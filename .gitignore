@@ -2,3 +2,4 @@
 *.sqlite
 __pycache__/
 .vscode/
+whos_on_my_network/static
