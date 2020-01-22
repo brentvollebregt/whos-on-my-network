@@ -1,19 +1,34 @@
-import React, { useEffect } from 'react';
-import { Col, Container, Row } from 'react-bootstrap';
+import React, { useEffect, useState } from 'react';
+import { Col, Container, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { getScanById } from '../../api';
+import { Interval, DateTime } from 'luxon';
+
+const dateRanges = ["1 Day", "1 Week", "1 Month"];
+const dateRangeToInterval: { [key: string]: Interval } = {
+    "1 Day": Interval.fromDateTimes(DateTime.local().minus({days: 7}), DateTime.local()),
+    "1 Week": Interval.fromDateTimes(DateTime.local().minus({days: 7}), DateTime.local()),
+    "1 Month": Interval.fromDateTimes(DateTime.local().minus({days: 7}), DateTime.local()),
+}
 
 const Home: React.FunctionComponent = () => {
+    const [selectedDateRange, setSelectedDateRange] = useState("1 Week");
 
     useEffect(() => {
         getScanById(1).then(d => console.log(d))
-    })
+    });
+
+    const dateRangeClick = (dateRange: string) => () => setSelectedDateRange(dateRange);
 
     return <Container>
         <Row className="justify-content-md-center">
             <Col className="col-md-10 col-lg-8">
                 <h1 className="text-center">Home: Temporary</h1>
-                <div style={{ background: 'grey', textAlign: 'left' }}>Date range selection buttons: 1 day, 1 week, 1 month</div>
-                <div style={{ background: 'lightgrey', marginTop: 10, height: 200 }}>Some sort of chart showing device discoveries</div>
+                <div style={{ textAlign: 'right' }}>
+                    <ButtonGroup aria-label="Basic example">
+                        {dateRanges.map(r => <Button variant="primary" active={r === selectedDateRange} onClick={dateRangeClick(r)}>{r}</Button>)}
+                    </ButtonGroup>
+                </div>
+                <div style={{ background: 'lightgrey', marginTop: 5, height: 200 }}>Some sort of chart showing device discoveries</div>
             </Col>
         </Row>
     </Container>;
