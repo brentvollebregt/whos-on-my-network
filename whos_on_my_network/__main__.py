@@ -40,12 +40,12 @@ def current(network_id: str):
     """ Look at who is currently on the network """
     print("Scanning...")
     scan_id = service.scan_network(network_id)
-    devices = service.get_devices_from_scan(scan_id)
+    discoveries = service.get_discoveries_from_scan(scan_id)
 
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
     print(f'| {"MAC Address":^17} | {"IP Address":^15} | {"Hostname":^30} |')
-    for device in devices:
-        print(f'| {device.mac_address:<17} | {device.ip_address:^15} | {device.hostname:^30} |')
+    for discovery in discoveries:
+        print(f'| {discovery.device.mac_address:<17} | {discovery.ip_address:^15} | {discovery.hostname:^30} |')
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
 
 
