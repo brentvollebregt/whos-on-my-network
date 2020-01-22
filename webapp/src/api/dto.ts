@@ -11,18 +11,20 @@ export interface Scan {
     id: number;
     scan_time: DateTime;
     network_id: string;
-    devices: DiscoveredDevice[];
+    discovered_devices: Discovery[];
 }
 
-export interface DiscoveredDevice {
-    scan_id: number;
+export interface Discovery {
     mac_address: string;
     ip_address: string;
     hostname: string;
 }
 
-export interface NamedDevice {
+export interface Device {
+    id: number;
     mac_address: string;
     name: string;
     note: string;
+    firstSeenDate: DateTime;
+    lastSeenDate: DateTime;
 }

@@ -13,7 +13,7 @@ def root():
     return app.send_static_file('index.html')
 
 
-@app.route("/scan/<int:scan_id>", methods=["GET"], endpoint='get_scan_by_id')
+@app.route("/api/scan/<int:scan_id>", methods=["GET"], endpoint='get_scan_by_id')
 def get_scan_by_id(scan_id: int):
     """ Get a scan by id """
     scan = service.get_scan_by_id(scan_id)
@@ -21,7 +21,7 @@ def get_scan_by_id(scan_id: int):
     return jsonify(scan.json())
 
 
-@app.route("/scan", methods=["POST"], endpoint='get_scans_by_filter')
+@app.route("/api/scan", methods=["POST"], endpoint='get_scans_by_filter')
 def get_scans_by_filter():
     """ Get scan summaries in between two dates (not required) """
     start_date = utils.iso_string_to_datetime(request.json['start_date']) if 'start_date' in request.json else None
@@ -33,7 +33,7 @@ def get_scans_by_filter():
     return jsonify([s.json() for s in scan_summaries])
 
 
-@app.route("/device/<mac_address>", methods=["GET"], endpoint='get_named_device')
+@app.route("/api/device/<mac_address>", methods=["GET"], endpoint='get_named_device')
 def get_named_device(mac_address: str):
     """ Get details about a named device """
     device = service.get_device(mac_address)
@@ -41,7 +41,7 @@ def get_named_device(mac_address: str):
     return jsonify(device.json())
 
 
-@app.route("/device/<mac_address>", methods=["POST"], endpoint='update_named_device')
+@app.route("/api/device/<mac_address>", methods=["POST"], endpoint='update_named_device')
 def update_named_device(mac_address: str):
     """ Update a named device """
     name = request.json['name'] if 'name' in request.json else ''
@@ -52,7 +52,7 @@ def update_named_device(mac_address: str):
     return jsonify(device.json())
 
 
-@app.route("/device/<mac_address>", methods=["DELETE"], endpoint='delete_named_device')
+@app.route("/api/device/<mac_address>", methods=["DELETE"], endpoint='delete_named_device')
 def delete_named_device(mac_address: str):
     """ Delete a named device """
     service.delete_device(mac_address)

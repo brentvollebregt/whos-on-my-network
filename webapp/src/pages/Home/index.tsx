@@ -1,7 +1,13 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import { getScanById } from '../../api';
 
 const Home: React.FunctionComponent = () => {
+
+    useEffect(() => {
+        getScanById(1).then(d => console.log(d))
+    })
+
     return <Container>
         <Row className="justify-content-md-center">
             <Col className="col-md-10 col-lg-8">
