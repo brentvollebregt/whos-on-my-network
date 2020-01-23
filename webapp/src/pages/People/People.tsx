@@ -1,7 +1,11 @@
 import React from 'react';
 import { Col, Container, Row } from 'react-bootstrap';
+import Constants from '../../constants';
+import { useTitle } from 'hookrouter';
 
 const People: React.FunctionComponent = () => {
+    useTitle(`People - ${Constants.title}`);
+
     return <Container>
         <Row className="justify-content-md-center">
             <Col className="col-md-10 col-lg-8">

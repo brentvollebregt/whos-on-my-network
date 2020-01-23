@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row, Button, ButtonGroup } from 'react-bootstrap';
 import { getScanById } from '../../api';
+import Constants from '../../constants';
 import { Interval, DateTime } from 'luxon';
+import { useTitle } from 'hookrouter';
 
 const dateRanges = ["1 Day", "1 Week", "1 Month"];
 const dateRangeToInterval: { [key: string]: Interval } = {
@@ -11,6 +13,7 @@ const dateRangeToInterval: { [key: string]: Interval } = {
 }
 
 const Home: React.FunctionComponent = () => {
+    useTitle(`Home - ${Constants.title}`);
     const [selectedDateRange, setSelectedDateRange] = useState("1 Week");
 
     useEffect(() => {
