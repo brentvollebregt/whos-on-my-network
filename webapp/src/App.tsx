@@ -9,16 +9,20 @@ import NotFound from "./pages/NotFound";
 import People from "./pages/People";
 import Person from "./pages/Person";
 import { useRoutes, useRedirect } from "hookrouter";
+import { isInt } from "./logic/utils";
 
 const App: React.FC = () => {
   const routes = {
     "/": () => <Home />,
     "/scans": () => <Scans />,
-    "/scans/:id": ({ id }: any) => <Scan id={id} />,
+    "/scans/:id": ({ id }: any) =>
+      isInt(id) ? <Scan id={parseInt(id)} /> : <NotFound />,
     "/devices": () => <Devices />,
-    "/devices/:id": ({ id }: any) => <Device id={id} />,
+    "/devices/:id": ({ id }: any) =>
+      isInt(id) ? <Device id={parseInt(id)} /> : <NotFound />,
     "/people": () => <People />,
-    "/people/:id": ({ id }: any) => <Person id={id} />
+    "/people/:id": ({ id }: any) =>
+      isInt(id) ? <Person id={parseInt(id)} /> : <NotFound />
   };
   const routeResult = useRoutes(routes);
   useRedirect("/about/", "/about");
