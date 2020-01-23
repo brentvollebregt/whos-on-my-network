@@ -4,6 +4,7 @@ import Scans from './pages/Scans';
 import Devices from './pages/Devices';
 import Navigation from './components/Navigation';
 import NotFound from './pages/NotFound';
+import People from './pages/People';
 import { useRoutes, useRedirect } from 'hookrouter';
 
 const App: React.FC = () => {
@@ -11,6 +12,7 @@ const App: React.FC = () => {
       '/': () => <Home />,
       '/scans': () => <Scans />,
       '/devices': () => <Devices />,
+      '/people': () => <People />,
   };
   const routeResult = useRoutes(routes);
   useRedirect('/about/', '/about');

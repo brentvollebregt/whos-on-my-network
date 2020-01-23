@@ -6,6 +6,7 @@ const navbarLinks: { [key: string]: string } = {
     '/': 'Home',
     '/scans': 'Scans',
     '/devices': 'Devices',
+    '/people': 'People',
 };
 
 const Navigation: React.FunctionComponent = () => {
