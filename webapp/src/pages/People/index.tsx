@@ -1,3 +1,3 @@
-import People from './People';
+import People from "./People";
 
 export default People;

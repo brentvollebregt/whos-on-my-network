@@ -1,3 +1,3 @@
-import Scans from './Scans';
+import Scans from "./Scans";
 
 export default Scans;

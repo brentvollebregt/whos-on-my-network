@@ -1,28 +1,28 @@
-import React from 'react';
-import Home from './pages/Home';
-import Scans from './pages/Scans';
-import Devices from './pages/Devices';
-import Navigation from './components/Navigation';
-import NotFound from './pages/NotFound';
-import People from './pages/People';
-import { useRoutes, useRedirect } from 'hookrouter';
+import React from "react";
+import Home from "./pages/Home";
+import Scans from "./pages/Scans";
+import Devices from "./pages/Devices";
+import Navigation from "./components/Navigation";
+import NotFound from "./pages/NotFound";
+import People from "./pages/People";
+import { useRoutes, useRedirect } from "hookrouter";
 
 const App: React.FC = () => {
   const routes = {
-      '/': () => <Home />,
-      '/scans': () => <Scans />,
-      '/devices': () => <Devices />,
-      '/people': () => <People />,
+    "/": () => <Home />,
+    "/scans": () => <Scans />,
+    "/devices": () => <Devices />,
+    "/people": () => <People />
   };
   const routeResult = useRoutes(routes);
-  useRedirect('/about/', '/about');
+  useRedirect("/about/", "/about");
 
-  return <>
+  return (
+    <>
       <Navigation />
-      <div className="my-3">
-          {routeResult || <NotFound />}
-      </div>
-  </>;
-}
+      <div className="my-3">{routeResult || <NotFound />}</div>
+    </>
+  );
+};
 
 export default App;
