@@ -5,6 +5,53 @@ from . import models
 from . import utils
 
 
+# TODO
+# - Scan
+#   - Scan time
+#   - Network id
+#   - Discovered DeviceSummaries
+
+# - ScanSummary (Scans)
+#   - Scan time
+#   - Network id
+#   - # Devices discovered
+#   - # People seen
+#   - # Primary devices seen
+
+# - Device
+#   - MAC address
+#   - Name
+#   - Matched PersonSummary
+#   - Is a primary device
+#   - First seen
+#   - Last seen
+#   - Note
+#   - Found in recent scans (max 10 : ScanSummary)
+
+# - DeviceSummary (Devices)
+#   - MAC address
+#   - Name
+#   - Matched PersonSummary (to get first name)
+#   - Is a primary device
+#   - First seen
+#   - Last seen
+
+# - Person
+#   - Name
+#   - All DeviceSummaries
+#   - First seen
+#   - Last seen
+#   - Note
+#   - Found in recent scans (max 10 : ScanSummary)
+
+# - PersonSummary (People)
+#   - Name
+#   - # Device Count
+#   - # Primary device count
+#   - First seen
+#   - Last seen
+
+
 class ToJsonSupport:
     def json(self) -> dict:
         return self.__dict__
