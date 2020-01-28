@@ -11,18 +11,20 @@ import Person from "./pages/Person";
 import { useRoutes, useRedirect } from "hookrouter";
 import { isInt } from "./logic/utils";
 
+const urlIdValidator = (
+  id: string,
+  Component: React.FunctionComponent<{ id: number }>
+) => (isInt(id) ? <Component id={parseInt(id)} /> : <NotFound />);
+
 const App: React.FC = () => {
   const routes = {
     "/": () => <Home />,
     "/scans": () => <Scans />,
-    "/scans/:id": ({ id }: any) =>
-      isInt(id) ? <Scan id={parseInt(id)} /> : <NotFound />,
+    "/scans/:id": ({ id }: any) => urlIdValidator(id, Scan),
     "/devices": () => <Devices />,
-    "/devices/:id": ({ id }: any) =>
-      isInt(id) ? <Device id={parseInt(id)} /> : <NotFound />,
+    "/devices/:id": ({ id }: any) => urlIdValidator(id, Device),
     "/people": () => <People />,
-    "/people/:id": ({ id }: any) =>
-      isInt(id) ? <Person id={parseInt(id)} /> : <NotFound />
+    "/people/:id": ({ id }: any) => urlIdValidator(id, Person)
   };
   const routeResult = useRoutes(routes);
   useRedirect("/about/", "/about");
