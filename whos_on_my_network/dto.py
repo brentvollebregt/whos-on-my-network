@@ -6,10 +6,16 @@ from . import utils
 
 
 # TODO
+# - Discovery
+#   - IP address
+#   - Hostname
+#   - DeviceSummary
+#   - ScanSummary
+
 # - Scan
 #   - Scan time
 #   - Network id
-#   - Discovered DeviceSummaries
+#   - Discovery[]
 
 # - ScanSummary (Scans)
 #   - Scan time
@@ -26,7 +32,7 @@ from . import utils
 #   - First seen
 #   - Last seen
 #   - Note
-#   - Found in recent scans (max 10 : ScanSummary)
+#   - Found in recent scans (max 10 : Discovery[])
 
 # - DeviceSummary (Devices)
 #   - MAC address

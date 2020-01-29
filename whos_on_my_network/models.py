@@ -24,11 +24,20 @@ class Scan(BaseModel):
     network_id = peewee.TextField()
 
 
+class Person(BaseModel):
+    """ A person that owns devices """
+    id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
+    name = peewee.TextField(default='')
+    note = peewee.TextField(default='')
+
+
 class Device(BaseModel):
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
     mac_address = peewee.TextField(unique=True)
     name = peewee.TextField(default='')
     note = peewee.TextField(default='')
+    owner = peewee.ForeignKeyField(Person, null=True, default=None)
+    is_primary = peewee.BooleanField(default=False)
 
 
 class Discovery(BaseModel):
@@ -41,4 +50,4 @@ class Discovery(BaseModel):
 
 
 database.connect()
-database.create_tables([Scan, Discovery, Device])
+database.create_tables([Scan, Person, Device, Discovery])
