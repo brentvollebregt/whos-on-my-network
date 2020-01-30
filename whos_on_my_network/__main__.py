@@ -2,8 +2,8 @@ import click
 from typing import Optional
 
 from . import config
-from . import service
 from .api import app
+from .service import scanning as scanning_service
 
 
 @click.group()
@@ -29,7 +29,7 @@ def watch(refresh_time: int, network_id: str, amount: Optional[int], verbose: bo
     """ Watch and record who is on a network periodically """
     print("Scanning... Press Ctrl+C to stop.")
     try:
-        service.repeatedly_scan_network(network_id, refresh_time, amount, verbose)
+        scanning_service.repeatedly_scan_network(network_id, refresh_time, amount, verbose)
     except KeyboardInterrupt:
         print("Stopped")
 
@@ -39,8 +39,8 @@ def watch(refresh_time: int, network_id: str, amount: Optional[int], verbose: bo
 def current(network_id: str):
     """ Look at who is currently on the network """
     print("Scanning...")
-    scan_id = service.scan_network(network_id)
-    discoveries = service.get_discoveries_from_scan(scan_id)
+    scan_id = scanning_service.scan_network(network_id)
+    discoveries = scanning_service.get_discoveries_from_scan(scan_id)
 
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
     print(f'| {"MAC Address":^17} | {"IP Address":^15} | {"Hostname":^30} |')

@@ -1,6 +1,38 @@
 import Config from "../config";
 import { DateTime } from "luxon";
-import { ScanSummary, Device, Scan } from "./dto";
+import {
+  ScanSummary,
+  Device,
+  Scan,
+  DeviceSummary,
+  PersonSummary,
+  Person
+} from "./dto";
+
+export function getScansByFilter(
+  startDate?: DateTime,
+  endDate?: DateTime
+): Promise<ScanSummary[]> {
+  return fetch(`${Config.api.root}/api/scan`, {
+    method: "POST",
+    body: JSON.stringify({ startDate, endDate })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return payload.map((s: any) => ({
+          id: s.id,
+          scan_time: DateTime.fromISO(s.scan_time),
+          network_id: s.network_id,
+          devices_discovered_count: s.devices_discovered_count,
+          people_seen_count: s.people_seen_count,
+          primary_devices_seen_count: s.primary_devices_seen_count
+        }));
+      });
+    } else {
+      throw Error(`Server Error (HTTP${r.status})`);
+    }
+  });
+}
 
 export function getScanById(scanId: number): Promise<Scan | undefined> {
   return fetch(`${Config.api.root}/api/scan/${scanId}`).then(r => {
@@ -10,7 +42,7 @@ export function getScanById(scanId: number): Promise<Scan | undefined> {
           id: payload.id,
           scan_time: DateTime.fromISO(payload.scan_time),
           network_id: payload.network_id,
-          discovered_devices: payload.discovered_devices
+          discoveries: payload.discoveries
         };
       });
     } else {
@@ -19,22 +51,24 @@ export function getScanById(scanId: number): Promise<Scan | undefined> {
   });
 }
 
-export function getScansByFilter(
-  startDate?: DateTime,
-  endDate?: DateTime,
-  macAddress?: string
-): Promise<ScanSummary[]> {
-  return fetch(`${Config.api.root}/api/scan/`, {
+export function getDevicesByFilter(
+  search_query: string
+): Promise<DeviceSummary[]> {
+  return fetch(`${Config.api.root}/api/device`, {
     method: "POST",
-    body: JSON.stringify({ startDate, endDate, macAddress })
+    body: JSON.stringify({ search_query })
   }).then(r => {
     if (r.status === 200) {
       return r.json().then(payload => {
-        return payload.map((s: any) => ({
-          id: s.id,
-          scan_time: DateTime.fromISO(s.scan_time),
-          network_id: s.network_id,
-          discovered_device_count: s.discovered_device_count
+        return payload.map((d: any) => ({
+          id: d.id,
+          mac_address: d.mac_address,
+          name: d.name,
+          note: d.note,
+          owner_id: d.owner_id,
+          is_primary: d.is_primary,
+          firstSeenDate: d.firstSeenDate,
+          lastSeenDate: d.lastSeenDate
         }));
       });
     } else {
@@ -43,8 +77,8 @@ export function getScansByFilter(
   });
 }
 
-export function getNamedDevice(macAddress: string): Promise<Device> {
-  return fetch(`${Config.api.root}/api/device/${macAddress}`).then(r => {
+export function getDeviceById(deviceId: number): Promise<Device | undefined> {
+  return fetch(`${Config.api.root}/api/device/${deviceId}`).then(r => {
     if (r.status === 200) {
       return r.json().then(payload => {
         return {
@@ -52,6 +86,38 @@ export function getNamedDevice(macAddress: string): Promise<Device> {
           mac_address: payload.mac_address,
           name: payload.name,
           note: payload.note,
+          owner_id: payload.owner_id,
+          is_primary: payload.is_primary,
+          firstSeenDate: payload.firstSeenDate,
+          lastSeenDate: payload.lastSeenDate
+        };
+      });
+    } else {
+      return undefined;
+    }
+  });
+}
+
+export function updateDeviceById(
+  deviceId: number,
+  name: string,
+  note: string,
+  ownerId: number | null,
+  isPrimary: boolean
+): Promise<Device> {
+  return fetch(`${Config.api.root}/api/device/${deviceId}`, {
+    method: "POST",
+    body: JSON.stringify({ name, note, ownerId, isPrimary })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return {
+          id: payload.id,
+          mac_address: payload.mac_address,
+          name: payload.name,
+          note: payload.note,
+          owner_id: payload.owner_id,
+          is_primary: payload.is_primary,
           firstSeenDate: payload.firstSeenDate,
           lastSeenDate: payload.lastSeenDate
         };
@@ -62,12 +128,53 @@ export function getNamedDevice(macAddress: string): Promise<Device> {
   });
 }
 
-export function updateNamedDevice(
-  macAddress: string,
+export function getPeopleByFilter(
+  search_query?: string
+): Promise<PersonSummary[]> {
+  return fetch(`${Config.api.root}/api/person`, {
+    method: "POST",
+    body: JSON.stringify({ search_query })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return payload.map((p: any) => ({
+          id: p.id,
+          name: p.name,
+          note: p.note,
+          first_seen: p.first_seen,
+          last_seen: p.last_seen
+        }));
+      });
+    } else {
+      throw Error(`Server Error (HTTP${r.status})`);
+    }
+  });
+}
+
+export function getPersonById(personId: number): Promise<Person | undefined> {
+  return fetch(`${Config.api.root}/api/person/${personId}`).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return {
+          id: payload.id,
+          name: payload.name,
+          note: payload.note,
+          first_seen: payload.first_seen,
+          last_seen: payload.last_seen
+        };
+      });
+    } else {
+      return undefined;
+    }
+  });
+}
+
+export function updatePersonById(
+  personId: number,
   name: string,
   note: string
-): Promise<Device> {
-  return fetch(`${Config.api.root}/api/device/${macAddress}`, {
+): Promise<Person> {
+  return fetch(`${Config.api.root}/api/person/${personId}`, {
     method: "POST",
     body: JSON.stringify({ name, note })
   }).then(r => {
@@ -75,11 +182,10 @@ export function updateNamedDevice(
       return r.json().then(payload => {
         return {
           id: payload.id,
-          mac_address: payload.mac_address,
           name: payload.name,
           note: payload.note,
-          firstSeenDate: payload.firstSeenDate,
-          lastSeenDate: payload.lastSeenDate
+          first_seen: payload.first_seen,
+          last_seen: payload.last_seen
         };
       });
     } else {

@@ -1,106 +1,89 @@
 import datetime
-from typing import List, Optional
+from typing import List
 
-from . import models
 from . import utils
 
 
-# TODO
-# - Discovery
-#   - IP address
-#   - Hostname
-#   - DeviceSummary
-#   - ScanSummary
-
-# - Scan
-#   - Scan time
-#   - Network id
-#   - Discovery[]
-
-# - ScanSummary (Scans)
-#   - Scan time
-#   - Network id
-#   - # Devices discovered
-#   - # People seen
-#   - # Primary devices seen
-
-# - Device
-#   - MAC address
-#   - Name
-#   - Matched PersonSummary
-#   - Is a primary device
-#   - First seen
-#   - Last seen
-#   - Note
-#   - Found in recent scans (max 10 : Discovery[])
-
-# - DeviceSummary (Devices)
-#   - MAC address
-#   - Name
-#   - Matched PersonSummary (to get first name)
-#   - Is a primary device
-#   - First seen
-#   - Last seen
-
-# - Person
-#   - Name
-#   - All DeviceSummaries
-#   - First seen
-#   - Last seen
-#   - Note
-#   - Found in recent scans (max 10 : ScanSummary)
-
-# - PersonSummary (People)
-#   - Name
-#   - # Device Count
-#   - # Primary device count
-#   - First seen
-#   - Last seen
-
-
 class ToJsonSupport:
-    def json(self) -> dict:
-        return self.__dict__
-
-
-class ScanSummary(ToJsonSupport):
-    """ A scan with the amount of devices discovered """
-
-    def __init__(self, scan: models.Scan, discovered_device_count: int):
-        self.id = scan.id
-        self.scan_time = utils.datetime_to_iso_string(scan.scan_time)
-        self.network_id = scan.network_id
-        self.discovered_device_count = discovered_device_count
-
-
-class Scan(ToJsonSupport):
-    """ A scan with a list of all discovered devices """
-
-    def __init__(self, scan: models.Scan, discovered_devices: List[models.Discovery]):
-        self.id = scan.id
-        self.scan_time = utils.datetime_to_iso_string(scan.scan_time)
-        self.network_id = scan.network_id
-        self.discovered_devices = [Discovery(d).json() for d in discovered_devices]
+    def build(self) -> dict:
+        _dict = self.__dict__
+        for key in _dict:
+            value = _dict[key]
+            if hasattr(value, 'build') and callable(value.build):
+                _dict[key] = value.build()
+            elif type(value) == datetime.datetime:
+                _dict[key] = utils.datetime_to_iso_string(value)
+            elif type(value) == list:
+                _dict[key] = [i.build() if hasattr(i, 'build') else i for i in value]
+        return _dict
 
 
 class Discovery(ToJsonSupport):
-    """ A discovered device """
+    def __init__(self, id: int, ip_address: str, hostname: str, device_id: int, scan_id: int):
+        self.id = id
+        self.ip_address = ip_address
+        self.hostname = hostname
+        self.device_id = device_id
+        self.scan_id = scan_id
 
-    def __init__(self, discovery: models.Discovery):
-        # self.id = discovered_device.id
-        # self.scan_id = discovered_device.scan.id
-        self.mac_address = discovery.device.mac_address
-        self.ip_address = discovery.ip_address
-        self.hostname = discovery.hostname
+
+class Scan(ToJsonSupport):
+    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, discoveries: List['Discovery']):
+        self.id = id
+        self.scan_time = scan_time
+        self.network_id = network_id
+        self.discoveries = discoveries
+
+
+class ScanSummary(ToJsonSupport):
+    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, devices_discovered_count: int, people_seen_count: int, primary_devices_seen_count: int):
+        self.id = id
+        self.scan_time = scan_time
+        self.network_id = network_id
+        self.devices_discovered_count = devices_discovered_count
+        self.people_seen_count = people_seen_count
+        self.primary_devices_seen_count = primary_devices_seen_count
+
+
+class Person(ToJsonSupport):
+    def __init__(self, id: int, name: str, note: str, first_seen: datetime.datetime, last_seen: datetime.datetime):
+        self.id = id
+        self.name = name
+        self.note = note
+        self.first_seen = first_seen
+        self.last_seen = last_seen
+
+
+class PersonSummary(ToJsonSupport):
+    def __init__(self, id: int, name: str, note: str, first_seen: datetime.datetime, last_seen: datetime.datetime):
+        self.id = id
+        self.name = name
+        self.note = note
+        self.first_seen = first_seen
+        self.last_seen = last_seen
 
 
 class Device(ToJsonSupport):
-    """ A device identified by its MAC address """
+    """ Full details of a device """
+    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime):
+        self.id = id
+        self.mac_address = mac_address
+        self.name = name
+        self.note = note
+        self.owner_id = owner_id
+        self.is_primary = is_primary
+        self.first_seen = first_seen
+        self.last_seen = last_seen
 
-    def __init__(self, device: models.Device, first_seen_date: Optional[datetime.datetime], last_seen_date: Optional[datetime.datetime]):
-        self.id = device.id
-        self.mac_address = device.mac_address
-        self.name = device.name
-        self.note = device.note
-        self.first_seen_date = utils.datetime_to_iso_string(first_seen_date) if first_seen_date is not None else None
-        self.last_seen_date = utils.datetime_to_iso_string(last_seen_date)if last_seen_date is not None else None
+
+class DeviceSummary(ToJsonSupport):
+    """ Reduced details of a device for batch device requests """
+    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime):
+        self.id = id
+        self.mac_address = mac_address
+        self.name = name
+        self.note = note
+        self.owner_id = owner_id
+        self.is_primary = is_primary
+        self.first_seen = first_seen
+        self.last_seen = last_seen
