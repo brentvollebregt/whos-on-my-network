@@ -13,6 +13,13 @@ const Scans: React.FunctionComponent = () => {
           <h1 className="text-center">Scans: Temporary</h1>
           <div style={{ background: "lightgrey", height: 200 }}>
             Scan table - click to view scan
+            <ul>
+              <li>Scan time</li>
+              <li>Network id</li>
+              <li>Devices discovered</li>
+              <li>People seen</li>
+              <li>Primary devices seen</li>
+            </ul>
           </div>
         </Col>
       </Row>

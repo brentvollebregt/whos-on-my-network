@@ -47,8 +47,8 @@ export interface Device {
   note: string;
   owner_id: number;
   is_primary: boolean;
-  firstSeenDate: DateTime;
-  lastSeenDate: DateTime;
+  first_seen: DateTime;
+  last_seen: DateTime;
 }
 
 export interface DeviceSummary {
@@ -58,6 +58,6 @@ export interface DeviceSummary {
   note: string;
   owner_id: number;
   is_primary: boolean;
-  firstSeenDate: DateTime;
-  lastSeenDate: DateTime;
+  first_seen: DateTime;
+  last_seen: DateTime;
 }
