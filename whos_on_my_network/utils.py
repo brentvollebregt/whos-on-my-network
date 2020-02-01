@@ -6,6 +6,11 @@ def get_utc_datetime():
     return datetime.datetime.utcnow().replace(tzinfo=datetime.timezone.utc)
 
 
+def to_utc_datetime(date: datetime.datetime):
+    """ Sets a datetime's timezone to UTC """
+    return date.replace(tzinfo=datetime.timezone.utc)
+
+
 def remove_timezome(date: datetime.datetime) -> datetime.datetime:
     """ Remove timezone from a datetime """
     return date.replace(tzinfo=None)

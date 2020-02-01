@@ -5,6 +5,7 @@ import peewee
 
 from .. import models
 from .. import dto
+from .. import utils
 
 
 def get_scans_by_filter(start_date: datetime, end_date: datetime) -> List[dto.ScanSummary]:
@@ -23,11 +24,12 @@ def get_scans_by_filter(start_date: datetime, end_date: datetime) -> List[dto.Sc
         .join(models.Discovery) \
         .join(models.Device) \
         .join(models.Person, peewee.JOIN.LEFT_OUTER) \
-        .group_by(models.Scan.id)
+        .group_by(models.Scan.id) \
+        .order_by(models.Scan.scan_time.desc())
 
     scan_dtos = [dto.ScanSummary(
         id=s.id,
-        scan_time=s.scan_time,
+        scan_time=utils.to_utc_datetime(s.scan_time),
         network_id=s.network_id,
         devices_discovered_count=s.devices_discovered_count,
         people_seen_count=s.people_seen_count,
