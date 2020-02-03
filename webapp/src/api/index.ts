@@ -166,6 +166,30 @@ export function getPeopleByFilter(
   });
 }
 
+export function createPerson(name?: string): Promise<Person | undefined> {
+  return fetch(`${Config.api.root}/api/person`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ name })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return {
+          id: payload.id,
+          name: payload.name,
+          note: payload.note,
+          first_seen: parsePythonTime(payload.first_seen),
+          last_seen: parsePythonTime(payload.last_seen)
+        };
+      });
+    } else {
+      return undefined;
+    }
+  });
+}
+
 export function getPersonById(personId: number): Promise<Person | undefined> {
   return fetch(`${Config.api.root}/api/person/${personId}`).then(r => {
     if (r.status === 200) {

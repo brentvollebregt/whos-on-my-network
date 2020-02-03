@@ -90,6 +90,17 @@ def get_people_by_filter():
     return jsonify(dict_response)
 
 
+@app.route("/api/person", methods=["PUT"])
+def create_person():
+    """ Create a new person """
+    name = request.json['name'] if 'name' in request.json else 'New Person'
+
+    person = people_service.create_person(name)
+
+    dict_response = person.build()
+    return jsonify(dict_response)
+
+
 @app.route("/api/person/<int:person_id>", methods=["GET"])
 def get_person_by_id(person_id: int):
     """ Get a person by id """
@@ -116,6 +127,6 @@ def update_person_by_id(person_id: int):
 @app.after_request
 def apply_caching(response):
     response.headers["Access-Control-Allow-Origin"] = "*"
-    response.headers["Access-Control-Allow-Methods"] = "GET, POST, DELETE, OPTIONS"
+    response.headers["Access-Control-Allow-Methods"] = "GET, POST, PUT, DELETE, OPTIONS"
     response.headers["Access-Control-Allow-Headers"] = "Origin, Content-Type, Authorization"
     return response

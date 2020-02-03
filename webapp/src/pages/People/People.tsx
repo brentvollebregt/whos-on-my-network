@@ -1,9 +1,16 @@
 import React, { useState, useEffect } from "react";
-import { Table, Spinner } from "react-bootstrap";
+import {
+  Table,
+  Spinner,
+  FormControl,
+  Button,
+  InputGroup,
+  ButtonToolbar
+} from "react-bootstrap";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
 import { PersonSummary } from "../../api/dto";
-import { getPeopleByFilter } from "../../api";
+import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 
 const People: React.FunctionComponent = () => {
@@ -11,16 +18,35 @@ const People: React.FunctionComponent = () => {
 
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
 
-  useEffect(() => {
+  const getPeople = () => {
     getPeopleByFilter()
       .then(p => setPeople(p))
       .catch(err => console.error(err));
+  };
+
+  useEffect(() => {
+    getPeople();
   }, []);
+
+  const onAddPerson = () => {
+    createPerson().then(p => getPeople());
+  };
 
   return (
     <PageSizeWrapper>
-      <h1 className="text-center">People: Temporary</h1>
-      <div style={{ background: "grey" }}>Add person + filter</div>
+      <h1 className="text-center">People</h1>
+
+      <ButtonToolbar className="mb-3 justify-content-between">
+        <InputGroup>
+          <InputGroup.Prepend>
+            <InputGroup.Text>Search</InputGroup.Text>
+          </InputGroup.Prepend>
+          <FormControl type="text" placeholder="Person Name" />
+        </InputGroup>
+        <Button variant="outline-secondary" onClick={onAddPerson}>
+          Add Person
+        </Button>
+      </ButtonToolbar>
 
       <Table striped bordered hover size="sm">
         <thead>

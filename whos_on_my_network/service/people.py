@@ -33,6 +33,13 @@ def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) 
     return [___person_to_person_summary_dto(p) for p in people]
 
 
+def create_person(name: str):
+    person = models.Person.create(
+        name=name,
+    )
+    return get_person_by_id(person.id)
+
+
 def get_person_by_id(person_id: int) -> dto.Person:
     person = models.Device.get(person_id)
 

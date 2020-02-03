@@ -45,7 +45,7 @@ const Devices: React.FunctionComponent = () => {
                 {/* <td>{device. Matched person}</td> */}
                 <td>{device.is_primary ? "Yes" : "No"}</td>
                 <td>{device.first_seen.toFormat("ff")}</td>
-                <td>{device.last_seen.toRelativeCalendar()}</td>
+                <td>{device.last_seen.toRelative()}</td>
                 {/* <td>{device.note Truncated}</td> */}
               </tr>
             ))}
