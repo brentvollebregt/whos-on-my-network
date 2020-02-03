@@ -31,8 +31,9 @@ def ___device_to_device_summary_dto(device: models.Device) -> dto.DeviceSummary:
     )
 
 
-def get_devices_by_filter(search_query: Optional[str]) -> List[dto.DeviceSummary]:
-    # TODO on query (MAC, name, note)
+def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str], owner_id: Optional[int], is_primary: Optional[bool]) -> List[dto.DeviceSummary]:
+    # TODO Filter on ids
+    # TODO Filter on search_query (MAC, name)
     # TODO Filter on owner.id
     # TODO Filter on is_primary
 

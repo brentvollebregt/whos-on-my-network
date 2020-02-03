@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Optional
 
 from .. import dto
 from .. import models
@@ -25,8 +25,9 @@ def ___person_to_person_summary_dto(device: models.Person) -> dto.PersonSummary:
     )
 
 
-def get_people_by_filter(search_query: str) -> List[dto.PersonSummary]:
-    # TODO on query (name, note)
+def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) -> List[dto.PersonSummary]:
+    # TODO Filter on ids
+    # TODO Filter on name_partial
     people: List[models.Person] = models.Person.select()
 
     return [___person_to_person_summary_dto(p) for p in people]

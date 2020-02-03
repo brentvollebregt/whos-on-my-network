@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List
+from typing import List, Optional
 
 import peewee
 
@@ -8,11 +8,13 @@ from .. import dto
 from .. import utils
 
 
-def get_scans_by_filter(start_date: datetime, end_date: datetime) -> List[dto.ScanSummary]:
+def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date: datetime, device_ids: Optional[List[int]], owner_ids: Optional[List[int]], limit: Optional[int], page: Optional[int]) -> List[dto.ScanSummary]:
+    # TODO Filter on ids
+    # TODO Filter on dates
     # TODO Filter by device ids
-    # TODO Filter by person ids
-    # TODO Filter by date range
+    # TODO Filter by owner ids
     # TODO Limit / paging
+
     scans: List[models.Scan] = models.Scan.select(
         models.Scan,
         peewee.fn.COUNT(models.Device.id).alias('devices_discovered_count'),

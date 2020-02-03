@@ -18,12 +18,15 @@ def root():
 @app.route("/api/scan", methods=["POST"])
 def get_scans_by_filter():
     """ Get scan summaries in between two dates (not required) """
+    ids = request.json['ids'] if 'ids' in request.json else None
     start_date = utils.iso_string_to_datetime(request.json['startDate']) if 'startDate' in request.json else None
     end_date = utils.iso_string_to_datetime(request.json['endDate']) if 'endDate' in request.json else None
-    # TODO List of devices?
-    # TODO List of people?
+    device_ids = request.json['device_ids'] if 'device_ids' in request.json else None
+    owner_ids = request.json['owner_ids'] if 'owner_ids' in request.json else None
+    limit = request.json['limit'] if 'limit' in request.json else None
+    page = request.json['page'] if 'page' in request.json else None
 
-    scans = scan_service.get_scans_by_filter(start_date, end_date)
+    scans = scan_service.get_scans_by_filter(ids, start_date, end_date, device_ids, owner_ids, limit, page)
 
     dict_response = [s.build() for s in scans]
     return jsonify(dict_response)
@@ -41,11 +44,12 @@ def get_scan_by_id(scan_id: int):
 @app.route("/api/device", methods=["POST"])
 def get_devices_by_filter():
     """ Get devices using a filter """
+    ids = request.json['ids'] if 'ids' in request.json else None
     search_query = request.json['search_query'] if 'search_query' in request.json else None
-    # TODO List of people?
-    # TODO Is primary
+    owner_id = request.json['owner_id'] if 'owner_id' in request.json else None
+    is_primary = request.json['is_primary'] if 'is_primary' in request.json else None
 
-    devices = device_service.get_devices_by_filter(search_query)
+    devices = device_service.get_devices_by_filter(ids, search_query, owner_id, is_primary)
 
     dict_response = [d.build() for d in devices]
     return jsonify(dict_response)
@@ -77,9 +81,10 @@ def update_device_by_id(device_id: int):
 @app.route("/api/person", methods=["POST"])
 def get_people_by_filter():
     """ Get people using a filter """
-    search_query = request.json['search_query'] if 'search_query' in request.json else None
+    ids = request.json['ids'] if 'ids' in request.json else None
+    name_partial = request.json['name_partial'] if 'name_partial' in request.json else None
 
-    people = people_service.get_people_by_filter(search_query)
+    people = people_service.get_people_by_filter(ids, name_partial)
 
     dict_response = [p.build() for p in people]
     return jsonify(dict_response)
