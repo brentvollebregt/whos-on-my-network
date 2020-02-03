@@ -45,7 +45,7 @@ export interface Device {
   mac_address: string;
   name: string;
   note: string;
-  owner_id: number;
+  owner_id: number | null;
   is_primary: boolean;
   first_seen: DateTime;
   last_seen: DateTime;
@@ -56,7 +56,7 @@ export interface DeviceSummary {
   mac_address: string;
   name: string;
   note: string;
-  owner_id: number;
+  owner_id: number | null;
   is_primary: boolean;
   first_seen: DateTime;
   last_seen: DateTime;

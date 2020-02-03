@@ -26,9 +26,12 @@ def ___person_to_person_summary_dto(device: models.Person) -> dto.PersonSummary:
 
 
 def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) -> List[dto.PersonSummary]:
-    # TODO Filter on ids
-    # TODO Filter on name_partial
-    people: List[models.Person] = models.Person.select()
+    ids_definite_list = ids if ids is not None else []
+
+    people: List[models.Person] = models.Person.select().where(
+        ((ids is None) | (models.Person.id.in_(ids_definite_list)))
+        & ((name_partial is None) | (models.Person.name.contains(name_partial)))
+    )
 
     return [___person_to_person_summary_dto(p) for p in people]
 

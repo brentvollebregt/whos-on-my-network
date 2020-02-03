@@ -141,14 +141,15 @@ export function updateDeviceById(
 }
 
 export function getPeopleByFilter(
-  search_query?: string
+  ids?: number[],
+  name_partial?: string
 ): Promise<PersonSummary[]> {
   return fetch(`${Config.api.root}/api/person`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ search_query })
+    body: JSON.stringify({ ids, name_partial })
   }).then(r => {
     if (r.status === 200) {
       return r.json().then(payload => {
