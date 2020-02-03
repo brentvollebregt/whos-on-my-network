@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Table, Spinner } from "react-bootstrap";
-import { useTitle } from "hookrouter";
+import { useTitle, navigate } from "hookrouter";
 import Constants from "../../constants";
 import { DeviceSummary } from "../../api/dto";
 import { getDevicesByFilter } from "../../api";
@@ -18,6 +18,9 @@ const Devices: React.FunctionComponent = () => {
       .then(d => setDevices(d))
       .catch(err => console.error(err));
   }, []);
+
+  const onDeviceClick = (deviceId: number) => () =>
+    navigate(`/devices/${deviceId}`);
 
   return (
     <PageSizeWrapper>
@@ -39,7 +42,7 @@ const Devices: React.FunctionComponent = () => {
         <tbody>
           {devices !== undefined &&
             devices.map(device => (
-              <tr key={device.id}>
+              <tr key={device.id} onClick={onDeviceClick(device.id)}>
                 <td>{device.mac_address}</td>
                 <td>{device.name}</td>
                 {/* <td>{device. Matched person}</td> */}

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Constants from "../../constants";
-import { useTitle } from "hookrouter";
+import { useTitle, navigate } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import { getScansByFilter } from "../../api";
 import { ScanSummary } from "../../api/dto";
@@ -16,6 +16,8 @@ const Scans: React.FunctionComponent = () => {
       .then(s => setScans(s))
       .catch(err => console.error(err));
   }, []);
+
+  const onScanClick = (scanId: number) => () => navigate(`/scans/${scanId}`);
 
   return (
     <PageSizeWrapper>
@@ -34,7 +36,7 @@ const Scans: React.FunctionComponent = () => {
         <tbody>
           {scans !== undefined &&
             scans.map(scan => (
-              <tr key={scan.id}>
+              <tr key={scan.id} onClick={onScanClick(scan.id)}>
                 <td>{scan.scan_time.toRelative()}</td>
                 <td>{scan.network_id}</td>
                 <td>{scan.devices_discovered_count}</td>

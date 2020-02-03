@@ -8,7 +8,7 @@ import {
   ButtonToolbar
 } from "react-bootstrap";
 import Constants from "../../constants";
-import { useTitle } from "hookrouter";
+import { useTitle, navigate } from "hookrouter";
 import { PersonSummary } from "../../api/dto";
 import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
@@ -28,9 +28,9 @@ const People: React.FunctionComponent = () => {
     getPeople();
   }, []);
 
-  const onAddPerson = () => {
-    createPerson().then(p => getPeople());
-  };
+  const onAddPerson = () => createPerson().then(p => getPeople());
+  const onPersonClick = (personId: number) => () =>
+    navigate(`/people/${personId}`);
 
   return (
     <PageSizeWrapper>
@@ -62,10 +62,10 @@ const People: React.FunctionComponent = () => {
         <tbody>
           {people !== undefined &&
             people.map(person => (
-              <tr key={person.id}>
+              <tr key={person.id} onClick={onPersonClick(person.id)}>
                 <td>{person.name}</td>
-                <td>{person.first_seen.toISO()}</td>
-                <td>{person.last_seen.toISO()}</td>
+                <td>{person.first_seen.toFormat("ff")}</td>
+                <td>{person.last_seen.toRelative()}</td>
               </tr>
             ))}
         </tbody>
