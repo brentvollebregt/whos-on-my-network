@@ -1,34 +1,10 @@
 from typing import List, Optional
 
+import peewee
+
 from .. import dto
 from .. import models
 from .. import utils
-
-
-def __device_to_device_dto(device: models.Device) -> dto.Device:
-    return dto.Device(
-        id=device.id,
-        mac_address=device.mac_address,
-        name=device.name,
-        note=device.note,
-        owner_id=device.owner.id if device.owner is not None else None,
-        is_primary=device.is_primary,
-        first_seen=utils.get_utc_datetime(),  # TODO Get
-        last_seen=utils.get_utc_datetime()  # TODO Get
-    )
-
-
-def ___device_to_device_summary_dto(device: models.Device) -> dto.DeviceSummary:
-    return dto.DeviceSummary(
-        id=device.id,
-        mac_address=device.mac_address,
-        name=device.name,
-        note=device.note,
-        owner_id=device.owner.id if device.owner is not None else None,
-        is_primary=device.is_primary,
-        first_seen=utils.get_utc_datetime(),  # TODO Get
-        last_seen=utils.get_utc_datetime()  # TODO Get
-    )
 
 
 def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str], owner_id: Optional[int], is_primary: Optional[bool]) -> List[dto.DeviceSummary]:
@@ -37,15 +13,50 @@ def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str],
     # TODO Filter on owner.id
     # TODO Filter on is_primary
 
-    devices: List[models.Device] = models.Device.select()
+    devices: List[models.Device] = models.Device.select(
+        models.Device,
+        peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
+        peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
+    ) \
+        .join(models.Discovery) \
+        .join(models.Scan) \
+        .group_by(models.Device.id)
 
-    return [___device_to_device_summary_dto(d) for d in devices]
+    dtos = [dto.DeviceSummary(
+        id=d.id,
+        mac_address=d.mac_address,
+        name=d.name,
+        note=d.note,
+        owner_id=d.owner.id if d.owner is not None else None,
+        is_primary=d.is_primary,
+        first_seen=utils.to_utc_datetime(d.first_seen),
+        last_seen=utils.to_utc_datetime(d.last_seen)
+    ) for d in devices]
+
+    return dtos
 
 
 def get_device_by_id(device_id: int) -> dto.Device:
     device = models.Device.get(device_id)
+    dates = models.Scan().select(
+        peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
+        peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
+    ).where(
+        (models.Discovery.device == device)
+    ).join(models.Discovery).scalar(as_tuple=True)
 
-    return __device_to_device_dto(device)
+    device_dto = dto.Device(
+        id=device.id,
+        mac_address=device.mac_address,
+        name=device.name,
+        note=device.note,
+        owner_id=device.owner.id if device.owner is not None else None,
+        is_primary=device.is_primary,
+        first_seen=dates[1],
+        last_seen=dates[0]
+    )
+
+    return device_dto
 
 
 def update_device_by_id(device_id: int, name: str, note: str, owner_id: Optional[int], is_primary: bool) -> dto.Device:
@@ -57,4 +68,4 @@ def update_device_by_id(device_id: int, name: str, note: str, owner_id: Optional
     device.is_primary = is_primary
     device.save()
 
-    return __device_to_device_dto(device)
+    return get_device_by_id(device.id)
