@@ -17,6 +17,7 @@ const People: React.FunctionComponent = () => {
   useTitle(`People - ${Constants.title}`);
 
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
+  const [textFilter, setTextFilter] = useState<string | undefined>(undefined);
 
   const getPeople = () => {
     getPeopleByFilter()
@@ -31,6 +32,15 @@ const People: React.FunctionComponent = () => {
   const onAddPerson = () => createPerson().then(p => getPeople());
   const onPersonClick = (personId: number) => () =>
     navigate(`/people/${personId}`);
+  const onTextFilter = (event: React.FormEvent<HTMLInputElement>) =>
+    setTextFilter(event.currentTarget.value);
+
+  const sortedPeople = people
+    ?.slice()
+    .sort((a, b) => (a.name === b.name ? 0 : a.name > b.name ? -1 : 1));
+  const filteredPeople = sortedPeople?.filter(
+    p => textFilter === undefined || p.name.indexOf(textFilter) !== -1
+  );
 
   return (
     <PageSizeWrapper>
@@ -41,7 +51,11 @@ const People: React.FunctionComponent = () => {
           <InputGroup.Prepend>
             <InputGroup.Text>Search</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl type="text" placeholder="Person Name" />
+          <FormControl
+            type="text"
+            placeholder="Person Name"
+            onChange={onTextFilter}
+          />
         </InputGroup>
         <Button variant="outline-secondary" onClick={onAddPerson}>
           Add Person
@@ -56,12 +70,11 @@ const People: React.FunctionComponent = () => {
             {/* <th>Primary Device Count</th> */}
             <th>First Seen</th>
             <th>Last Seen</th>
-            {/* <th>Truncated note</th> */}
           </tr>
         </thead>
         <tbody>
-          {people !== undefined &&
-            people.map(person => (
+          {filteredPeople !== undefined &&
+            filteredPeople.map(person => (
               <tr key={person.id} onClick={onPersonClick(person.id)}>
                 <td>{person.name}</td>
                 <td>{person.first_seen.toFormat("ff")}</td>
