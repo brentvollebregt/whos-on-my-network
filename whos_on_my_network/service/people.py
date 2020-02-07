@@ -42,7 +42,7 @@ def create_person(name: str):
 
 
 def get_person_by_id(person_id: int) -> dto.Person:
-    person = models.Device.get(person_id)
+    person = models.Person.get(person_id)
 
     dates = models.Person.select(
         peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
@@ -65,7 +65,7 @@ def get_person_by_id(person_id: int) -> dto.Person:
 
 
 def update_person_by_id(person_id: int, name: str, note: str) -> dto.Person:
-    person = models.Device.get(person_id)
+    person = models.Person.get(person_id)
 
     person.name = name
     person.note = note
