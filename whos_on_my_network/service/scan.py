@@ -10,7 +10,6 @@ from .. import utils
 
 def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date: datetime, device_ids: Optional[List[int]], owner_ids: Optional[List[int]], limit: Optional[int], page: Optional[int]) -> List[dto.ScanSummary]:
     # TODO Filter on ids
-    # TODO Filter on dates
     # TODO Filter by device ids
     # TODO Filter by owner ids
     # TODO Limit / paging
@@ -22,6 +21,10 @@ def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date
         peewee.fn.GROUP_CONCAT(models.Device.is_primary, ',')
             .python_value(lambda bools: [bool(int(b)) for b in bools.split(',') if id != ''] if bools is not None else [])
             .alias('is_primary_array')
+    ) \
+        .where(
+        ((start_date is None) | (models.Scan.scan_time >= utils.remove_timezome(start_date))
+         & ((end_date is None) | (models.Scan.scan_time <= utils.remove_timezome(end_date))))
     ) \
         .join(models.Discovery) \
         .join(models.Device) \

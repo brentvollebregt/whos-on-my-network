@@ -5,7 +5,6 @@ import {
   ButtonToolbar,
   InputGroup,
   FormControl,
-  Button,
   DropdownButton,
   Dropdown
 } from "react-bootstrap";
@@ -49,7 +48,7 @@ const Devices: React.FunctionComponent = () => {
     if (people === undefined || ownerId === null) {
       return ""; // Loading people or no owner
     }
-    const person = people.find(x => x.id == ownerId);
+    const person = people.find(x => x.id === ownerId);
     if (person === undefined) {
       console.error(`Not able to find person ${ownerId}`);
       return "Not Found"; // Should not occur

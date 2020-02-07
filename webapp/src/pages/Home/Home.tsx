@@ -9,15 +9,15 @@ import PageSizeWrapper from "../../components/PageSizeWrapper";
 const dateRanges = ["1 Day", "1 Week", "1 Month"];
 const dateRangeToInterval: { [key: string]: Interval } = {
   "1 Day": Interval.fromDateTimes(
-    DateTime.local().minus({ days: 7 }),
+    DateTime.local().minus({ days: 1 }),
     DateTime.local()
   ),
   "1 Week": Interval.fromDateTimes(
-    DateTime.local().minus({ days: 7 }),
+    DateTime.local().minus({ weeks: 1 }),
     DateTime.local()
   ),
   "1 Month": Interval.fromDateTimes(
-    DateTime.local().minus({ days: 7 }),
+    DateTime.local().minus({ months: 1 }),
     DateTime.local()
   )
 };
