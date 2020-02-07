@@ -105,14 +105,14 @@ const Devices: React.FunctionComponent = () => {
           className="ml-1"
           id="is_primary-filter-dropdown"
           title={`Primary: ${
-            isPrimaryFilter === null ? "" : isPrimaryFilter ? "Yes" : "No"
+            isPrimaryFilter === null ? "" : isPrimaryFilter ? "✔️" : "❌"
           }`}
         >
           <Dropdown.Item onClick={onIsPrimaryFilter(null)}>
             Don't Filter
           </Dropdown.Item>
-          <Dropdown.Item onClick={onIsPrimaryFilter(true)}>Yes</Dropdown.Item>
-          <Dropdown.Item onClick={onIsPrimaryFilter(false)}>No</Dropdown.Item>
+          <Dropdown.Item onClick={onIsPrimaryFilter(true)}>✔️</Dropdown.Item>
+          <Dropdown.Item onClick={onIsPrimaryFilter(false)}>❌</Dropdown.Item>
         </DropdownButton>
       </ButtonToolbar>
 
@@ -134,7 +134,7 @@ const Devices: React.FunctionComponent = () => {
                 <td>{device.mac_address}</td>
                 <td>{device.name}</td>
                 <td>{getOwnerName(device.owner_id)}</td>
-                <td>{device.is_primary ? "Yes" : "No"}</td>
+                <td>{device.is_primary ? "✔️" : "❌"}</td>
                 <td>{device.first_seen.toFormat("ff")}</td>
                 <td>{device.last_seen.toRelative()}</td>
               </tr>

@@ -10,14 +10,16 @@ from .. import utils
 def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str], owner_id: Optional[int], is_primary: Optional[bool]) -> List[dto.DeviceSummary]:
     # TODO Filter on ids
     # TODO Filter on search_query (MAC, name)
-    # TODO Filter on owner.id
     # TODO Filter on is_primary
 
     devices: List[models.Device] = models.Device.select(
         models.Device,
         peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
         peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
-    ) \
+    ).where(
+        ((owner_id is None) | (models.Person.id == owner_id))
+    ).join(models.Person) \
+        .switch(models.Device) \
         .join(models.Discovery) \
         .join(models.Scan) \
         .group_by(models.Device.id)

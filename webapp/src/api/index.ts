@@ -58,14 +58,17 @@ export function getScanById(scanId: number): Promise<Scan | undefined> {
 }
 
 export function getDevicesByFilter(
-  search_query?: string
+  ids?: number[],
+  search_query?: string,
+  owner_id?: number,
+  is_primary?: boolean
 ): Promise<DeviceSummary[]> {
   return fetch(`${Config.api.root}/api/device`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ search_query })
+    body: JSON.stringify({ ids, search_query, owner_id, is_primary })
   }).then(r => {
     if (r.status === 200) {
       return r.json().then(payload => {
