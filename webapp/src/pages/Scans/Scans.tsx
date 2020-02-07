@@ -154,8 +154,6 @@ const Scans: React.FunctionComponent = () => {
           <Spinner animation="border" />
         </div>
       )}
-
-      <div>TODO Paging</div>
     </PageSizeWrapper>
   );
 };
