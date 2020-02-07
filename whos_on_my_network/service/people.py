@@ -13,7 +13,8 @@ def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) 
     people: List[models.Person] = models.Person.select(
         models.Person,
         peewee.fn.MIN(models.Scan.scan_time).alias('first_seen'),
-        peewee.fn.MAX(models.Scan.scan_time).alias('last_seen')
+        peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
+        peewee.fn.COUNT(models.Device.id.distinct()).alias('device_count')
     ).where(
         ((ids is None) | (models.Person.id.in_(ids_definite_list)))
         & ((name_partial is None) | (models.Person.name.contains(name_partial)))
@@ -27,6 +28,7 @@ def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) 
         id=p.id,
         name=p.name,
         note=p.note,
+        device_count=p.device_count,
         first_seen=utils.to_utc_datetime(p.first_seen),
         last_seen=utils.to_utc_datetime(p.last_seen)
     )for p in people]

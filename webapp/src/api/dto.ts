@@ -36,6 +36,7 @@ export interface PersonSummary {
   id: number;
   name: string;
   note: string;
+  device_count: number;
   first_seen: DateTime;
   last_seen: DateTime;
 }

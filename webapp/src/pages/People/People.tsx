@@ -66,8 +66,7 @@ const People: React.FunctionComponent = () => {
         <thead>
           <tr>
             <th>Name</th>
-            {/* <th>Device Count</th> */}
-            {/* <th>Primary Device Count</th> */}
+            <th>Devices</th>
             <th>First Seen</th>
             <th>Last Seen</th>
           </tr>
@@ -77,6 +76,7 @@ const People: React.FunctionComponent = () => {
             filteredPeople.map(person => (
               <tr key={person.id} onClick={onPersonClick(person.id)}>
                 <td>{person.name}</td>
+                <td>{person.device_count}</td>
                 <td>{person.first_seen.toFormat("ff")}</td>
                 <td>{person.last_seen.toRelative()}</td>
               </tr>

@@ -55,10 +55,11 @@ class Person(ToJsonSupport):
 
 
 class PersonSummary(ToJsonSupport):
-    def __init__(self, id: int, name: str, note: str, first_seen: datetime.datetime, last_seen: datetime.datetime):
+    def __init__(self, id: int, name: str, note: str, device_count: int, first_seen: datetime.datetime, last_seen: datetime.datetime):
         self.id = id
         self.name = name
         self.note = note
+        self.device_count = device_count
         self.first_seen = first_seen
         self.last_seen = last_seen
 

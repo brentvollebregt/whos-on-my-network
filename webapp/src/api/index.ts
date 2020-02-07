@@ -157,6 +157,7 @@ export function getPeopleByFilter(
           id: p.id,
           name: p.name,
           note: p.note,
+          device_count: p.device_count,
           first_seen: parsePythonTime(p.first_seen),
           last_seen: parsePythonTime(p.last_seen)
         }));
