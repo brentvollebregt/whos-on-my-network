@@ -2,7 +2,7 @@ import React from "react";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
-import PersonDetails from "./PersonDetails";
+import PersonDetail from "./PersonDetail";
 import PersonDevices from "./PersonDevices";
 
 interface PersonProps {
@@ -14,8 +14,8 @@ const Person: React.FunctionComponent<PersonProps> = ({ id }) => {
 
   return (
     <PageSizeWrapper>
-      <PersonDetails id={id} />
-      <div className="mt-5">
+      <PersonDetail id={id} />
+      <div className="mt-4">
         <PersonDevices id={id} />
       </div>
     </PageSizeWrapper>

@@ -4,11 +4,11 @@ import { getDevicesByFilter } from "../../api";
 import { Table } from "react-bootstrap";
 import { navigate } from "hookrouter";
 
-interface PersonProps {
+interface PersonDevicesProps {
   id: number;
 }
 
-const PersonDevices: React.FunctionComponent<PersonProps> = ({ id }) => {
+const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
   const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
     undefined
   );

@@ -10,11 +10,11 @@ import {
   FormControl
 } from "react-bootstrap";
 
-interface PersonProps {
+interface PersonDetailProps {
   id: number;
 }
 
-const PersonDetails: React.FunctionComponent<PersonProps> = ({ id }) => {
+const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
   const [person, setPerson] = useState<Person | undefined>(undefined);
   const [name, setName] = useState<string>("");
   const [nameDirty, setNameDirty] = useState<boolean>(false);
@@ -109,6 +109,7 @@ const PersonDetails: React.FunctionComponent<PersonProps> = ({ id }) => {
                 borderBottomRightRadius: 0
               }}
               value={person.first_seen.toFormat("FF")}
+              disabled
             />
             <InputGroup.Text
               style={{
@@ -126,6 +127,7 @@ const PersonDetails: React.FunctionComponent<PersonProps> = ({ id }) => {
               }}
               value={person.last_seen.toRelative() ?? ""}
               title={person.last_seen.toFormat("FF")}
+              disabled
             />
           </InputGroup>
 
@@ -148,4 +150,4 @@ const PersonDetails: React.FunctionComponent<PersonProps> = ({ id }) => {
   );
 };
 
-export default PersonDetails;
+export default PersonDetail;
