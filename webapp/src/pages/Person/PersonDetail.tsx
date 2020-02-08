@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import Constants from "../../constants";
 import { Person } from "../../api/dto";
 import { getPersonById, updatePersonById } from "../../api";
 import {
@@ -17,9 +16,8 @@ interface PersonDetailProps {
 const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
   const [person, setPerson] = useState<Person | undefined>(undefined);
   const [name, setName] = useState<string>("");
-  const [nameDirty, setNameDirty] = useState<boolean>(false);
   const [note, setNote] = useState<string>("");
-  const [noteDirty, setNoteDirty] = useState<boolean>(false);
+  const [dirty, setDirty] = useState<boolean>(false);
 
   useEffect(() => {
     getPersonById(id)
@@ -33,29 +31,19 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
 
   const onNoteChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setNote(event.currentTarget.value);
-    setNoteDirty(true);
+    setDirty(true);
   };
   const onNameChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setName(event.currentTarget.value);
-    setNameDirty(true);
+    setDirty(true);
   };
-  const saveName = () => {
+  const saveChanges = () => {
     if (person !== undefined) {
-      updatePersonById(id, name, person.note).then(p => {
+      updatePersonById(id, name, note).then(p => {
         setPerson(p);
         setName(p === undefined ? "" : p.name);
         setNote(p === undefined ? "" : p.note);
-        setNameDirty(false);
-      });
-    }
-  };
-  const saveNote = () => {
-    if (person !== undefined) {
-      updatePersonById(id, person.name, note).then(p => {
-        setPerson(p);
-        setName(p === undefined ? "" : p.name);
-        setNote(p === undefined ? "" : p.note);
-        setNoteDirty(false);
+        setDirty(false);
       });
     }
   };
@@ -66,84 +54,68 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
         <Spinner animation="border" />
       ) : (
         <>
-          <h1 className="text-center">
+          <h1 className="text-center mb-4">
             {person.name} (#{person.id})
           </h1>
 
-          <InputGroup className="mb-3">
-            <InputGroup.Prepend>
-              <InputGroup.Text>Name</InputGroup.Text>
-            </InputGroup.Prepend>
-            <InputGroup.Append>
-              <FormControl
-                style={{ borderTopLeftRadius: 0, borderBottomLeftRadius: 0 }}
-                value={name}
-                onChange={onNameChange}
-              />
-            </InputGroup.Append>
-            <Button
-              className="ml-2"
-              variant="primary"
-              disabled={!nameDirty}
-              onClick={saveName}
-            >
-              Save Name
-            </Button>
-          </InputGroup>
+          <div
+            style={{
+              display: "grid",
+              gridTemplateColumns: "auto 1fr",
+              gridGap: 20
+            }}
+          >
+            <div>
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Name</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl value={name} onChange={onNameChange} />
+              </InputGroup>
 
-          <InputGroup className="mb-2">
-            <InputGroup.Text
-              style={{
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0,
-                borderRight: "none"
-              }}
-            >
-              First Seen
-            </InputGroup.Text>
-            <FormControl
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0
-              }}
-              value={person.first_seen.toFormat("FF")}
-              disabled
-            />
-            <InputGroup.Text
-              style={{
-                borderRadius: 0,
-                borderLeft: "none",
-                borderRight: "none"
-              }}
-            >
-              Last Seen
-            </InputGroup.Text>
-            <FormControl
-              style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0
-              }}
-              value={person.last_seen.toRelative() ?? ""}
-              title={person.last_seen.toFormat("FF")}
-              disabled
-            />
-          </InputGroup>
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>First Seen</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={person.first_seen.toFormat("FF")}
+                  disabled
+                />
+              </InputGroup>
 
-          <Form.Group>
-            <Form.Label>Notes</Form.Label>
-            <Form.Control
-              as="textarea"
-              rows="3"
-              className="mb-1"
-              value={note}
-              onChange={onNoteChange}
-            />
-            <Button variant="primary" disabled={!noteDirty} onClick={saveNote}>
-              Save Note
-            </Button>
-          </Form.Group>
+              <InputGroup className="mb-3">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Last Seen</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl
+                  value={person.last_seen.toRelative() ?? ""}
+                  title={person.last_seen.toFormat("FF")}
+                  disabled
+                />
+              </InputGroup>
+            </div>
+            <div>
+              <Form.Group>
+                <Form.Label>Notes</Form.Label>
+                <Form.Control
+                  as="textarea"
+                  rows="4"
+                  className="mb-1"
+                  value={note}
+                  onChange={onNoteChange}
+                />
+                <div style={{ textAlign: "right" }}>
+                  <Button
+                    variant="primary"
+                    disabled={!dirty}
+                    onClick={saveChanges}
+                  >
+                    Save Changes
+                  </Button>
+                </div>
+              </Form.Group>
+            </div>
+          </div>
         </>
       )}
     </div>
