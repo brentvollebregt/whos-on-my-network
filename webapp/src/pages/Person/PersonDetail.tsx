@@ -66,14 +66,14 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
             }}
           >
             <div>
-              <InputGroup className="mb-3">
+              <InputGroup className="mb-2">
                 <InputGroup.Prepend>
                   <InputGroup.Text>Name</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl value={name} onChange={onNameChange} />
               </InputGroup>
 
-              <InputGroup className="mb-3">
+              <InputGroup className="mb-2">
                 <InputGroup.Prepend>
                   <InputGroup.Text>First Seen</InputGroup.Text>
                 </InputGroup.Prepend>
@@ -83,7 +83,7 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
                 />
               </InputGroup>
 
-              <InputGroup className="mb-3">
+              <InputGroup className="mb-2">
                 <InputGroup.Prepend>
                   <InputGroup.Text>Last Seen</InputGroup.Text>
                 </InputGroup.Prepend>

@@ -18,7 +18,7 @@ def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str],
         peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
     ).where(
         ((owner_id is None) | (models.Person.id == owner_id))
-    ).join(models.Person) \
+    ).join(models.Person, peewee.JOIN.LEFT_OUTER) \
         .switch(models.Device) \
         .join(models.Discovery) \
         .join(models.Scan) \
@@ -54,8 +54,8 @@ def get_device_by_id(device_id: int) -> dto.Device:
         note=device.note,
         owner_id=device.owner.id if device.owner is not None else None,
         is_primary=device.is_primary,
-        first_seen=dates[1],
-        last_seen=dates[0]
+        first_seen=utils.to_utc_datetime(dates[1]),
+        last_seen=utils.to_utc_datetime(dates[0])
     )
 
     return device_dto

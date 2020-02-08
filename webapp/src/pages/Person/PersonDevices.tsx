@@ -37,7 +37,7 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
         {devices !== undefined &&
           devices.map(device => (
             <tr key={device.id} onClick={onDeviceClick(device.id)}>
-              <td>{device.mac_address}</td>
+              <td>{device.mac_address.toUpperCase()}</td>
               <td>{device.name}</td>
               <td>{device.is_primary ? "✔️" : "❌"}</td>
               <td>{device.first_seen.toFormat("ff")}</td>

@@ -67,12 +67,12 @@ def get_device_by_id(device_id: int):
 @app.route("/api/device/<int:device_id>", methods=["POST"])
 def update_device_by_id(device_id: int):
     """ Update device by id """
-    name = request.json['name']
-    note = request.json['note']
-    owner = int(request.json['owner'])
-    is_primary = request.json['is_primary'].lower() == 'true'
+    name: str = request.json['name']
+    note: str = request.json['note']
+    owner_id: int = request.json['ownerId']
+    is_primary: bool = request.json['isPrimary']
 
-    device = device_service.update_device_by_id(device_id, name, note, owner, is_primary)
+    device = device_service.update_device_by_id(device_id, name, note, owner_id, is_primary)
 
     dict_response = device.build()
     return jsonify(dict_response)
