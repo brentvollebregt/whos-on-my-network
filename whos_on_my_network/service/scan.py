@@ -17,10 +17,10 @@ def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date
     scans: List[models.Scan] = models.Scan.select(
         models.Scan,
         peewee.fn.COUNT(models.Device.id).alias('devices_discovered_count'),
-        peewee.fn.COUNT(models.Person.id).alias('people_seen_count'),
+        peewee.fn.COUNT(models.Person.id.distinct()).alias('people_seen_count'),
         peewee.fn.GROUP_CONCAT(models.Device.is_primary, ',')
             .python_value(lambda bools: [bool(int(b)) for b in bools.split(',') if id != ''] if bools is not None else [])
-            .alias('is_primary_array')
+            .alias('is_primary_array')  # TODO Incorrect
     ) \
         .where(
         ((start_date is None) | (models.Scan.scan_time >= utils.remove_timezome(start_date))
