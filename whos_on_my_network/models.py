@@ -22,6 +22,7 @@ class Scan(BaseModel):
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
     scan_time = peewee.DateTimeField(default=utils.remove_timezome(utils.get_utc_datetime()))  # UTC (no timezone)
     network_id = peewee.TextField()
+    # discoveries = Discovery.scan[] backref
 
 
 class Person(BaseModel):
@@ -43,7 +44,7 @@ class Device(BaseModel):
 class Discovery(BaseModel):
     """ A discovered device """
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
-    scan = peewee.ForeignKeyField(Scan)
+    scan = peewee.ForeignKeyField(Scan, backref='discoveries')
     device = peewee.ForeignKeyField(Device)
     ip_address = peewee.TextField()
     hostname = peewee.TextField(null=True)
