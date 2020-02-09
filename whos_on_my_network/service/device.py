@@ -11,6 +11,7 @@ def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str],
     # TODO Filter on ids
     # TODO Filter on search_query (MAC, name)
     # TODO Filter on is_primary
+    ids_definite_list = ids if ids is not None else []
 
     devices: List[models.Device] = models.Device.select(
         models.Device,
@@ -18,7 +19,8 @@ def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str],
         peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
         peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
     ).where(
-        ((owner_id is None) | (models.Person.id == owner_id))
+        ((ids is None) | (models.Device.id.in_(ids_definite_list)))
+        & ((owner_id is None) | (models.Person.id == owner_id))
     ).join(models.Person, peewee.JOIN.LEFT_OUTER) \
         .switch(models.Device) \
         .join(models.Discovery) \

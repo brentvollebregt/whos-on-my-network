@@ -1,36 +1,12 @@
-import React, { useEffect, useState } from "react";
-import { Device, Person, Scan } from "../../api/dto";
-import {
-  getDeviceById,
-  updateDeviceById,
-  getPeopleByFilter,
-  getScanById
-} from "../../api";
-import {
-  Spinner,
-  InputGroup,
-  FormControl,
-  Form,
-  Button,
-  DropdownButton,
-  Dropdown
-} from "react-bootstrap";
+import React from "react";
+import { Scan } from "../../api/dto";
+import { Spinner, InputGroup, FormControl } from "react-bootstrap";
 
 interface ScanDetailProps {
-  id: number;
+  scan: Scan | undefined;
 }
 
-const ScanDetail: React.FunctionComponent<ScanDetailProps> = ({ id }) => {
-  const [scan, setScan] = useState<Scan | undefined>(undefined);
-
-  useEffect(() => {
-    getScanById(id)
-      .then(s => {
-        setScan(s);
-      })
-      .catch(err => console.error(err));
-  }, []);
-
+const ScanDetail: React.FunctionComponent<ScanDetailProps> = ({ scan }) => {
   return (
     <div>
       {scan === undefined ? (
