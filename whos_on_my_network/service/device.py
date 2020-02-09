@@ -14,6 +14,7 @@ def get_devices_by_filter(ids: Optional[List[int]], search_query: Optional[str],
 
     devices: List[models.Device] = models.Device.select(
         models.Device,
+        models.Person,
         peewee.fn.MAX(models.Scan.scan_time).alias('last_seen'),
         peewee.fn.MIN(models.Scan.scan_time).alias('first_seen')
     ).where(
