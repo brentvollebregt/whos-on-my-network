@@ -34,23 +34,23 @@ def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date
 
     for scan in scans_with_discoveries:
         discovered_devices_ids = []
-        primary_discovered_devices_ids = []
         discovered_devices_people_ids = []
+        primary_discovered_devices_ids = []
         for discovery in scan.discoveries:
             if discovery.device.id not in discovered_devices_ids:
                 discovered_devices_ids.append(discovery.device.id)
-            if discovery.device.is_primary and (discovery.device.id not in discovered_devices_ids):
-                primary_discovered_devices_ids.append(discovery.device.id)
             if discovery.device.owner is not None and discovery.device.owner.id not in discovered_devices_people_ids:
                 discovered_devices_people_ids.append(discovery.device.owner.id)
+            if discovery.device.is_primary and (discovery.device.id not in primary_discovered_devices_ids):
+                primary_discovered_devices_ids.append(discovery.device.id)
 
         scan_dtos.append(dto.ScanSummary(
             id=scan.id,
             scan_time=utils.to_utc_datetime(scan.scan_time),
             network_id=scan.network_id,
             devices_discovered_count=len(discovered_devices_ids),
-            people_seen_count=len(primary_discovered_devices_ids),
-            primary_devices_seen_count=len(discovered_devices_people_ids),
+            people_seen_count=len(discovered_devices_people_ids),
+            primary_devices_seen_count=len(primary_discovered_devices_ids),
         ))
 
     return scan_dtos
