@@ -72,7 +72,7 @@ def get_scan_by_id(scan_id: int) -> dto.Scan:
 
     return dto.Scan(
         id=scan.id,
-        scan_time=scan.scan_time,
+        scan_time=utils.to_utc_datetime(scan.scan_time),
         network_id=scan.network_id,
         discoveries=discovery_dtos
     )

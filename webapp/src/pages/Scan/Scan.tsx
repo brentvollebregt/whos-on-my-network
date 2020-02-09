@@ -2,6 +2,8 @@ import React from "react";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
+import ScanDetail from "./ScanDetail";
+import ScanDiscoveries from "./ScanDiscoveries";
 
 interface ScanProps {
   id: number;
@@ -12,8 +14,10 @@ const Scan: React.FunctionComponent<ScanProps> = ({ id }) => {
 
   return (
     <PageSizeWrapper>
-      <h1 className="text-center">Scan ({id}): Temporary</h1>
-      <div style={{ background: "lightgrey" }}>Scan details</div>
+      <ScanDetail id={id} />
+      <div className="mt-4">
+        <ScanDiscoveries id={id} />
+      </div>
     </PageSizeWrapper>
   );
 };

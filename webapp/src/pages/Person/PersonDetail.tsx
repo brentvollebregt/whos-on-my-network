@@ -68,13 +68,6 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
             <div>
               <InputGroup className="mb-2">
                 <InputGroup.Prepend>
-                  <InputGroup.Text>Name</InputGroup.Text>
-                </InputGroup.Prepend>
-                <FormControl value={name} onChange={onNameChange} />
-              </InputGroup>
-
-              <InputGroup className="mb-2">
-                <InputGroup.Prepend>
                   <InputGroup.Text>First Seen</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
@@ -95,11 +88,18 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
               </InputGroup>
             </div>
             <div>
+              <InputGroup className="mb-2">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Name</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl value={name} onChange={onNameChange} />
+              </InputGroup>
+
               <Form.Group>
                 <Form.Label>Notes</Form.Label>
                 <Form.Control
                   as="textarea"
-                  rows="4"
+                  rows="3"
                   className="mb-1"
                   value={note}
                   onChange={onNoteChange}
