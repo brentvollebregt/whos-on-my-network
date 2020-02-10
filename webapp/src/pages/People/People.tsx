@@ -86,10 +86,16 @@ const People: React.FunctionComponent = () => {
                     ? "Never"
                     : person.first_seen.toFormat("ff")}
                 </td>
-                <td>
+                <td
+                  title={
+                    person.last_seen === null
+                      ? "Never"
+                      : person.last_seen.toFormat("ff")
+                  }
+                >
                   {person.last_seen === null
                     ? "Never"
-                    : person.last_seen.toFormat("ff")}
+                    : person.last_seen.toRelative()}
                 </td>
               </tr>
             ))}
