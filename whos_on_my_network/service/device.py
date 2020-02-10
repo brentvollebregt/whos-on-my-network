@@ -64,7 +64,7 @@ def get_device_by_id(device_id: int) -> dto.Device:
     discovery_dtos: List[dto.Discovery] = [dto.Discovery(
         id=d.id,
         ip_address=d.ip_address,
-        hostname=d.ip_address,
+        hostname=d.hostname,
         device_id=d.device_id,
         scan_id=d.scan_id,
     ) for d in discoveries]
