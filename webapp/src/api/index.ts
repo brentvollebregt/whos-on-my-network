@@ -176,8 +176,9 @@ export function getPeopleByFilter(
           name: p.name,
           note: p.note,
           device_count: p.device_count,
-          first_seen: parsePythonTime(p.first_seen),
-          last_seen: parsePythonTime(p.last_seen)
+          first_seen:
+            p.first_seen !== null ? parsePythonTime(p.first_seen) : null,
+          last_seen: p.first_seen !== null ? parsePythonTime(p.last_seen) : null
         }));
       });
     } else {
@@ -200,8 +201,14 @@ export function createPerson(name?: string): Promise<Person | undefined> {
           id: payload.id,
           name: payload.name,
           note: payload.note,
-          first_seen: parsePythonTime(payload.first_seen),
-          last_seen: parsePythonTime(payload.last_seen)
+          first_seen:
+            payload.first_seen !== null
+              ? parsePythonTime(payload.first_seen)
+              : null,
+          last_seen:
+            payload.last_seen !== null
+              ? parsePythonTime(payload.last_seen)
+              : null
         };
       });
     } else {
@@ -218,8 +225,14 @@ export function getPersonById(personId: number): Promise<Person | undefined> {
           id: payload.id,
           name: payload.name,
           note: payload.note,
-          first_seen: parsePythonTime(payload.first_seen),
-          last_seen: parsePythonTime(payload.last_seen)
+          first_seen:
+            payload.first_seen !== null
+              ? parsePythonTime(payload.first_seen)
+              : null,
+          last_seen:
+            payload.last_seen !== null
+              ? parsePythonTime(payload.last_seen)
+              : null
         };
       });
     } else {
@@ -246,8 +259,14 @@ export function updatePersonById(
           id: payload.id,
           name: payload.name,
           note: payload.note,
-          first_seen: parsePythonTime(payload.first_seen),
-          last_seen: parsePythonTime(payload.last_seen)
+          first_seen:
+            payload.first_seen !== null
+              ? parsePythonTime(payload.first_seen)
+              : null,
+          last_seen:
+            payload.last_seen !== null
+              ? parsePythonTime(payload.last_seen)
+              : null
         };
       });
     } else {

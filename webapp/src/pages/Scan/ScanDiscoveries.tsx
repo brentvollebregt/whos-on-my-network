@@ -46,9 +46,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
       return "";
     }
     const device = devices.find(d => d.id === deviceId);
-    return device === undefined
-      ? "NOT FOUND"
-      : device.mac_address.toUpperCase();
+    return device === undefined ? "NOT FOUND" : device.mac_address;
   };
   const getDeviceIsPrimary = (deviceId: number) => {
     if (devices === undefined) {
@@ -97,7 +95,9 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
               onClick={onDiscoveryClick(discovery.device_id)}
             >
               <td>{getDeviceName(discovery.device_id)}</td>
-              <td>{getDeviceMACAddress(discovery.device_id)}</td>
+              <td className="mac-address">
+                {getDeviceMACAddress(discovery.device_id)}
+              </td>
               <td>{getDeviceIsPrimary(discovery.device_id)}</td>
               <td>{getOwnerName(discovery.device_id)}</td>
               <td>{discovery.hostname}</td>

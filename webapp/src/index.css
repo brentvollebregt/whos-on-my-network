@@ -11,3 +11,12 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
 }
+
+.pointer {
+  cursor: pointer;
+}
+
+.mac-address {
+  font-family: Monaco, monospace;
+  text-transform: uppercase;
+}

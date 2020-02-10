@@ -1,5 +1,5 @@
 import datetime
-from typing import List
+from typing import List, Optional
 
 from . import utils
 
@@ -46,7 +46,7 @@ class ScanSummary(ToJsonSupport):
 
 
 class Person(ToJsonSupport):
-    def __init__(self, id: int, name: str, note: str, first_seen: datetime.datetime, last_seen: datetime.datetime):
+    def __init__(self, id: int, name: str, note: str, first_seen: Optional[datetime.datetime], last_seen: Optional[datetime.datetime]):
         self.id = id
         self.name = name
         self.note = note
@@ -55,7 +55,7 @@ class Person(ToJsonSupport):
 
 
 class PersonSummary(ToJsonSupport):
-    def __init__(self, id: int, name: str, note: str, device_count: int, first_seen: datetime.datetime, last_seen: datetime.datetime):
+    def __init__(self, id: int, name: str, note: str, device_count: int, first_seen: Optional[datetime.datetime], last_seen: Optional[datetime.datetime]):
         self.id = id
         self.name = name
         self.note = note

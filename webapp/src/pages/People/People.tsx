@@ -77,8 +77,16 @@ const People: React.FunctionComponent = () => {
               <tr key={person.id} onClick={onPersonClick(person.id)}>
                 <td>{person.name}</td>
                 <td>{person.device_count}</td>
-                <td>{person.first_seen.toFormat("ff")}</td>
-                <td>{person.last_seen.toRelative()}</td>
+                <td>
+                  {person.first_seen === null
+                    ? "Never"
+                    : person.first_seen.toFormat("ff")}
+                </td>
+                <td>
+                  {person.last_seen === null
+                    ? "Never"
+                    : person.last_seen.toFormat("ff")}
+                </td>
               </tr>
             ))}
         </tbody>

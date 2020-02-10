@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Device, Person } from "../../api/dto";
+import { Device, Person, PersonSummary } from "../../api/dto";
 import { updateDeviceById, getPeopleByFilter } from "../../api";
 import {
   Spinner,
@@ -20,7 +20,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
   device,
   updateDevice
 }) => {
-  const [people, setPeople] = useState<Person[]>([]);
+  const [people, setPeople] = useState<PersonSummary[]>([]);
   const [name, setName] = useState<string>(device.name);
   const [note, setNote] = useState<string>(device.note);
   const [ownerId, setOwnerId] = useState<number | null>(device.owner_id);
@@ -93,7 +93,8 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   <InputGroup.Text>MAC Address</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  value={device.mac_address.toUpperCase()}
+                  className="mac-address"
+                  value={device.mac_address}
                   disabled
                 />
               </InputGroup>

@@ -21,7 +21,7 @@ def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) 
     ) \
         .join(models.Device, peewee.JOIN.LEFT_OUTER) \
         .join(models.Discovery, peewee.JOIN.LEFT_OUTER) \
-        .join(models.Scan) \
+        .join(models.Scan, peewee.JOIN.LEFT_OUTER) \
         .group_by(models.Person.id)
 
     return [dto.PersonSummary(
@@ -29,8 +29,8 @@ def get_people_by_filter(ids: Optional[List[int]], name_partial: Optional[str]) 
         name=p.name,
         note=p.note,
         device_count=p.device_count,
-        first_seen=utils.to_utc_datetime(p.first_seen),
-        last_seen=utils.to_utc_datetime(p.last_seen)
+        first_seen=utils.to_utc_datetime(p.first_seen) if p.first_seen is not None else None,
+        last_seen=utils.to_utc_datetime(p.last_seen) if p.first_seen is not None else None
     )for p in people]
 
 
@@ -59,8 +59,8 @@ def get_person_by_id(person_id: int) -> dto.Person:
         id=person.id,
         name=person.name,
         note=person.note,
-        first_seen=utils.to_utc_datetime(dates[1]),
-        last_seen=utils.to_utc_datetime(dates[0])
+        first_seen=utils.to_utc_datetime(dates[1]) if dates[1] is not None else None,
+        last_seen=utils.to_utc_datetime(dates[0]) if dates[0] is not None else None
     )
 
 

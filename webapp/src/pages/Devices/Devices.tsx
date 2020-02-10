@@ -131,7 +131,7 @@ const Devices: React.FunctionComponent = () => {
           {filteredDevices !== undefined &&
             filteredDevices.map(device => (
               <tr key={device.id} onClick={onDeviceClick(device.id)}>
-                <td>{device.mac_address.toUpperCase()}</td>
+                <td className="mac-address">{device.mac_address}</td>
                 <td>{device.name}</td>
                 <td>{getOwnerName(device.owner_id)}</td>
                 <td>{device.is_primary ? "✔️" : "❌"}</td>

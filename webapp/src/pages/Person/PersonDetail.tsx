@@ -71,7 +71,11 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
                   <InputGroup.Text>First Seen</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  value={person.first_seen.toFormat("FF")}
+                  value={
+                    person.first_seen === null
+                      ? "Never"
+                      : person.first_seen.toFormat("FF")
+                  }
                   disabled
                 />
               </InputGroup>
@@ -81,8 +85,16 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
                   <InputGroup.Text>Last Seen</InputGroup.Text>
                 </InputGroup.Prepend>
                 <FormControl
-                  value={person.last_seen.toRelative() ?? ""}
-                  title={person.last_seen.toFormat("FF")}
+                  value={
+                    person.last_seen === null
+                      ? "Never"
+                      : person.last_seen.toRelative() ?? ""
+                  }
+                  title={
+                    person.last_seen === null
+                      ? ""
+                      : person.last_seen.toFormat("FF")
+                  }
                   disabled
                 />
               </InputGroup>

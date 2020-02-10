@@ -28,8 +28,8 @@ export interface Person {
   id: number;
   name: string;
   note: string;
-  first_seen: DateTime;
-  last_seen: DateTime;
+  first_seen: DateTime | null;
+  last_seen: DateTime | null;
 }
 
 export interface PersonSummary {
@@ -37,8 +37,8 @@ export interface PersonSummary {
   name: string;
   note: string;
   device_count: number;
-  first_seen: DateTime;
-  last_seen: DateTime;
+  first_seen: DateTime | null;
+  last_seen: DateTime | null;
 }
 
 export interface Device {
