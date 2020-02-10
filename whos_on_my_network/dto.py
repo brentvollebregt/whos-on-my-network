@@ -66,7 +66,7 @@ class PersonSummary(ToJsonSupport):
 
 class Device(ToJsonSupport):
     """ Full details of a device """
-    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime):
+    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime, last_10_discoveries: List['Discovery']):
         self.id = id
         self.mac_address = mac_address
         self.name = name
@@ -75,6 +75,7 @@ class Device(ToJsonSupport):
         self.is_primary = is_primary
         self.first_seen = first_seen
         self.last_seen = last_seen
+        self.last_10_discoveries = last_10_discoveries
 
 
 class DeviceSummary(ToJsonSupport):

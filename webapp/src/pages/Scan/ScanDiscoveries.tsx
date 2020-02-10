@@ -46,7 +46,9 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
       return "";
     }
     const device = devices.find(d => d.id === deviceId);
-    return device === undefined ? "NOT FOUND" : device.mac_address;
+    return device === undefined
+      ? "NOT FOUND"
+      : device.mac_address.toUpperCase();
   };
   const getDeviceIsPrimary = (deviceId: number) => {
     if (devices === undefined) {

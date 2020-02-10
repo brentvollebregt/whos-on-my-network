@@ -49,6 +49,25 @@ def get_device_by_id(device_id: int) -> dto.Device:
     ).where(
         (models.Discovery.device == device)
     ).join(models.Discovery).scalar(as_tuple=True)
+    discoveries = models.Discovery.select(
+        models.Discovery, models.Device, models.Person
+    ).where(
+        (models.Discovery.device == device)
+    ) \
+        .join(models.Device) \
+        .join(models.Person, peewee.JOIN.LEFT_OUTER) \
+        .switch(models.Discovery) \
+        .join(models.Scan) \
+        .order_by(models.Scan.scan_time.desc()) \
+        .limit(10)
+
+    discovery_dtos: List[dto.Discovery] = [dto.Discovery(
+        id=d.id,
+        ip_address=d.ip_address,
+        hostname=d.ip_address,
+        device_id=d.device_id,
+        scan_id=d.scan_id,
+    ) for d in discoveries]
 
     device_dto = dto.Device(
         id=device.id,
@@ -58,7 +77,8 @@ def get_device_by_id(device_id: int) -> dto.Device:
         owner_id=device.owner.id if device.owner is not None else None,
         is_primary=device.is_primary,
         first_seen=utils.to_utc_datetime(dates[1]),
-        last_seen=utils.to_utc_datetime(dates[0])
+        last_seen=utils.to_utc_datetime(dates[0]),
+        last_10_discoveries=discovery_dtos
     )
 
     return device_dto

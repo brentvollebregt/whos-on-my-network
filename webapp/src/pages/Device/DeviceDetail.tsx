@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Device, Person } from "../../api/dto";
-import { getDeviceById, updateDeviceById, getPeopleByFilter } from "../../api";
+import { updateDeviceById, getPeopleByFilter } from "../../api";
 import {
   Spinner,
   InputGroup,
@@ -12,35 +12,36 @@ import {
 } from "react-bootstrap";
 
 interface DeviceDetailProps {
-  id: number;
+  device: Device;
+  updateDevice: (device: Device) => void;
 }
 
-const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({ id }) => {
-  const [device, setDevice] = useState<Device | undefined>(undefined);
+const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
+  device,
+  updateDevice
+}) => {
   const [people, setPeople] = useState<Person[]>([]);
-  const [name, setName] = useState<string>("");
-  const [note, setNote] = useState<string>("");
-  const [ownerId, setOwnerId] = useState<number | null>(null);
-  const [isPrimary, setIsPrimary] = useState<boolean | undefined>(undefined);
+  const [name, setName] = useState<string>(device.name);
+  const [note, setNote] = useState<string>(device.note);
+  const [ownerId, setOwnerId] = useState<number | null>(device.owner_id);
+  const [isPrimary, setIsPrimary] = useState<boolean | undefined>(
+    device.is_primary
+  );
   const [dirty, setDirty] = useState<boolean>(false);
-
-  useEffect(() => {
-    getDeviceById(id)
-      .then(d => {
-        setDevice(d);
-        setName(d === undefined ? "" : d.name);
-        setNote(d === undefined ? "" : d.note);
-        setOwnerId(d === undefined ? null : d.owner_id);
-        setIsPrimary(d === undefined ? undefined : d.is_primary);
-      })
-      .catch(err => console.error(err));
-  }, []);
 
   useEffect(() => {
     getPeopleByFilter()
       .then(p => setPeople(p))
       .catch(err => console.error(err));
   }, []);
+
+  useEffect(() => {
+    setName(device.name);
+    setNote(device.note);
+    setOwnerId(device.owner_id);
+    setIsPrimary(device.is_primary);
+    setDirty(false);
+  }, [device]);
 
   const onNoteChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setNote(event.currentTarget.value);
@@ -60,13 +61,8 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({ id }) => {
   };
   const saveChanges = () => {
     if (device !== undefined && isPrimary !== undefined) {
-      updateDeviceById(id, name, note, ownerId, isPrimary).then(d => {
-        setDevice(d);
-        setName(d === undefined ? "" : d.name);
-        setNote(d === undefined ? "" : d.note);
-        setOwnerId(d === undefined ? null : d.owner_id);
-        setIsPrimary(d === undefined ? undefined : d.is_primary);
-        setDirty(false);
+      updateDeviceById(device.id, name, note, ownerId, isPrimary).then(d => {
+        updateDevice(d);
       });
     }
   };
@@ -96,7 +92,10 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({ id }) => {
                 <InputGroup.Prepend>
                   <InputGroup.Text>MAC Address</InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl value={device.mac_address} disabled />
+                <FormControl
+                  value={device.mac_address.toUpperCase()}
+                  disabled
+                />
               </InputGroup>
 
               <InputGroup className="mb-2">

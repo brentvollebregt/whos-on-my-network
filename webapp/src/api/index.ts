@@ -13,15 +13,28 @@ const parsePythonTime = (timeString: string) =>
   DateTime.fromFormat(timeString, "yyyy-MM-dd'T'HH:mm:ss.uZZ");
 
 export function getScansByFilter(
+  ids?: number[],
   startDate?: DateTime,
-  endDate?: DateTime
+  endDate?: DateTime,
+  deviceIds?: number[],
+  ownerIds?: number[],
+  limit?: number,
+  page?: number
 ): Promise<ScanSummary[]> {
   return fetch(`${Config.api.root}/api/scan`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json"
     },
-    body: JSON.stringify({ startDate, endDate })
+    body: JSON.stringify({
+      ids,
+      startDate,
+      endDate,
+      deviceIds,
+      ownerIds,
+      limit,
+      page
+    })
   }).then(r => {
     if (r.status === 200) {
       return r.json().then(payload => {
@@ -101,7 +114,8 @@ export function getDeviceById(deviceId: number): Promise<Device | undefined> {
           owner_id: payload.owner_id,
           is_primary: payload.is_primary,
           first_seen: parsePythonTime(payload.first_seen),
-          last_seen: parsePythonTime(payload.last_seen)
+          last_seen: parsePythonTime(payload.last_seen),
+          last_10_discoveries: payload.last_10_discoveries
         };
       });
     } else {
@@ -134,7 +148,8 @@ export function updateDeviceById(
           owner_id: payload.owner_id,
           is_primary: payload.is_primary,
           first_seen: parsePythonTime(payload.first_seen),
-          last_seen: parsePythonTime(payload.last_seen)
+          last_seen: parsePythonTime(payload.last_seen),
+          last_10_discoveries: payload.last_10_discoveries
         };
       });
     } else {

@@ -21,8 +21,8 @@ def get_scans_by_filter():
     ids = request.json['ids'] if 'ids' in request.json else None
     start_date = utils.iso_string_to_datetime(request.json['startDate']) if 'startDate' in request.json else None
     end_date = utils.iso_string_to_datetime(request.json['endDate']) if 'endDate' in request.json else None
-    device_ids = request.json['device_ids'] if 'device_ids' in request.json else None
-    owner_ids = request.json['owner_ids'] if 'owner_ids' in request.json else None
+    device_ids = request.json['deviceIds'] if 'deviceIds' in request.json else None
+    owner_ids = request.json['ownerIds'] if 'ownerIds' in request.json else None
     limit = request.json['limit'] if 'limit' in request.json else None
     page = request.json['page'] if 'page' in request.json else None
 

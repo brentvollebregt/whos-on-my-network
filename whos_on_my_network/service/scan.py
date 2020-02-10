@@ -9,16 +9,19 @@ from .. import utils
 
 
 def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date: datetime, device_ids: Optional[List[int]], owner_ids: Optional[List[int]], limit: Optional[int], page: Optional[int]) -> List[dto.ScanSummary]:
-    # TODO Filter on ids
     # TODO Filter by device ids
     # TODO Filter by owner ids
     # TODO Limit / paging
+    ids_definite_list = ids if ids is not None else []
+    start_date_no_timezone = utils.remove_timezome(start_date) if start_date is not None else None
+    end_date_no_timezone = utils.remove_timezome(end_date) if end_date is not None else None
 
     scans = models.Scan.select(
         models.Scan
     ).where(
-        ((start_date is None) | (models.Scan.scan_time >= utils.remove_timezome(start_date))
-         & ((end_date is None) | (models.Scan.scan_time <= utils.remove_timezome(end_date))))
+        ((ids is None) | (models.Scan.id.in_(ids_definite_list)))
+        & ((start_date is None) | (models.Scan.scan_time >= start_date_no_timezone))
+        & ((end_date is None) | (models.Scan.scan_time <= end_date_no_timezone))
     ) \
         .join(models.Discovery) \
         .join(models.Device) \

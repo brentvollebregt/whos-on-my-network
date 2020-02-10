@@ -39,13 +39,14 @@ class Device(BaseModel):
     note = peewee.TextField(default='')
     owner = peewee.ForeignKeyField(Person, null=True, default=None)
     is_primary = peewee.BooleanField(default=False)
+    # discoveries = Discovery.scan[] backref
 
 
 class Discovery(BaseModel):
     """ A discovered device """
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
     scan = peewee.ForeignKeyField(Scan, backref='discoveries')
-    device = peewee.ForeignKeyField(Device)
+    device = peewee.ForeignKeyField(Device, backref='discoveries')
     ip_address = peewee.TextField()
     hostname = peewee.TextField(null=True)
 

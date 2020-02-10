@@ -50,6 +50,7 @@ export interface Device {
   is_primary: boolean;
   first_seen: DateTime;
   last_seen: DateTime;
+  last_10_discoveries: Discovery[];
 }
 
 export interface DeviceSummary {

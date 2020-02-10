@@ -44,7 +44,7 @@ const Scans: React.FunctionComponent = () => {
   );
 
   useEffect(() => {
-    getScansByFilter(fromDate, toDate)
+    getScansByFilter(undefined, fromDate, toDate)
       .then(s => setScans(s))
       .catch(err => console.error(err));
   }, [fromDate, toDate]);
