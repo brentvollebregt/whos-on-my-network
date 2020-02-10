@@ -139,14 +139,18 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   <Dropdown.Item onClick={onOwnerIdChange(null)}>
                     Not Set
                   </Dropdown.Item>
-                  {people.map(person => (
-                    <Dropdown.Item
-                      key={person.id}
-                      onClick={onOwnerIdChange(person.id)}
-                    >
-                      {person.name}
-                    </Dropdown.Item>
-                  ))}
+                  {people
+                    .sort((a, b) =>
+                      a.name === b.name ? 0 : a.name < b.name ? -1 : 1
+                    )
+                    .map(person => (
+                      <Dropdown.Item
+                        key={person.id}
+                        onClick={onOwnerIdChange(person.id)}
+                      >
+                        {person.name}
+                      </Dropdown.Item>
+                    ))}
                 </DropdownButton>
               </InputGroup>
 
