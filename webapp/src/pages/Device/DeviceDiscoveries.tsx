@@ -35,7 +35,7 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
   };
 
   const onDiscoveryClick = (scanId: number) => () =>
-    navigate(`/scan/${scanId}`);
+    navigate(`/scans/${scanId}`);
 
   return (
     <Table striped bordered hover size="sm">
@@ -52,7 +52,8 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
           device.last_10_discoveries.map(discovery => (
             <tr
               key={discovery.id}
-              onClick={onDiscoveryClick(discovery.device_id)}
+              onClick={onDiscoveryClick(discovery.scan_id)}
+              className="pointer"
             >
               <td>{getScanTime(discovery.scan_id)}</td>
               <td>{getScanNetworkId(discovery.scan_id)}</td>

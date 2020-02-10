@@ -93,6 +93,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
             <tr
               key={discovery.id}
               onClick={onDiscoveryClick(discovery.device_id)}
+              className="pointer"
             >
               <td>{getDeviceName(discovery.device_id)}</td>
               <td className="mac-address">

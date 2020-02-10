@@ -36,7 +36,11 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
       <tbody>
         {devices !== undefined &&
           devices.map(device => (
-            <tr key={device.id} onClick={onDeviceClick(device.id)}>
+            <tr
+              key={device.id}
+              onClick={onDeviceClick(device.id)}
+              className="pointer"
+            >
               <td className="mac-address">{device.mac_address}</td>
               <td>{device.name}</td>
               <td>{device.is_primary ? "✔️" : "❌"}</td>

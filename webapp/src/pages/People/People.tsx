@@ -74,7 +74,11 @@ const People: React.FunctionComponent = () => {
         <tbody>
           {filteredPeople !== undefined &&
             filteredPeople.map(person => (
-              <tr key={person.id} onClick={onPersonClick(person.id)}>
+              <tr
+                key={person.id}
+                onClick={onPersonClick(person.id)}
+                className="pointer"
+              >
                 <td>{person.name}</td>
                 <td>{person.device_count}</td>
                 <td>

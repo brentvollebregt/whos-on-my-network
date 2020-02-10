@@ -13,7 +13,7 @@ const ScanDetail: React.FunctionComponent<ScanDetailProps> = ({ scan }) => {
         <Spinner animation="border" />
       ) : (
         <>
-          <h1 className="text-center mb-4">#{scan.id}</h1>
+          <h1 className="text-center mb-4">Scan #{scan.id}</h1>
 
           <div
             style={{
