@@ -17,7 +17,7 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
     getScansByFilter(device.last_10_discoveries.map(d => d.scan_id))
       .then(s => setScans(s))
       .catch(err => console.error(err));
-  }, [device.id]);
+  }, [device.last_10_discoveries]);
 
   const getScanTime = (scanId: number) => {
     if (scans === undefined) {

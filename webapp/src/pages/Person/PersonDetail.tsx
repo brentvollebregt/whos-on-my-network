@@ -27,7 +27,7 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ id }) => {
         setNote(p === undefined ? "" : p.note);
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [id]);
 
   const onNoteChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
     setNote(event.currentTarget.value);

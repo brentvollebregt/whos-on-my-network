@@ -17,17 +17,13 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
 
   const [device, setDevice] = useState<DeviceDTO | undefined>(undefined);
 
-  const getDevice = () => {
+  useEffect(() => {
     getDeviceById(id)
       .then(d => {
         setDevice(d);
       })
       .catch(err => console.error(err));
-  };
-
-  useEffect(() => {
-    getDevice();
-  }, []);
+  }, [id]);
 
   const updateDevice = (device: DeviceDTO) => setDevice(device);
 

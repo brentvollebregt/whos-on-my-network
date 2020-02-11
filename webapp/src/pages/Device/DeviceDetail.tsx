@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Device, Person, PersonSummary } from "../../api/dto";
+import { Device, PersonSummary } from "../../api/dto";
 import { updateDeviceById, getPeopleByFilter } from "../../api";
 import {
   Spinner,

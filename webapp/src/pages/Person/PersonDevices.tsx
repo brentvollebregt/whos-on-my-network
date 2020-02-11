@@ -17,7 +17,7 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
     getDevicesByFilter(undefined, undefined, id, undefined)
       .then(d => setDevices(d))
       .catch(err => console.error(err));
-  }, []);
+  }, [id]);
 
   const onDeviceClick = (deviceId: number) => () =>
     navigate(`/devices/${deviceId}`);

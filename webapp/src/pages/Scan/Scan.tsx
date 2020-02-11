@@ -22,7 +22,7 @@ const Scan: React.FunctionComponent<ScanProps> = ({ id }) => {
         setScan(s);
       })
       .catch(err => console.error(err));
-  }, []);
+  }, [id]);
 
   return (
     <PageSizeWrapper>
