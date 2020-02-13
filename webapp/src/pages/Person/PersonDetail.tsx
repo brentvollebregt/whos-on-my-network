@@ -8,6 +8,7 @@ import {
   InputGroup,
   FormControl
 } from "react-bootstrap";
+import { showInfoToast } from "../../utils/toasts";
 
 interface PersonDetailProps {
   person: Person;
@@ -40,6 +41,7 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({
     if (person !== undefined) {
       updatePersonById(person.id, name, note).then(p => {
         setPerson(p);
+        showInfoToast(`Updated ${p.name} (#${p.id})`);
       });
     }
   };

@@ -1,6 +1,6 @@
 import cogoToast from "cogo-toast";
 
-export const showInfoToast = (title: string, content: string) => {
+export const showInfoToast = (title: string, content?: string) => {
   const { hide } = cogoToast.info(content, {
     position: "bottom-center",
     heading: title,

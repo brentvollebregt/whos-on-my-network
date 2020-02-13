@@ -10,6 +10,7 @@ import {
   DropdownButton,
   Dropdown
 } from "react-bootstrap";
+import { showInfoToast } from "../../utils/toasts";
 
 interface DeviceDetailProps {
   device: Device;
@@ -63,6 +64,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
     if (device !== undefined && isPrimary !== undefined) {
       updateDeviceById(device.id, name, note, ownerId, isPrimary).then(d => {
         updateDevice(d);
+        showInfoToast(`Updated ${d.name} (#${d.id})`);
       });
     }
   };
