@@ -140,7 +140,9 @@ const Devices: React.FunctionComponent = () => {
                 <td>{getOwnerName(device.owner_id)}</td>
                 <td>{device.is_primary ? "✔️" : "❌"}</td>
                 <td>{device.first_seen.toFormat("ff")}</td>
-                <td>{device.last_seen.toRelative()}</td>
+                <td title={device.last_seen.toFormat("FF")}>
+                  {device.last_seen.toRelative()}
+                </td>
               </tr>
             ))}
         </tbody>

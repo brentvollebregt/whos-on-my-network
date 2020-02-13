@@ -34,42 +34,6 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
     }
   }, [devices]);
 
-  const getDeviceName = (deviceId: number) => {
-    if (devices === undefined) {
-      return "";
-    }
-    const device = devices.find(d => d.id === deviceId);
-    return device === undefined ? "NOT FOUND" : device.name;
-  };
-  const getDeviceMACAddress = (deviceId: number) => {
-    if (devices === undefined) {
-      return "";
-    }
-    const device = devices.find(d => d.id === deviceId);
-    return device === undefined ? "NOT FOUND" : device.mac_address;
-  };
-  const getDeviceIsPrimary = (deviceId: number) => {
-    if (devices === undefined) {
-      return "";
-    }
-    const device = devices.find(d => d.id === deviceId);
-    return device === undefined ? "NOT FOUND" : device.is_primary ? "✔️" : "❌";
-  };
-  const getOwnerName = (deviceId: number) => {
-    if (devices === undefined || people === undefined) {
-      return "";
-    }
-    const device = devices.find(d => d.id === deviceId);
-    if (device === undefined) {
-      return "CANNOT FIND DEVICE";
-    }
-    if (device.owner_id === null) {
-      return "";
-    }
-    const person = people.find(p => p.id === device.owner_id);
-    return person === undefined ? "NOT FOUND" : person.name;
-  };
-
   const onDiscoveryClick = (deviceId: number) => () =>
     navigate(`/devices/${deviceId}`);
 
@@ -79,32 +43,43 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
     <Table striped bordered hover size="sm">
       <thead>
         <tr>
+          <th>MAC Address</th>
           <th>Name</th>
-          <th>MAC</th>
-          <th>Primary</th>
           <th>Owner</th>
+          <th>Is Primary</th>
           <th>Hostname</th>
           <th>IP Address</th>
         </tr>
       </thead>
       <tbody>
         {scan.discoveries !== undefined &&
-          scan.discoveries.map(discovery => (
-            <tr
-              key={discovery.id}
-              onClick={onDiscoveryClick(discovery.device_id)}
-              className="pointer"
-            >
-              <td>{getDeviceName(discovery.device_id)}</td>
-              <td className="mac-address">
-                {getDeviceMACAddress(discovery.device_id)}
-              </td>
-              <td>{getDeviceIsPrimary(discovery.device_id)}</td>
-              <td>{getOwnerName(discovery.device_id)}</td>
-              <td>{discovery.hostname}</td>
-              <td>{discovery.ip_address}</td>
-            </tr>
-          ))}
+          scan.discoveries.map(discovery => {
+            const device = devices?.find(d => d.id === discovery.device_id);
+            const person =
+              device !== undefined
+                ? people?.find(p => p.id === device.owner_id)
+                : undefined;
+            return (
+              <tr
+                key={discovery.id}
+                onClick={onDiscoveryClick(discovery.device_id)}
+                className="pointer"
+              >
+                <td className="mac-address">{device?.mac_address}</td>
+                <td>{device?.name}</td>
+                <td>{person?.name}</td>
+                <td>
+                  {device === undefined
+                    ? undefined
+                    : device.is_primary
+                    ? "✔️"
+                    : "❌"}
+                </td>
+                <td>{discovery.hostname}</td>
+                <td>{discovery.ip_address}</td>
+              </tr>
+            );
+          })}
       </tbody>
     </Table>
   );
