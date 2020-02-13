@@ -13,6 +13,7 @@ import Constants from "../../constants";
 import { DeviceSummary, PersonSummary } from "../../api/dto";
 import { getDevicesByFilter, getPeopleByFilter } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 const Devices: React.FunctionComponent = () => {
   useTitle(`Devices - ${Constants.title}`);
@@ -28,11 +29,11 @@ const Devices: React.FunctionComponent = () => {
   useEffect(() => {
     getDevicesByFilter()
       .then(d => setDevices(d))
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage("devices"));
 
     getPeopleByFilter()
       .then(p => setPeople(p))
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage("people"));
   }, []);
 
   const onDeviceClick = (deviceId: number) => () =>

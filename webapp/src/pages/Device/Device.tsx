@@ -7,6 +7,7 @@ import DeviceDiscoveries from "./DeviceDiscoveries";
 import { getDeviceById } from "../../api";
 import { Device as DeviceDTO } from "../../api/dto";
 import { Spinner } from "react-bootstrap";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 interface DeviceProps {
   id: number;
@@ -22,7 +23,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
       .then(d => {
         setDevice(d);
       })
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage(`device #${id}`));
   }, [id]);
 
   const updateDevice = (device: DeviceDTO) => setDevice(device);

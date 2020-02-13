@@ -16,6 +16,7 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateTime, Interval } from "luxon";
 import { useLocalStorage } from "@rehooks/local-storage";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 const dateRanges = ["1 Day", "1 Week", "1 Month"];
 const dateRangeToInterval: { [key: string]: Interval } = {
@@ -62,7 +63,7 @@ const Scans: React.FunctionComponent = () => {
   useEffect(() => {
     getScansByFilter(undefined, getStartDate(), getEndDate())
       .then(s => setScans(s))
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage("scans"));
   }, [startAndEndDates]);
 
   const onScanClick = (scanId: number) => () => navigate(`/scans/${scanId}`);

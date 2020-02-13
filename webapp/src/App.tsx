@@ -9,7 +9,7 @@ import NotFound from "./pages/NotFound";
 import People from "./pages/People";
 import Person from "./pages/Person";
 import { useRoutes, useRedirect } from "hookrouter";
-import { isInt } from "./logic/utils";
+import { isInt } from "./utils/logic";
 
 const urlIdValidator = (
   id: string,

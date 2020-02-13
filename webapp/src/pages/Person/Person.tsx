@@ -7,6 +7,7 @@ import PersonDevices from "./PersonDevices";
 import { Person as PersonDTO } from "../../api/dto";
 import { getPersonById } from "../../api";
 import { Spinner } from "react-bootstrap";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 interface PersonProps {
   id: number;
@@ -20,7 +21,7 @@ const Person: React.FunctionComponent<PersonProps> = ({ id }) => {
   useEffect(() => {
     getPersonById(id)
       .then(p => setPerson(p))
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage(`person #${id}`));
   }, [id]);
 
   const updatePerson = (p: PersonDTO) => setPerson(p);

@@ -7,6 +7,7 @@ import ScanDetail from "./ScanDetail";
 import ScanDiscoveries from "./ScanDiscoveries";
 import { getScanById } from "../../api";
 import { Spinner } from "react-bootstrap";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 interface ScanProps {
   id: number;
@@ -22,7 +23,7 @@ const Scan: React.FunctionComponent<ScanProps> = ({ id }) => {
       .then(s => {
         setScan(s);
       })
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage(`scan #${id}`));
   }, [id]);
 
   return (

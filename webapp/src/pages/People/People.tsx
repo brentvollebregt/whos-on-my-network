@@ -12,6 +12,7 @@ import { useTitle, navigate } from "hookrouter";
 import { PersonSummary } from "../../api/dto";
 import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
+import { genericApiErrorMessage } from "../../utils/toasts";
 
 const People: React.FunctionComponent = () => {
   useTitle(`People - ${Constants.title}`);
@@ -22,7 +23,7 @@ const People: React.FunctionComponent = () => {
   const getPeople = () => {
     getPeopleByFilter()
       .then(p => setPeople(p))
-      .catch(err => console.error(err));
+      .catch(err => genericApiErrorMessage("people"));
   };
 
   useEffect(() => {
