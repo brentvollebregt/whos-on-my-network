@@ -104,10 +104,7 @@ const Scans: React.FunctionComponent = () => {
           customInput={
             <FormControl
               style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0
+                borderRadius: 0
               }}
             />
           }
@@ -125,10 +122,7 @@ const Scans: React.FunctionComponent = () => {
           customInput={
             <FormControl
               style={{
-                borderTopLeftRadius: 0,
-                borderBottomLeftRadius: 0,
-                borderTopRightRadius: 0,
-                borderBottomRightRadius: 0
+                borderRadius: 0
               }}
             />
           }

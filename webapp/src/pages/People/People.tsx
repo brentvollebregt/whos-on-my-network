@@ -35,12 +35,10 @@ const People: React.FunctionComponent = () => {
   const onTextFilter = (event: React.FormEvent<HTMLInputElement>) =>
     setTextFilter(event.currentTarget.value);
 
-  const sortedPeople = people
-    ?.slice()
-    .sort((a, b) => (a.name === b.name ? 0 : a.name > b.name ? -1 : 1));
-  const filteredPeople = sortedPeople?.filter(
-    p => textFilter === undefined || p.name.indexOf(textFilter) !== -1
-  );
+  const sortedAndFilteredPeople = people
+    ?.slice() // Do not modify the original list
+    .filter(p => textFilter === undefined || p.name.indexOf(textFilter) !== -1)
+    .sort((a, b) => (a.name === b.name ? 0 : a.name > b.name ? 1 : -1));
 
   return (
     <PageSizeWrapper>
@@ -72,8 +70,8 @@ const People: React.FunctionComponent = () => {
           </tr>
         </thead>
         <tbody>
-          {filteredPeople !== undefined &&
-            filteredPeople.map(person => (
+          {sortedAndFilteredPeople !== undefined &&
+            sortedAndFilteredPeople.map(person => (
               <tr
                 key={person.id}
                 onClick={onPersonClick(person.id)}
