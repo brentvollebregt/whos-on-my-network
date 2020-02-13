@@ -73,13 +73,6 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
         <Spinner animation="border" />
       ) : (
         <>
-          <h1 className="text-center mb-4">
-            {device.name === ""
-              ? device.mac_address.toUpperCase()
-              : device.name}{" "}
-            (#{device.id})
-          </h1>
-
           <div
             style={{
               display: "grid",

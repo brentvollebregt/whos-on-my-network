@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { DeviceSummary } from "../../api/dto";
 import { getDevicesByFilter } from "../../api";
-import { Table } from "react-bootstrap";
+import { Table, Spinner } from "react-bootstrap";
 import { navigate } from "hookrouter";
 
 interface PersonDevicesProps {
@@ -38,33 +38,41 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
     }); // Then sort by names (empty names are lowest)
 
   return (
-    <Table striped bordered hover size="sm">
-      <thead>
-        <tr>
-          <th>MAC Address</th>
-          <th>Name</th>
-          <th>Is Primary</th>
-          <th>First Seen</th>
-          <th>Last Seen</th>
-        </tr>
-      </thead>
-      <tbody>
-        {sortedDevices !== undefined &&
-          sortedDevices.map(device => (
-            <tr
-              key={device.id}
-              onClick={onDeviceClick(device.id)}
-              className="pointer"
-            >
-              <td className="mac-address">{device.mac_address}</td>
-              <td>{device.name}</td>
-              <td>{device.is_primary ? "✔️" : "❌"}</td>
-              <td>{device.first_seen.toFormat("ff")}</td>
-              <td>{device.last_seen.toRelative()}</td>
-            </tr>
-          ))}
-      </tbody>
-    </Table>
+    <>
+      <Table striped bordered hover size="sm">
+        <thead>
+          <tr>
+            <th>MAC Address</th>
+            <th>Name</th>
+            <th>Is Primary</th>
+            <th>First Seen</th>
+            <th>Last Seen</th>
+          </tr>
+        </thead>
+        <tbody>
+          {sortedDevices !== undefined &&
+            sortedDevices.map(device => (
+              <tr
+                key={device.id}
+                onClick={onDeviceClick(device.id)}
+                className="pointer"
+              >
+                <td className="mac-address">{device.mac_address}</td>
+                <td>{device.name}</td>
+                <td>{device.is_primary ? "✔️" : "❌"}</td>
+                <td>{device.first_seen.toFormat("ff")}</td>
+                <td>{device.last_seen.toRelative()}</td>
+              </tr>
+            ))}
+        </tbody>
+      </Table>
+
+      {sortedDevices === undefined && (
+        <div style={{ textAlign: "center" }}>
+          <Spinner animation="border" />
+        </div>
+      )}
+    </>
   );
 };
 

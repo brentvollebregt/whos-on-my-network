@@ -6,6 +6,7 @@ import PageSizeWrapper from "../../components/PageSizeWrapper";
 import ScanDetail from "./ScanDetail";
 import ScanDiscoveries from "./ScanDiscoveries";
 import { getScanById } from "../../api";
+import { Spinner } from "react-bootstrap";
 
 interface ScanProps {
   id: number;
@@ -26,10 +27,22 @@ const Scan: React.FunctionComponent<ScanProps> = ({ id }) => {
 
   return (
     <PageSizeWrapper>
-      <ScanDetail scan={scan} />
-      <div className="mt-4">
-        <ScanDiscoveries scan={scan} />
-      </div>
+      <h1 className="text-center mb-4">Scan #{id}</h1>
+
+      {scan !== undefined && (
+        <>
+          <ScanDetail scan={scan} />
+          <div className="mt-4">
+            <ScanDiscoveries scan={scan} />
+          </div>
+        </>
+      )}
+
+      {scan === undefined && (
+        <div style={{ textAlign: "center" }}>
+          <Spinner animation="border" />
+        </div>
+      )}
     </PageSizeWrapper>
   );
 };

@@ -29,15 +29,28 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
 
   return (
     <PageSizeWrapper>
-      {device === undefined ? (
-        <Spinner animation="border" />
-      ) : (
+      <h1 className="text-center mb-4">
+        {device === undefined
+          ? undefined
+          : device.name === ""
+          ? device.mac_address.toUpperCase()
+          : device.name}{" "}
+        (#{id})
+      </h1>
+
+      {device !== undefined && (
         <>
           <DeviceDetail device={device} updateDevice={updateDevice} />
           <div className="mt-4">
             <DeviceDiscoveries device={device} />
           </div>
         </>
+      )}
+
+      {device === undefined && (
+        <div style={{ textAlign: "center" }}>
+          <Spinner animation="border" />
+        </div>
       )}
     </PageSizeWrapper>
   );
