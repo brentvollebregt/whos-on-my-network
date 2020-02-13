@@ -15,49 +15,74 @@ import {
 import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateTime, Interval } from "luxon";
+import { useLocalStorage } from "@rehooks/local-storage";
 
 const dateRanges = ["1 Day", "1 Week", "1 Month"];
 const dateRangeToInterval: { [key: string]: Interval } = {
   "1 Day": Interval.fromDateTimes(
-    DateTime.local().minus({ days: 1 }),
     DateTime.local()
+      .minus({ days: 1 })
+      .startOf("day"),
+    DateTime.local().endOf("day")
   ),
   "1 Week": Interval.fromDateTimes(
-    DateTime.local().minus({ weeks: 1 }),
     DateTime.local()
+      .minus({ weeks: 1 })
+      .startOf("day"),
+    DateTime.local().endOf("day")
   ),
   "1 Month": Interval.fromDateTimes(
-    DateTime.local().minus({ months: 1 }),
     DateTime.local()
+      .minus({ months: 1 })
+      .startOf("day"),
+    DateTime.local().endOf("day")
   )
 };
+const defaultStartDateRange = "1 Day";
+const defaultStartDate = dateRangeToInterval[defaultStartDateRange].start;
+const defaultEndDate = dateRangeToInterval[defaultStartDateRange].end;
 
 const Scans: React.FunctionComponent = () => {
   useTitle(`Scans - ${Constants.title}`);
 
   const [scans, setScans] = useState<ScanSummary[] | undefined>(undefined);
-  const [fromDate, setFromDate] = useState<DateTime>(
-    dateRangeToInterval["1 Day"].start
-  );
-  const [toDate, setToDate] = useState<DateTime>(
-    dateRangeToInterval["1 Day"].end
-  );
+  const [startAndEndDates, setStartAndEndDates] = useLocalStorage<
+    [string, string]
+  >("scans_selectedDates", [defaultStartDate.toISO(), defaultEndDate.toISO()]);
+
+  const getStartDate = () =>
+    startAndEndDates === null
+      ? defaultStartDate
+      : DateTime.fromISO(startAndEndDates[0]);
+  const getEndDate = () =>
+    startAndEndDates === null
+      ? defaultEndDate
+      : DateTime.fromISO(startAndEndDates[1]);
 
   useEffect(() => {
-    getScansByFilter(undefined, fromDate, toDate)
+    getScansByFilter(undefined, getStartDate(), getEndDate())
       .then(s => setScans(s))
       .catch(err => console.error(err));
-  }, [fromDate, toDate]);
+  }, [startAndEndDates]);
 
   const onScanClick = (scanId: number) => () => navigate(`/scans/${scanId}`);
   const onStartDateSelection = (date: Date | null) =>
-    date !== null && setFromDate(DateTime.fromJSDate(date));
+    date !== null &&
+    setStartAndEndDates([
+      DateTime.fromJSDate(date).toISO(),
+      getEndDate().toISO()
+    ]);
   const onEndDateSelection = (date: Date | null) =>
-    date !== null && setToDate(DateTime.fromJSDate(date));
-  const onDateRangeSelection = (range: string) => {
-    setFromDate(dateRangeToInterval[range].start);
-    setToDate(dateRangeToInterval[range].end);
-  };
+    date !== null &&
+    setStartAndEndDates([
+      getStartDate().toISO(),
+      DateTime.fromJSDate(date).toISO()
+    ]);
+  const onDateRangeSelection = (range: string) => () =>
+    setStartAndEndDates([
+      dateRangeToInterval[range].start.toISO(),
+      dateRangeToInterval[range].end.toISO()
+    ]);
 
   return (
     <PageSizeWrapper>
@@ -74,7 +99,7 @@ const Scans: React.FunctionComponent = () => {
           From
         </InputGroup.Text>
         <DatePicker
-          selected={fromDate.toJSDate()}
+          selected={getStartDate().toJSDate()}
           onChange={onStartDateSelection}
           customInput={
             <FormControl
@@ -86,6 +111,8 @@ const Scans: React.FunctionComponent = () => {
               }}
             />
           }
+          maxDate={getEndDate().toJSDate()}
+          dateFormat="dd/MM/yyyy"
         />
         <InputGroup.Text
           style={{ borderRadius: 0, borderLeft: "none", borderRight: "none" }}
@@ -93,7 +120,7 @@ const Scans: React.FunctionComponent = () => {
           to
         </InputGroup.Text>
         <DatePicker
-          selected={toDate.toJSDate()}
+          selected={getEndDate().toJSDate()}
           onChange={onEndDateSelection}
           customInput={
             <FormControl
@@ -105,6 +132,8 @@ const Scans: React.FunctionComponent = () => {
               }}
             />
           }
+          minDate={getStartDate().toJSDate()}
+          dateFormat="dd/MM/yyyy"
         />
         <DropdownButton
           as={InputGroup.Append}
@@ -114,7 +143,7 @@ const Scans: React.FunctionComponent = () => {
         >
           {dateRanges.map(dateRange => (
             <Dropdown.Item
-              onClick={() => onDateRangeSelection(dateRange)}
+              onClick={onDateRangeSelection(dateRange)}
               key={dateRange}
             >
               {dateRange}
