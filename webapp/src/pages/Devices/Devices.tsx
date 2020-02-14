@@ -68,7 +68,7 @@ const Devices: React.FunctionComponent = () => {
         (ownerFilter === null || d.owner_id === ownerFilter) && // Owner filter
         (isPrimaryFilter === null || d.is_primary === isPrimaryFilter) // Primary filter
     )
-    .sort((a, b) => (a.mac_address > b.mac_address ? 1 : -1)) // Initially sort by MAC address
+    .sort((a, b) => -a.last_seen.diff(b.last_seen).as("milliseconds")) // Initially sort by last seen time
     .sort((a, b) => {
       if (a.name === b.name) {
         return 0;
