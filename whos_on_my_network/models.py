@@ -20,7 +20,7 @@ class BaseModel(peewee.Model):
 class Scan(BaseModel):
     """ Scans done on a network """
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
-    scan_time = peewee.DateTimeField(default=utils.remove_timezome(utils.get_utc_datetime()))  # UTC (no timezone)
+    scan_time = peewee.DateTimeField(default=lambda: utils.remove_timezome(utils.get_utc_datetime()))  # UTC (no timezone)
     network_id = peewee.TextField()
     # discoveries = Discovery.scan[] backref
 
