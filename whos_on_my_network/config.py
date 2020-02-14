@@ -10,3 +10,4 @@ PORT = int(os.getenv('PORT', 8080))
 
 # General Application
 VERBOSE = False
+DEFAULT_PLUGIN = None
