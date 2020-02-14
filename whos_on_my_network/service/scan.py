@@ -23,8 +23,8 @@ def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date
         & ((start_date is None) | (models.Scan.scan_time >= start_date_no_timezone))
         & ((end_date is None) | (models.Scan.scan_time <= end_date_no_timezone))
     ) \
-        .join(models.Discovery) \
-        .join(models.Device) \
+        .join(models.Discovery, peewee.JOIN.LEFT_OUTER) \
+        .join(models.Device, peewee.JOIN.LEFT_OUTER) \
         .join(models.Person, peewee.JOIN.LEFT_OUTER) \
         .group_by(models.Scan.id) \
         .order_by(models.Scan.scan_time.desc())
