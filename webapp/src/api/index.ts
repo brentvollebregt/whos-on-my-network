@@ -6,7 +6,8 @@ import {
   Scan,
   DeviceSummary,
   PersonSummary,
-  Person
+  Person,
+  DiscoveryTimes
 } from "./dto";
 
 const parsePythonTime = (timeString: string) =>
@@ -268,6 +269,62 @@ export function updatePersonById(
               ? parsePythonTime(payload.last_seen)
               : null
         };
+      });
+    } else {
+      throw Error(`Server Error (HTTP${r.status})`);
+    }
+  });
+}
+
+export function getDeviceDiscoveryTimes(
+  ids: number[],
+  startDate: DateTime,
+  endDate: DateTime
+): Promise<DiscoveryTimes> {
+  return fetch(`${Config.api.root}/api/device/discovery-times`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ ids, startDate, endDate })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        const returnPayload = { ...payload };
+        Object.keys(returnPayload).forEach((key: string) => {
+          returnPayload[parseInt(key)] = returnPayload[key].map((d: string) =>
+            parsePythonTime(d)
+          );
+        });
+        return returnPayload as DiscoveryTimes;
+      });
+    } else {
+      throw Error(`Server Error (HTTP${r.status})`);
+    }
+  });
+}
+
+export function getPersonDiscoveryTimes(
+  ids: number[],
+  startDate: DateTime,
+  endDate: DateTime
+): Promise<DiscoveryTimes> {
+  return fetch(`${Config.api.root}/api/person/discovery-times`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ ids, startDate, endDate })
+  }).then(r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        const returnPayload = { ...payload };
+        Object.keys(returnPayload).forEach((key: string) => {
+          returnPayload[parseInt(key)] = returnPayload[key].map((d: string) =>
+            parsePythonTime(d)
+          );
+        });
+        return returnPayload as DiscoveryTimes;
       });
     } else {
       throw Error(`Server Error (HTTP${r.status})`);

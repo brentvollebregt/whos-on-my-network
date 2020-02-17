@@ -4,6 +4,7 @@ from . import utils
 from .service import scan as scan_service
 from .service import device as device_service
 from .service import people as people_service
+from .service import discovery as discovery_service
 
 
 app = Flask(__name__, static_url_path='')
@@ -119,6 +120,32 @@ def update_person_by_id(person_id: int):
     person = people_service.update_person_by_id(person_id, name, note)
 
     dict_response = person.build()
+    return jsonify(dict_response)
+
+
+@app.route("/api/device/discovery-times", methods=["POST"])
+def get_device_discovery_times():
+    """ Get times devices were discovered by id """
+    ids = request.json['ids'] if 'ids' in request.json else None
+    start_date = utils.iso_string_to_datetime(request.json['startDate']) if 'startDate' in request.json else None
+    end_date = utils.iso_string_to_datetime(request.json['endDate']) if 'endDate' in request.json else None
+
+    discovery_times = discovery_service.get_discovery_times_for_devices(ids, start_date, end_date)
+
+    dict_response = utils.serialize_dict(discovery_times)
+    return jsonify(dict_response)
+
+
+@app.route("/api/person/discovery-times", methods=["POST"])
+def get_person_discovery_times():
+    """ Get times people were discovered by id """
+    ids = request.json['ids'] if 'ids' in request.json else None
+    start_date = utils.iso_string_to_datetime(request.json['startDate']) if 'startDate' in request.json else None
+    end_date = utils.iso_string_to_datetime(request.json['endDate']) if 'endDate' in request.json else None
+
+    discovery_times = discovery_service.get_discovery_times_for_people(ids, start_date, end_date)
+
+    dict_response = utils.serialize_dict(discovery_times)
     return jsonify(dict_response)
 
 

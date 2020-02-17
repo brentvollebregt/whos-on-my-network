@@ -63,3 +63,7 @@ export interface DeviceSummary {
   first_seen: DateTime;
   last_seen: DateTime;
 }
+
+export interface DiscoveryTimes {
+  [key: number]: DateTime;
+}

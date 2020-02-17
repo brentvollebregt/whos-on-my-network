@@ -1,13 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Person } from "../../api/dto";
-import { getPersonById, updatePersonById } from "../../api";
-import {
-  Spinner,
-  Form,
-  Button,
-  InputGroup,
-  FormControl
-} from "react-bootstrap";
+import { updatePersonById } from "../../api";
+import { Form, Button, InputGroup, FormControl } from "react-bootstrap";
 import { showInfoToast } from "../../utils/toasts";
 
 interface PersonDetailProps {

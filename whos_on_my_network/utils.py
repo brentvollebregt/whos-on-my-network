@@ -24,3 +24,12 @@ def datetime_to_iso_string(date: datetime.datetime) -> str:
 def iso_string_to_datetime(string: str) -> datetime.datetime:
     """ Convert an ISO string (passed from a JavaScript client) to a datetime """
     return datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f%z")
+
+
+def serialize_dict(_dict: dict) -> dict:
+    """ A function to support generic dict serialization for dynamic DTOs """
+    for key in _dict:
+        value = _dict[key]
+        if type(value) == datetime.datetime:
+            _dict[key] = datetime_to_iso_string(value)
+    return _dict
