@@ -22,7 +22,7 @@ class Scan(BaseModel):
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
     scan_time = peewee.DateTimeField(default=lambda: utils.remove_timezome(utils.get_utc_datetime()))  # UTC (no timezone)
     network_id = peewee.TextField()
-    # discoveries = Discovery.scan[] backref
+    # discoveries = Discovery[] (backref from Discovery.scan)
 
 
 class Person(BaseModel):
@@ -30,6 +30,7 @@ class Person(BaseModel):
     id = peewee.PrimaryKeyField(constraints=[peewee.SQL('AUTOINCREMENT')])
     name = peewee.TextField(default='')
     note = peewee.TextField(default='')
+    # devices = Device[] (backref from Device.owner)
 
 
 class Device(BaseModel):
@@ -37,9 +38,9 @@ class Device(BaseModel):
     mac_address = peewee.TextField(unique=True)
     name = peewee.TextField(default='')
     note = peewee.TextField(default='')
-    owner = peewee.ForeignKeyField(Person, null=True, default=None)
+    owner = peewee.ForeignKeyField(Person, null=True, default=None, backref='devices')
     is_primary = peewee.BooleanField(default=False)
-    # discoveries = Discovery.scan[] backref
+    # discoveries = Discovery[] (backref from Discovery.device)
 
 
 class Discovery(BaseModel):

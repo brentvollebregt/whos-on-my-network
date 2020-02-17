@@ -1,5 +1,5 @@
 from datetime import datetime
-from typing import List, Optional, Tuple
+from typing import List, Optional
 
 import peewee
 
@@ -8,7 +8,7 @@ from .. import dto
 from .. import utils
 
 
-def get_scans_by_filter(ids: Optional[List[int]], start_date: datetime, end_date: datetime, device_ids: Optional[List[int]], owner_ids: Optional[List[int]], limit: Optional[int], page: Optional[int]) -> List[dto.ScanSummary]:
+def get_scans_by_filter(ids: Optional[List[int]], start_date: Optional[datetime], end_date: Optional[datetime], device_ids: Optional[List[int]], owner_ids: Optional[List[int]], limit: Optional[int], page: Optional[int]) -> List[dto.ScanSummary]:
     # TODO Filter by device ids
     # TODO Filter by owner ids
     # TODO Limit / paging
