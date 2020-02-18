@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
@@ -17,7 +17,7 @@ const Home: React.FunctionComponent = () => {
 
       <Chart entityType={entityType} selectedIds={selectedIds} />
 
-      <div className="mt-2">
+      <div className="mt-3">
         <EntitySelection
           entityType={entityType}
           setEntityType={setEntityType}

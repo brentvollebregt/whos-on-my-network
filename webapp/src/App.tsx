@@ -8,6 +8,7 @@ import Navigation from "./components/Navigation";
 import NotFound from "./pages/NotFound";
 import People from "./pages/People";
 import Person from "./pages/Person";
+import Current from "./pages/Current";
 import { useRoutes, useRedirect } from "hookrouter";
 import { isInt } from "./utils/logic";
 
@@ -24,7 +25,8 @@ const App: React.FC = () => {
     "/devices": () => <Devices />,
     "/devices/:id": ({ id }: any) => urlIdValidator(id, Device),
     "/people": () => <People />,
-    "/people/:id": ({ id }: any) => urlIdValidator(id, Person)
+    "/people/:id": ({ id }: any) => urlIdValidator(id, Person),
+    "/current": () => <Current />
   };
   const routeResult = useRoutes(routes);
   useRedirect("/about/", "/about");

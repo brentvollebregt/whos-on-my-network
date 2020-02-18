@@ -41,13 +41,17 @@ const Chart: React.FC<ChartProps> = ({ entityType, selectedIds }) => {
         setStartAndEndDates={setStartAndEndDates}
       />
 
-      {/* TODO Graph */}
+      {/* 
+      TODO Graph
+        - Dot plotting: https://vx-demo.now.sh/dots
+        - Axis labels: https://vx-demo.now.sh/barstackhorizontal
+      If we can click to deselect, we can get rid of the bottom component and substitute it with some pill system
+      that shows the unselected names/devices and allows for them to be reselected (+ select/deselect all)
+      */}
       <div
         className="mb-2"
         style={{ background: "lightgrey", marginTop: 5, height: 200 }}
       >
-        Some sort of chart showing device discoveries
-        <br />
         {getStartAndEndDates()[0].toISO()} to {getStartAndEndDates()[1].toISO()}
       </div>
     </>

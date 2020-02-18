@@ -8,11 +8,10 @@ import {
   ButtonToolbar
 } from "react-bootstrap";
 import { getDevicesByFilter, getPeopleByFilter } from "../../api";
-import Constants from "../../constants";
 import { DeviceSummary, PersonSummary } from "../../api/dto";
 import { genericApiErrorMessage } from "../../utils/toasts";
-import "./Home.css";
 import { EntityType } from "./Chart";
+import "./Home.css";
 
 interface EntitySelectionProps {
   entityType: EntityType;
