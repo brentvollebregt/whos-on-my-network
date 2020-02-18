@@ -13,10 +13,16 @@ interface DeviceProps {
   id: number;
 }
 
-const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
-  useTitle(`Device - ${Constants.title}`);
+const getDeviceName = (id: number, device: DeviceDTO | undefined) =>
+  device === undefined
+    ? id
+    : device.name === ""
+    ? device.mac_address.toUpperCase()
+    : device.name;
 
+const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
   const [device, setDevice] = useState<DeviceDTO | undefined>(undefined);
+  useTitle(`Device: ${getDeviceName(id, device)} - ${Constants.title}`);
 
   useEffect(() => {
     getDeviceById(id)
@@ -31,12 +37,7 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
   return (
     <PageSizeWrapper>
       <h1 className="text-center mb-4">
-        {device === undefined
-          ? undefined
-          : device.name === ""
-          ? device.mac_address.toUpperCase()
-          : device.name}{" "}
-        (#{id})
+        {getDeviceName(id, device)} (#{id})
       </h1>
 
       {device !== undefined && (

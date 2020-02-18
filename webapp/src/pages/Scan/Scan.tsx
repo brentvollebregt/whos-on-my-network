@@ -14,7 +14,7 @@ interface ScanProps {
 }
 
 const Scan: React.FunctionComponent<ScanProps> = ({ id }) => {
-  useTitle(`Scans - ${Constants.title}`);
+  useTitle(`Scan ${id} - ${Constants.title}`);
 
   const [scan, setScan] = useState<ScanDTO | undefined>(undefined);
 
