@@ -331,3 +331,15 @@ export function getPersonDiscoveryTimes(
     }
   });
 }
+
+export function lookupMacVendor(macAddress: string): Promise<string> {
+  return fetch(`${Config.api.root}/api/external/mac-lookup/${macAddress}`).then(
+    async r => {
+      if (r.status === 200) {
+        return r.text();
+      } else {
+        return "";
+      }
+    }
+  );
+}

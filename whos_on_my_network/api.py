@@ -5,6 +5,7 @@ from .service import scan as scan_service
 from .service import device as device_service
 from .service import people as people_service
 from .service import discovery as discovery_service
+from .service import external as external_service
 
 
 app = Flask(__name__, static_url_path='')
@@ -147,6 +148,13 @@ def get_person_discovery_times():
 
     dict_response = utils.serialize_dict(discovery_times)
     return jsonify(dict_response)
+
+
+@app.route("/api/external/mac-lookup/<mac_address>", methods=["GET"])
+def get_mac_address_vendor(mac_address: str):
+    """ Get a mac addresses vendor """
+    vendor = external_service.get_mac_address_vendor(mac_address)
+    return vendor
 
 
 # Setup access control

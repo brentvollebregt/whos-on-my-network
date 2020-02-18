@@ -1,6 +1,10 @@
 import React, { useEffect, useState } from "react";
 import { Device, PersonSummary } from "../../api/dto";
-import { updateDeviceById, getPeopleByFilter } from "../../api";
+import {
+  updateDeviceById,
+  getPeopleByFilter,
+  lookupMacVendor
+} from "../../api";
 import {
   Spinner,
   InputGroup,
@@ -29,6 +33,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
     device.is_primary
   );
   const [dirty, setDirty] = useState<boolean>(false);
+  const [vendor, setVendor] = useState<string>("");
 
   useEffect(() => {
     getPeopleByFilter()
@@ -42,6 +47,10 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
     setOwnerId(device.owner_id);
     setIsPrimary(device.is_primary);
     setDirty(false);
+  }, [device]);
+
+  useEffect(() => {
+    lookupMacVendor(device.mac_address).then(v => setVendor(v));
   }, [device]);
 
   const onNoteChange = (event: React.FormEvent<HTMLTextAreaElement>) => {
@@ -92,6 +101,13 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   value={device.mac_address}
                   disabled
                 />
+              </InputGroup>
+
+              <InputGroup className="mb-2">
+                <InputGroup.Prepend>
+                  <InputGroup.Text>Vendor</InputGroup.Text>
+                </InputGroup.Prepend>
+                <FormControl value={vendor} title={vendor} disabled />
               </InputGroup>
 
               <InputGroup className="mb-2">
