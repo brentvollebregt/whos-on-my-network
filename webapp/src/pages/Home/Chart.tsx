@@ -9,8 +9,10 @@ const defaultStartDate = DateTime.local()
   .startOf("day");
 const defaultEndDate = DateTime.local().endOf("day");
 
+export type EntityType = "device" | "person";
+
 interface ChartProps {
-  entityType: "device" | "person";
+  entityType: EntityType;
   selectedIds: number[];
 }
 
