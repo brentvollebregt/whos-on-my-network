@@ -26,10 +26,18 @@ def iso_string_to_datetime(string: str) -> datetime.datetime:
     return datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f%z")
 
 
+def __serialize_value(value):
+    if type(value) == datetime.datetime:
+        return datetime_to_iso_string(value)
+    elif type(value) == list:
+        return [__serialize_value(i) for i in value]
+    else:
+        return value
+
+
 def serialize_dict(_dict: dict) -> dict:
     """ A function to support generic dict serialization for dynamic DTOs """
     for key in _dict:
         value = _dict[key]
-        if type(value) == datetime.datetime:
-            _dict[key] = datetime_to_iso_string(value)
+        _dict[key] = __serialize_value(value)
     return _dict

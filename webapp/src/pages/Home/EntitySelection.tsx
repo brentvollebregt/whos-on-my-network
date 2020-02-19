@@ -10,7 +10,7 @@ import {
 import { getDevicesByFilter, getPeopleByFilter } from "../../api";
 import { DeviceSummary, PersonSummary } from "../../api/dto";
 import { genericApiErrorMessage } from "../../utils/toasts";
-import { EntityType } from "./Chart";
+import { EntityType } from "./ChartWrapper";
 import "./Home.css";
 
 interface EntitySelectionProps {

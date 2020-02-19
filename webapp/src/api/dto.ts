@@ -65,5 +65,5 @@ export interface DeviceSummary {
 }
 
 export interface DiscoveryTimes {
-  [key: number]: DateTime;
+  [key: number]: DateTime[];
 }
