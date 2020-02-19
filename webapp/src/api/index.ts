@@ -343,3 +343,20 @@ export function lookupMacVendor(macAddress: string): Promise<string> {
     }
   );
 }
+
+export function runSingleScan(): Promise<Scan | undefined> {
+  return fetch(`${Config.api.root}/api/run/single-scan`).then(async r => {
+    if (r.status === 200) {
+      return r.json().then(payload => {
+        return {
+          id: payload.id,
+          scan_time: parsePythonTime(payload.scan_time),
+          network_id: payload.network_id,
+          discoveries: payload.discoveries
+        };
+      });
+    } else {
+      return undefined;
+    }
+  });
+}

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import {
-  Table,
   Spinner,
   FormControl,
   Button,
@@ -8,11 +7,12 @@ import {
   ButtonToolbar
 } from "react-bootstrap";
 import Constants from "../../constants";
-import { useTitle, navigate } from "hookrouter";
+import { useTitle } from "hookrouter";
 import { PersonSummary } from "../../api/dto";
 import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import { genericApiErrorMessage } from "../../utils/toasts";
+import PeopleTable from "./PeopleTable";
 
 const People: React.FunctionComponent = () => {
   useTitle(`People - ${Constants.title}`);
@@ -31,15 +31,12 @@ const People: React.FunctionComponent = () => {
   }, []);
 
   const onAddPerson = () => createPerson().then(p => getPeople());
-  const onPersonClick = (personId: number) => () =>
-    navigate(`/people/${personId}`);
   const onTextFilter = (event: React.FormEvent<HTMLInputElement>) =>
     setTextFilter(event.currentTarget.value);
 
-  const sortedAndFilteredPeople = people
+  const filteredPeople = people
     ?.slice() // Do not modify the original list
-    .filter(p => textFilter === undefined || p.name.indexOf(textFilter) !== -1)
-    .sort((a, b) => (a.name === b.name ? 0 : a.name > b.name ? 1 : -1));
+    .filter(p => textFilter === undefined || p.name.indexOf(textFilter) !== -1);
 
   return (
     <PageSizeWrapper>
@@ -61,47 +58,9 @@ const People: React.FunctionComponent = () => {
         </Button>
       </ButtonToolbar>
 
-      <Table striped bordered hover size="sm">
-        <thead>
-          <tr>
-            <th>Name</th>
-            <th>Devices</th>
-            <th>First Seen</th>
-            <th>Last Seen</th>
-          </tr>
-        </thead>
-        <tbody>
-          {sortedAndFilteredPeople !== undefined &&
-            sortedAndFilteredPeople.map(person => (
-              <tr
-                key={person.id}
-                onClick={onPersonClick(person.id)}
-                className="pointer"
-              >
-                <td>{person.name}</td>
-                <td>{person.device_count}</td>
-                <td>
-                  {person.first_seen === null
-                    ? "Never"
-                    : person.first_seen.toFormat("ff")}
-                </td>
-                <td
-                  title={
-                    person.last_seen === null
-                      ? "Never"
-                      : person.last_seen.toFormat("ff")
-                  }
-                >
-                  {person.last_seen === null
-                    ? "Never"
-                    : person.last_seen.toRelative()}
-                </td>
-              </tr>
-            ))}
-        </tbody>
-      </Table>
+      {filteredPeople !== undefined && <PeopleTable people={filteredPeople} />}
 
-      {people === undefined && (
+      {filteredPeople === undefined && (
         <div style={{ textAlign: "center" }}>
           <Spinner animation="border" />
         </div>

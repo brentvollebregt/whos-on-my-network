@@ -1,11 +1,13 @@
 from flask import Flask, request, jsonify
 
+from . import config
 from . import utils
 from .service import scan as scan_service
 from .service import device as device_service
 from .service import people as people_service
 from .service import discovery as discovery_service
 from .service import external as external_service
+from .service import scanning as scanning_service
 
 
 app = Flask(__name__, static_url_path='')
@@ -155,6 +157,16 @@ def get_mac_address_vendor(mac_address: str):
     """ Get a mac addresses vendor """
     vendor = external_service.get_mac_address_vendor(mac_address)
     return vendor
+
+
+@app.route("/api/run/single-scan", methods=["GET"])
+def run_single_scan():
+    """ Run a single scan and return the scan id """
+    scan_id = scanning_service.scan_network_single(config.DEFAULT_NETWORK_ID, config.DEFAULT_PLUGIN, False)
+    scan = scan_service.get_scan_by_id(scan_id)
+
+    dict_response = scan.build()
+    return jsonify(dict_response)
 
 
 # Setup access control
