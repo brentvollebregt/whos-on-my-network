@@ -5,7 +5,7 @@ import { getDevicesByFilter, getPeopleByFilter } from "../../api";
 import { navigate } from "hookrouter";
 
 interface ScanDiscoveriesProps {
-  scan: Scan | undefined;
+  scan: Scan;
 }
 
 const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
@@ -16,19 +16,21 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
   );
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
 
+  // Get devices
   useEffect(() => {
-    if (scan !== undefined) {
-      getDevicesByFilter(scan.discoveries.map(d => d.device_id))
-        .then(d => setDevices(d))
-        .catch(err => console.error(err));
-    }
-  }, [scan]);
+    getDevicesByFilter(scan.discoveries.map(d => d.device_id))
+      .then(d => setDevices(d))
+      .catch(err => console.error(err));
+  }, []);
 
+  // Get people when devices are loaded
   useEffect(() => {
     if (devices !== undefined) {
-      getPeopleByFilter(
-        devices.filter(d => d.owner_id !== null).map(d => d.owner_id as number)
-      )
+      const uniquePeopleIds = devices
+        .filter(d => d.owner_id !== null)
+        .map(d => d.owner_id as number)
+        .filter((v, i, self) => self.indexOf(v) === i);
+      getPeopleByFilter(uniquePeopleIds)
         .then(p => setPeople(p))
         .catch(err => console.error(err));
     }
@@ -37,9 +39,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
   const onDiscoveryClick = (deviceId: number) => () =>
     navigate(`/devices/${deviceId}`);
 
-  return scan === undefined ? (
-    <Spinner animation="border" />
-  ) : (
+  return (
     <Table striped bordered hover size="sm">
       <thead>
         <tr>

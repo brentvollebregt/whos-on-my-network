@@ -10,7 +10,7 @@ import {
 } from "../../api";
 import { Scan, PersonSummary, DeviceSummary } from "../../api/dto";
 import { genericApiErrorMessage } from "../../utils/toasts";
-import { ScanDetail } from "../Scan";
+import { ScanDetail, ScanDiscoveries } from "../Scan";
 import { PeopleTable } from "../People";
 
 const Current: React.FunctionComponent = () => {
@@ -91,6 +91,10 @@ const Current: React.FunctionComponent = () => {
 
           <div className="text-center mb-2">
             <Button onClick={goToScan}>Go to Scan #{scan.id}</Button>
+          </div>
+
+          <div className="mb-3">
+            <ScanDiscoveries scan={scan} />
           </div>
         </>
       )}

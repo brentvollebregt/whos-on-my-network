@@ -11,7 +11,7 @@ const PageSizeWrapper: React.FunctionComponent<PageSizeWrapperProps> = ({
   return (
     <Container>
       <Row className="justify-content-md-center">
-        <Col className="col-md-10 col-lg-9">{children}</Col>
+        <Col className="col-md-10">{children}</Col>
       </Row>
     </Container>
   );
