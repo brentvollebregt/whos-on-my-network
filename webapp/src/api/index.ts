@@ -277,7 +277,7 @@ export function updatePersonById(
 }
 
 export function getDeviceDiscoveryTimes(
-  ids: number[],
+  ids: number[] | undefined,
   startDate: DateTime,
   endDate: DateTime
 ): Promise<DiscoveryTimes> {
@@ -305,7 +305,7 @@ export function getDeviceDiscoveryTimes(
 }
 
 export function getPersonDiscoveryTimes(
-  ids: number[],
+  ids: number[] | undefined,
   startDate: DateTime,
   endDate: DateTime
 ): Promise<DiscoveryTimes> {

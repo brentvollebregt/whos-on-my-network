@@ -6,10 +6,12 @@ import { Group } from "@vx/group";
 import { AxisBottom, AxisLeft } from "@vx/axis";
 import { scaleBand, scaleTime } from "@vx/scale";
 import { Circle, Line } from "@vx/shape";
+import { EntityIdNameMap } from "./Home";
 
 interface ChartProps {
-  data: DiscoveryTimes;
-  dataIndexesToNames: { [key: string]: string };
+  entityDiscoveryTimes: DiscoveryTimes;
+  entityIdNameMap: EntityIdNameMap;
+  onEntityClick: (entityId: string) => void;
   maxDate: DateTime;
   minDate: DateTime;
 }
@@ -30,8 +32,9 @@ const margin = {
 };
 
 const Chart: React.FC<ChartProps> = ({
-  data,
-  dataIndexesToNames,
+  entityDiscoveryTimes,
+  entityIdNameMap,
+  onEntityClick,
   maxDate,
   minDate
 }) => {
@@ -40,8 +43,8 @@ const Chart: React.FC<ChartProps> = ({
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const points = Object.keys(data)
-    .map((d: string) => data[d].map(date => [d, date]))
+  const points = Object.keys(entityDiscoveryTimes)
+    .map((d: string) => entityDiscoveryTimes[d].map(date => [d, date]))
     .flatMap(x => x) as [string, DateTime][];
 
   const xScale = scaleTime({
@@ -51,12 +54,24 @@ const Chart: React.FC<ChartProps> = ({
 
   const yScale = scaleBand({
     range: [yMax, 0],
-    domain: Object.keys(data),
+    domain: Object.keys(entityDiscoveryTimes),
     padding: 0.2
   });
 
-  const onDeviceNameClick = (deviceId: string | number | undefined) => () => {
-    console.log("click", deviceId);
+  const onDeviceNameClick = (entityName: string | number | undefined) => () => {
+    const entityId = Object.keys(entityIdNameMap).reduce(
+      (acc: undefined | string, currentEntityId) => {
+        return acc !== undefined
+          ? acc
+          : entityIdNameMap[currentEntityId] === entityName
+          ? currentEntityId
+          : undefined;
+      },
+      undefined
+    );
+    if (entityId !== undefined) {
+      onEntityClick(entityId);
+    }
   };
 
   return (
@@ -75,14 +90,14 @@ const Chart: React.FC<ChartProps> = ({
                   className="dot"
                   cx={cx}
                   cy={cy}
-                  r={5}
+                  r={4}
                   fill="blue"
                 />
               );
             })}
           </Group>
           <Group>
-            {Object.keys(data).map(deviceId => {
+            {Object.keys(entityDiscoveryTimes).map(deviceId => {
               const x1 = xScale(minDate);
               const x2 = xScale(maxDate);
               const y = (yScale(deviceId) ?? 0) + yScale.bandwidth() / 2;
@@ -94,7 +109,7 @@ const Chart: React.FC<ChartProps> = ({
                   y2={y}
                   key={`line-${y}`}
                   // className="dot"
-                  stroke="blue"
+                  stroke="black"
                   strokeWidth={1}
                 />
               );
@@ -105,13 +120,12 @@ const Chart: React.FC<ChartProps> = ({
             hideTicks={true}
             scale={yScale}
             tickFormat={(value: string, tickIndex: number) =>
-              dataIndexesToNames[value]
+              entityIdNameMap[value]
             }
             tickComponent={({ x, y, formattedValue }) => (
               <text
                 x={x}
                 y={y}
-                fill="red"
                 fontSize={11}
                 textAnchor="end"
                 dy={3}
@@ -129,7 +143,6 @@ const Chart: React.FC<ChartProps> = ({
               DateTime.fromJSDate(value).toFormat("d MMM")
             }
             tickLabelProps={(value, index) => ({
-              fill: "red",
               fontSize: 11,
               textAnchor: "middle"
             })}
