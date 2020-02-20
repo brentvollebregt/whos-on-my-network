@@ -292,7 +292,7 @@ export function getDeviceDiscoveryTimes(
       return r.json().then(payload => {
         const returnPayload = { ...payload };
         Object.keys(returnPayload).forEach((key: string) => {
-          returnPayload[parseInt(key)] = returnPayload[key].map((d: string) =>
+          returnPayload[key] = returnPayload[key].map((d: string) =>
             parsePythonTime(d)
           );
         });
@@ -320,7 +320,7 @@ export function getPersonDiscoveryTimes(
       return r.json().then(payload => {
         const returnPayload = { ...payload };
         Object.keys(returnPayload).forEach((key: string) => {
-          returnPayload[parseInt(key)] = returnPayload[key].map((d: string) =>
+          returnPayload[key] = returnPayload[key].map((d: string) =>
             parsePythonTime(d)
           );
         });

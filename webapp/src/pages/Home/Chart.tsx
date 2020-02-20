@@ -5,10 +5,11 @@ import { DateTime } from "luxon";
 import { Group } from "@vx/group";
 import { AxisBottom, AxisLeft } from "@vx/axis";
 import { scaleBand, scaleTime } from "@vx/scale";
-import { Circle } from "@vx/shape";
+import { Circle, Line } from "@vx/shape";
 
 interface ChartProps {
   data: DiscoveryTimes;
+  dataIndexesToNames: { [key: string]: string };
   maxDate: DateTime;
   minDate: DateTime;
 }
@@ -28,17 +29,20 @@ const margin = {
   right: 0
 };
 
-const Chart: React.FC<ChartProps> = ({ data, maxDate, minDate }) => {
+const Chart: React.FC<ChartProps> = ({
+  data,
+  dataIndexesToNames,
+  maxDate,
+  minDate
+}) => {
   const width = 800;
   const height = 400;
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
   const points = Object.keys(data)
-    .map((d: string) =>
-      data[parseInt(d)].map(date => [parseInt(d), date as DateTime])
-    )
-    .flatMap(x => x) as [number, DateTime][];
+    .map((d: string) => data[d].map(date => [d, date]))
+    .flatMap(x => x) as [string, DateTime][];
 
   const xScale = scaleTime({
     range: [0, xMax],
@@ -47,9 +51,13 @@ const Chart: React.FC<ChartProps> = ({ data, maxDate, minDate }) => {
 
   const yScale = scaleBand({
     range: [yMax, 0],
-    domain: Object.keys(data).map(id => `Device ${id}`),
+    domain: Object.keys(data),
     padding: 0.2
   });
+
+  const onDeviceNameClick = (deviceId: string | number | undefined) => () => {
+    console.log("click", deviceId);
+  };
 
   return (
     <div style={{ position: "relative" }}>
@@ -58,9 +66,9 @@ const Chart: React.FC<ChartProps> = ({ data, maxDate, minDate }) => {
           <Group>
             {points.map((point, i) => {
               const x = point[1].toJSDate();
-              const y = `Device ${point[0]}`;
+              const y = point[0];
               const cx = xScale(x);
-              const cy = yScale(y);
+              const cy = (yScale(y) ?? 0) + yScale.bandwidth() / 2;
               return (
                 <Circle
                   key={`point-${y}-${x.valueOf()}-${i}`}
@@ -73,20 +81,53 @@ const Chart: React.FC<ChartProps> = ({ data, maxDate, minDate }) => {
               );
             })}
           </Group>
+          <Group>
+            {Object.keys(data).map(deviceId => {
+              const x1 = xScale(minDate);
+              const x2 = xScale(maxDate);
+              const y = (yScale(deviceId) ?? 0) + yScale.bandwidth() / 2;
+              return (
+                <Line
+                  x1={x1}
+                  x2={x2}
+                  y1={y}
+                  y2={y}
+                  key={`line-${y}`}
+                  // className="dot"
+                  stroke="blue"
+                  strokeWidth={1}
+                />
+              );
+            })}
+          </Group>
           <AxisLeft
             hideAxisLine={true}
             hideTicks={true}
             scale={yScale}
-            tickFormat={(value: string, tickIndex: number) => value}
-            tickLabelProps={(value, index) => ({
-              fill: "red",
-              fontSize: 11,
-              textAnchor: "end"
-            })}
+            tickFormat={(value: string, tickIndex: number) =>
+              dataIndexesToNames[value]
+            }
+            tickComponent={({ x, y, formattedValue }) => (
+              <text
+                x={x}
+                y={y}
+                fill="red"
+                fontSize={11}
+                textAnchor="end"
+                dy={3}
+                onClick={onDeviceNameClick(formattedValue)}
+              >
+                <tspan>{formattedValue}</tspan>
+              </text>
+            )}
           />
           <AxisBottom
             top={yMax}
             scale={xScale}
+            numTicks={10}
+            tickFormat={(value: Date, tickIndex: number) =>
+              DateTime.fromJSDate(value).toFormat("d MMM")
+            }
             tickLabelProps={(value, index) => ({
               fill: "red",
               fontSize: 11,

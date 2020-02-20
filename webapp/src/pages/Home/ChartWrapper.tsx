@@ -62,6 +62,15 @@ const ChartWrapper: React.FC<ChartProps> = ({ entityType, selectedIds }) => {
       {tempData !== undefined && (
         <Chart
           data={tempData}
+          dataIndexesToNames={{
+            "1": "Device 1",
+            "2": "Device 2.2",
+            "3": "Device 3.3",
+            "4": "Device 4.4",
+            "5": "Device 5.5",
+            "6": "Device 6.6",
+            "7": "Device 7.7"
+          }}
           minDate={getStartDate()}
           maxDate={getEndDate()}
         />
