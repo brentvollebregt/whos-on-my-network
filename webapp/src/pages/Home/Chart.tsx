@@ -8,21 +8,15 @@ import { scaleBand, scaleTime } from "@vx/scale";
 import { Circle, Line } from "@vx/shape";
 import { EntityIdNameMap } from "./Home";
 
-interface ChartProps {
+export interface ChartProps {
   entityDiscoveryTimes: DiscoveryTimes;
   entityIdNameMap: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;
   maxDate: DateTime;
   minDate: DateTime;
+  width: number;
+  height: number;
 }
-
-/* 
-TODO Graph
-  - Dot plotting: https://vx-demo.now.sh/dots
-  - Axis labels: https://vx-demo.now.sh/barstackhorizontal
-If we can click to deselect, we can get rid of the bottom component and substitute it with some pill system
-that shows the unselected names/devices and allows for them to be reselected (+ select/deselect all)
-*/
 
 const margin = {
   top: 0,
@@ -36,10 +30,10 @@ const Chart: React.FC<ChartProps> = ({
   entityIdNameMap,
   onEntityClick,
   maxDate,
-  minDate
+  minDate,
+  width,
+  height
 }) => {
-  const width = 800;
-  const height = 400;
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
@@ -75,7 +69,7 @@ const Chart: React.FC<ChartProps> = ({
   };
 
   return (
-    <div style={{ position: "relative" }}>
+    <div>
       <svg width={width} height={height}>
         <Group top={margin.top} left={margin.left}>
           <Group>

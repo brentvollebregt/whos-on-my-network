@@ -13,8 +13,15 @@ import {
   getPersonDiscoveryTimes
 } from "../../api";
 import { genericApiErrorMessage } from "../../utils/toasts";
-import Chart from "./Chart";
 import UnselectedEntities from "./UnselectedEntities";
+import ChartSizeWrapper from "./ChartSizeWrapper";
+import {
+  ButtonToolbar,
+  DropdownButton,
+  ButtonGroup,
+  Dropdown,
+  Button
+} from "react-bootstrap";
 
 export type EntityIdNameMap = { [key: string]: string };
 
@@ -77,6 +84,7 @@ const Home: React.FunctionComponent = () => {
       setSelectedIds(people.map(p => p.id + ""));
     }
   };
+  const deselectAllEntities = () => setSelectedIds([]);
 
   // When devices and people load, set the selected ids
   useEffect(() => {
@@ -147,8 +155,6 @@ const Home: React.FunctionComponent = () => {
             people?.find(d => d.id + "" === entityId)?.name ?? "Not Found";
         }
 
-        // console.log(entityId, selectedIds.indexOf(entityId), selectedIds);
-
         const groupName =
           selectedIds.indexOf(entityId) !== -1
             ? "selectedEntityIdNameMap"
@@ -177,14 +183,39 @@ const Home: React.FunctionComponent = () => {
       {!entitiesReady() ? (
         "Loading"
       ) : (
-        <div>
-          <Chart
+        <div className="mb-4">
+          <ChartSizeWrapper
             entityDiscoveryTimes={filteredDiscoveryTimes}
             entityIdNameMap={selectedEntityIdNameMap}
             onEntityClick={onEntityClick}
             minDate={getStartDate()}
             maxDate={getEndDate()}
           />
+
+          <ButtonToolbar className="mb-2 text-center d-block">
+            <DropdownButton
+              as={ButtonGroup}
+              id="entity-selection"
+              title={`Entity Type: ${
+                entityType === "device" ? "Device" : "People"
+              }`}
+            >
+              <Dropdown.Item onClick={() => setEntityType("device")}>
+                Device
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setEntityType("person")}>
+                People
+              </Dropdown.Item>
+            </DropdownButton>
+            <ButtonGroup className="ml-2">
+              <Button variant="primary" onClick={selectAllEntities}>
+                Select All
+              </Button>
+              <Button variant="primary" onClick={deselectAllEntities}>
+                Deselect All
+              </Button>
+            </ButtonGroup>
+          </ButtonToolbar>
 
           <UnselectedEntities
             entities={unselectedEntityIdNameMap}
