@@ -22,6 +22,7 @@ import {
   Dropdown,
   Button
 } from "react-bootstrap";
+import useStoredDatePair from "../../hooks/useStoredDatePair";
 
 export type EntityIdNameMap = { [key: string]: string };
 
@@ -40,18 +41,12 @@ const Home: React.FunctionComponent = () => {
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
   const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({});
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [storedStartAndEndDates, setStoredStartAndEndDates] = useLocalStorage<
-    [string, string]
-  >("home_selectedDates", [defaultStartDate.toISO(), defaultEndDate.toISO()]);
-
-  const getStartDate = () =>
-    storedStartAndEndDates === null
-      ? defaultStartDate
-      : DateTime.fromISO(storedStartAndEndDates[0]);
-  const getEndDate = () =>
-    storedStartAndEndDates === null
-      ? defaultEndDate
-      : DateTime.fromISO(storedStartAndEndDates[1]);
+  const {
+    getStartDate,
+    getEndDate,
+    getStartAndEndDates,
+    setStartAndEndDates
+  } = useStoredDatePair("home", defaultStartDate, defaultEndDate);
 
   // Fetch all devices and people
   useEffect(() => {
@@ -95,15 +90,6 @@ const Home: React.FunctionComponent = () => {
   useEffect(() => {
     selectAllEntities();
   }, [entityType]);
-
-  const getStartAndEndDates = (): [DateTime, DateTime] => [
-    getStartDate(),
-    getEndDate()
-  ];
-
-  const setStartAndEndDates = (startDate: DateTime, endDate: DateTime) => {
-    setStoredStartAndEndDates([startDate.toISO(), endDate.toISO()]);
-  };
 
   const entitiesReady = (): boolean =>
     (entityType === "device" && devices !== undefined) ||

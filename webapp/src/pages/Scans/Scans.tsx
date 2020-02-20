@@ -9,6 +9,7 @@ import { DateTime } from "luxon";
 import { useLocalStorage } from "@rehooks/local-storage";
 import { genericApiErrorMessage } from "../../utils/toasts";
 import DateRangeSelector from "../../components/DateRangeSelector";
+import useStoredDatePair from "../../hooks/useStoredDatePair";
 
 const defaultStartDate = DateTime.local()
   .minus({ weeks: 1 })
@@ -19,33 +20,19 @@ const Scans: React.FunctionComponent = () => {
   useTitle(`Scans - ${Constants.title}`);
 
   const [scans, setScans] = useState<ScanSummary[] | undefined>(undefined);
-  const [storedStartAndEndDates, setStoredStartAndEndDates] = useLocalStorage<
-    [string, string]
-  >("home_selectedDates", [defaultStartDate.toISO(), defaultEndDate.toISO()]);
-
-  const getStartDate = () =>
-    storedStartAndEndDates === null
-      ? defaultStartDate
-      : DateTime.fromISO(storedStartAndEndDates[0]);
-  const getEndDate = () =>
-    storedStartAndEndDates === null
-      ? defaultEndDate
-      : DateTime.fromISO(storedStartAndEndDates[1]);
+  const {
+    getStartDate,
+    getEndDate,
+    getStartAndEndDates,
+    setStartAndEndDates,
+    storedStartAndEndDates
+  } = useStoredDatePair("scans", defaultStartDate, defaultEndDate);
 
   useEffect(() => {
     getScansByFilter(undefined, getStartDate(), getEndDate())
       .then(s => setScans(s))
       .catch(err => genericApiErrorMessage("scans"));
   }, [storedStartAndEndDates]);
-
-  const getStartAndEndDates = (): [DateTime, DateTime] => [
-    getStartDate(),
-    getEndDate()
-  ];
-
-  const setStartAndEndDates = (startDate: DateTime, endDate: DateTime) => {
-    setStoredStartAndEndDates([startDate.toISO(), endDate.toISO()]);
-  };
 
   const onScanClick = (scanId: number) => () => navigate(`/scans/${scanId}`);
 
