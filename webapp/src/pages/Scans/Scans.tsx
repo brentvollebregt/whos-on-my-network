@@ -6,7 +6,6 @@ import { getScansByFilter } from "../../api";
 import { ScanSummary } from "../../api/dto";
 import { Table, Spinner } from "react-bootstrap";
 import { DateTime } from "luxon";
-import { useLocalStorage } from "@rehooks/local-storage";
 import { genericApiErrorMessage } from "../../utils/toasts";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import useStoredDatePair from "../../hooks/useStoredDatePair";

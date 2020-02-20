@@ -36,9 +36,11 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
   const [vendor, setVendor] = useState<string>("");
 
   useEffect(() => {
-    getPeopleByFilter()
-      .then(p => setPeople(p))
-      .catch(err => console.error(err));
+    if (device.owner_id !== null) {
+      getPeopleByFilter([device.owner_id])
+        .then(p => setPeople(p))
+        .catch(err => console.error(err));
+    }
   }, []);
 
   useEffect(() => {

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Table,
   Spinner,
@@ -10,31 +10,18 @@ import {
 } from "react-bootstrap";
 import { useTitle, navigate } from "hookrouter";
 import Constants from "../../constants";
-import { DeviceSummary, PersonSummary } from "../../api/dto";
-import { getDevicesByFilter, getPeopleByFilter } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
-import { genericApiErrorMessage } from "../../utils/toasts";
+import useAllDevices from "../../hooks/useAllDevices";
+import useAllPeople from "../../hooks/useAllPeople";
 
 const Devices: React.FunctionComponent = () => {
   useTitle(`Devices - ${Constants.title}`);
 
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
-  const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
+  const { devices } = useAllDevices();
+  const { people } = useAllPeople();
   const [textFilter, setTextFilter] = useState<string | undefined>(undefined);
   const [ownerFilter, setOwnerFilter] = useState<number | null>(null);
   const [isPrimaryFilter, setIsPrimaryFilter] = useState<boolean | null>(null);
-
-  useEffect(() => {
-    getDevicesByFilter()
-      .then(d => setDevices(d))
-      .catch(err => genericApiErrorMessage("devices"));
-
-    getPeopleByFilter()
-      .then(p => setPeople(p))
-      .catch(err => genericApiErrorMessage("people"));
-  }, []);
 
   const onDeviceClick = (deviceId: number) => () =>
     navigate(`/devices/${deviceId}`);

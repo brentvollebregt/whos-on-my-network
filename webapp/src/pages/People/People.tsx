@@ -13,24 +13,15 @@ import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import { genericApiErrorMessage } from "../../utils/toasts";
 import PeopleTable from "./PeopleTable";
+import useAllPeople from "../../hooks/useAllPeople";
 
 const People: React.FunctionComponent = () => {
   useTitle(`People - ${Constants.title}`);
 
-  const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
+  const { people, refresh } = useAllPeople();
   const [textFilter, setTextFilter] = useState<string | undefined>(undefined);
 
-  const getPeople = () => {
-    getPeopleByFilter()
-      .then(p => setPeople(p))
-      .catch(err => genericApiErrorMessage("people"));
-  };
-
-  useEffect(() => {
-    getPeople();
-  }, []);
-
-  const onAddPerson = () => createPerson().then(p => getPeople());
+  const onAddPerson = () => createPerson().then(p => refresh());
   const onTextFilter = (event: React.FormEvent<HTMLInputElement>) =>
     setTextFilter(event.currentTarget.value);
 

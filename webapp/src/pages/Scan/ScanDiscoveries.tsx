@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { Scan, DeviceSummary, PersonSummary } from "../../api/dto";
-import { Table, Spinner } from "react-bootstrap";
+import { Table } from "react-bootstrap";
 import { getDevicesByFilter, getPeopleByFilter } from "../../api";
 import { navigate } from "hookrouter";
 

@@ -4,15 +4,8 @@ import { useTitle } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import { DateTime } from "luxon";
-import useLocalStorage from "@rehooks/local-storage";
-import { DeviceSummary, PersonSummary, DiscoveryTimes } from "../../api/dto";
-import {
-  getDevicesByFilter,
-  getPeopleByFilter,
-  getDeviceDiscoveryTimes,
-  getPersonDiscoveryTimes
-} from "../../api";
-import { genericApiErrorMessage } from "../../utils/toasts";
+import { DiscoveryTimes } from "../../api/dto";
+import { getDeviceDiscoveryTimes, getPersonDiscoveryTimes } from "../../api";
 import UnselectedEntities from "./UnselectedEntities";
 import ChartSizeWrapper from "./ChartSizeWrapper";
 import {
@@ -23,6 +16,8 @@ import {
   Button
 } from "react-bootstrap";
 import useStoredDatePair from "../../hooks/useStoredDatePair";
+import useAllPeople from "../../hooks/useAllPeople";
+import useAllDevices from "../../hooks/useAllDevices";
 
 export type EntityIdNameMap = { [key: string]: string };
 
@@ -34,30 +29,18 @@ const defaultEndDate = DateTime.local().endOf("day");
 const Home: React.FunctionComponent = () => {
   useTitle(`Home - ${Constants.title}`);
 
-  const [entityType, setEntityType] = useState<"device" | "person">("device");
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
-  const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
-  const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({});
-  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const { devices } = useAllDevices();
+  const { people } = useAllPeople();
   const {
     getStartDate,
     getEndDate,
     getStartAndEndDates,
-    setStartAndEndDates
+    setStartAndEndDates,
+    storedStartAndEndDates
   } = useStoredDatePair("home", defaultStartDate, defaultEndDate);
-
-  // Fetch all devices and people
-  useEffect(() => {
-    getDevicesByFilter()
-      .then(d => setDevices(d))
-      .catch(err => genericApiErrorMessage("devices"));
-
-    getPeopleByFilter()
-      .then(p => setPeople(p))
-      .catch(err => genericApiErrorMessage("people"));
-  }, []);
+  const [entityType, setEntityType] = useState<"device" | "person">("device");
+  const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({});
 
   // Fetch discovery times for selected entity type
   useEffect(() => {
@@ -70,7 +53,7 @@ const Home: React.FunctionComponent = () => {
         setDiscoveryTimes(d)
       );
     }
-  }, [entityType]);
+  }, [entityType, storedStartAndEndDates]);
 
   const selectAllEntities = () => {
     if (entityType === "device" && devices !== undefined) {
@@ -81,12 +64,12 @@ const Home: React.FunctionComponent = () => {
   };
   const deselectAllEntities = () => setSelectedIds([]);
 
-  // When devices and people load, set the selected ids
+  // When devices and people load, reset the selection
   useEffect(() => {
     selectAllEntities();
   }, [devices, people]);
 
-  // Reset selection on an entity type change
+  // Reset the selection on an entity type change
   useEffect(() => {
     selectAllEntities();
   }, [entityType]);

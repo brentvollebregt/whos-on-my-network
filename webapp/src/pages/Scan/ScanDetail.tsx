@@ -1,6 +1,6 @@
 import React from "react";
 import { Scan } from "../../api/dto";
-import { Spinner, InputGroup, FormControl } from "react-bootstrap";
+import { InputGroup, FormControl } from "react-bootstrap";
 
 interface ScanDetailProps {
   scan: Scan;
