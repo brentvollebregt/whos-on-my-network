@@ -39,10 +39,19 @@ export const mapToSelectedAndUnselectedEntityIdNameMap = (
 
   return Object.keys(discoveryTimes).reduce(
     (acc: SelectedAndUnselectedEntityIdNameMap, entityId) => {
-      const entityName =
-        entityType === "device"
-          ? devices?.find(d => d.id + "" === entityId)?.name ?? "Not Found"
-          : people?.find(d => d.id + "" === entityId)?.name ?? "Not Found";
+      let entityName = "";
+      if (entityType === "device") {
+        const device = devices?.find(d => d.id + "" === entityId);
+        entityName =
+          device === undefined
+            ? "Not Found"
+            : device.name !== ""
+            ? device.name
+            : device.mac_address.toUpperCase();
+      } else if (entityType === "person") {
+        const person = people?.find(d => d.id + "" === entityId);
+        entityName = person === undefined ? "Not Found" : person.name;
+      }
 
       const groupName =
         selectedEntityIds.indexOf(entityId) !== -1

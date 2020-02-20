@@ -1,3 +1,21 @@
 .table-striped tbody tr.unselected {
   color: #b9b9b9;
 }
+
+.home-chart .entity-label {
+  cursor: pointer;
+  font-size: 11px;
+}
+
+.home-chart .date-label {
+  font-size: 11px;
+}
+
+.home-chart .horizontal-line {
+  stroke: rgba(0, 0, 0, 0.5);
+  stroke-width: 1px;
+}
+
+.home-chart .dot {
+  fill: #007bff;
+}

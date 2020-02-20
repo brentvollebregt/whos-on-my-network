@@ -22,6 +22,7 @@ import {
   filterDiscoveryTimes,
   mapToSelectedAndUnselectedEntityIdNameMap
 } from "./mappings";
+import "./Home.css";
 
 export type EntityType = "device" | "person";
 export type EntityIdNameMap = { [key: string]: string };
