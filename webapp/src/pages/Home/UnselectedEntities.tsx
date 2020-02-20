@@ -14,7 +14,7 @@ const UnselectedEntities: React.FC<UnselectedEntitiesProps> = ({
   const onBadgeClick = (entityId: string) => () => onEntityClick(entityId);
 
   return (
-    <div>
+    <div className="text-center m-auto" style={{ maxWidth: 800 }}>
       {Object.keys(entities).map(id => (
         <Badge variant="primary" className="mr-1" onClick={onBadgeClick(id)}>
           {entities[id]}
