@@ -10,4 +10,4 @@ PORT = int(os.getenv('PORT', 8080))
 
 # General Application
 VERBOSE = False
-DEFAULT_PLUGIN = None
+DEFAULT_NETWORK_ID = '192.168.1.0/24'
