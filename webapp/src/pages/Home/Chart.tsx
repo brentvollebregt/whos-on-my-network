@@ -96,7 +96,7 @@ const Chart: React.FC<ChartProps> = ({
             const cy = (yScale(y) ?? 0) + yScale.bandwidth() / 2;
             return (
               <Circle
-                key={`point-${y}-${x.valueOf()}`}
+                key={`point-${y}-${x.valueOf()}-${i}`}
                 className="dot"
                 cx={cx}
                 cy={cy}

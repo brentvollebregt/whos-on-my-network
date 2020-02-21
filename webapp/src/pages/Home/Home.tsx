@@ -19,8 +19,8 @@ import useStoredDatePair from "../../hooks/useStoredDatePair";
 import useAllPeople from "../../hooks/useAllPeople";
 import useAllDevices from "../../hooks/useAllDevices";
 import {
-  filterDiscoveryTimes,
-  mapToSelectedAndUnselectedEntityIdNameMap
+  mapToSelectedAndUnselectedDiscoveryTimes,
+  mapToEntityIdNameMap
 } from "./mappings";
 import "./Home.css";
 
@@ -90,19 +90,18 @@ const Home: React.FunctionComponent = () => {
     }
   };
 
-  const filteredDiscoveryTimes = filterDiscoveryTimes(
+  const {
+    selectedDiscoveryTimes,
+    unselectedDiscoveryTimes
+  } = mapToSelectedAndUnselectedDiscoveryTimes(
     discoveryTimes,
     selectedEntityIds
   );
-  const {
-    selectedEntityIdNameMap,
-    unselectedEntityIdNameMap
-  } = mapToSelectedAndUnselectedEntityIdNameMap(
+  const entityIdNameMap = mapToEntityIdNameMap(
     discoveryTimes,
     entityType,
     devices,
-    people,
-    selectedEntityIds
+    people
   );
 
   return (
@@ -116,8 +115,8 @@ const Home: React.FunctionComponent = () => {
 
       <div className="mb-4">
         <ChartSizeWrapper
-          entityDiscoveryTimes={filteredDiscoveryTimes}
-          entityIdNameMap={selectedEntityIdNameMap}
+          entityDiscoveryTimes={selectedDiscoveryTimes}
+          entityIdNameMap={entityIdNameMap}
           onEntityClick={onEntityClick}
           minDate={getStartDate()}
           maxDate={getEndDate()}
@@ -149,7 +148,8 @@ const Home: React.FunctionComponent = () => {
         </ButtonToolbar>
 
         <UnselectedEntities
-          entities={unselectedEntityIdNameMap}
+        entityIds={Object.keys(unselectedDiscoveryTimes)}
+          entityIdNameMap={entityIdNameMap}
           onEntityClick={onEntityClick}
         />
       </div>

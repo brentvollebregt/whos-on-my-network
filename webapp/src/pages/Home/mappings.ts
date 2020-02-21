@@ -1,71 +1,66 @@
 import { EntityIdNameMap, EntityType } from "./Home";
 import { DiscoveryTimes, DeviceSummary, PersonSummary } from "../../api/dto";
 
-interface SelectedAndUnselectedEntityIdNameMap {
-  selectedEntityIdNameMap: EntityIdNameMap;
-  unselectedEntityIdNameMap: EntityIdNameMap;
+interface SelectedAndUnselectedDiscoveryTimes {
+  selectedDiscoveryTimes: DiscoveryTimes;
+  unselectedDiscoveryTimes: DiscoveryTimes;
 }
 
-export const filterDiscoveryTimes = (
+export const mapToSelectedAndUnselectedDiscoveryTimes = (
   discoveryTimes: DiscoveryTimes,
   selectedEntityIds: string[]
-): DiscoveryTimes => {
-  return Object.keys(discoveryTimes)
-    .filter(entityId => selectedEntityIds.indexOf(entityId) !== -1)
-    .reduce((acc: DiscoveryTimes, currentEntityId: string) => {
-      return {
-        ...acc,
-        [currentEntityId]: discoveryTimes[currentEntityId]
-      };
-    }, {});
-};
-
-export const mapToSelectedAndUnselectedEntityIdNameMap = (
-  discoveryTimes: DiscoveryTimes,
-  entityType: EntityType,
-  devices: DeviceSummary[] | undefined,
-  people: PersonSummary[] | undefined,
-  selectedEntityIds: string[]
-): SelectedAndUnselectedEntityIdNameMap => {
-  if (
-    (entityType === "device" && devices === undefined) ||
-    (entityType === "person" && people === undefined)
-  ) {
-    return {
-      selectedEntityIdNameMap: {},
-      unselectedEntityIdNameMap: {}
-    };
-  }
-
+): SelectedAndUnselectedDiscoveryTimes => {
   return Object.keys(discoveryTimes).reduce(
-    (acc: SelectedAndUnselectedEntityIdNameMap, entityId) => {
-      let entityName = "";
-      if (entityType === "device") {
-        const device = devices?.find(d => d.id + "" === entityId);
-        entityName =
-          device === undefined
-            ? "Not Found"
-            : device.name !== ""
-            ? device.name
-            : device.mac_address.toUpperCase();
-      } else if (entityType === "person") {
-        const person = people?.find(d => d.id + "" === entityId);
-        entityName = person === undefined ? "Not Found" : person.name;
-      }
-
-      const groupName =
+    (acc: SelectedAndUnselectedDiscoveryTimes, entityId: string) => {
+      const groupName: keyof SelectedAndUnselectedDiscoveryTimes =
         selectedEntityIds.indexOf(entityId) !== -1
-          ? "selectedEntityIdNameMap"
-          : "unselectedEntityIdNameMap";
+          ? "selectedDiscoveryTimes"
+          : "unselectedDiscoveryTimes";
 
       return {
         ...acc,
         [groupName]: {
           ...acc[groupName],
-          [entityId]: entityName
+          [entityId]: discoveryTimes[entityId]
         }
       };
     },
-    { selectedEntityIdNameMap: {}, unselectedEntityIdNameMap: {} }
+    { selectedDiscoveryTimes: {}, unselectedDiscoveryTimes: {} }
+  );
+};
+
+export const mapToEntityIdNameMap = (
+  discoveryTimes: DiscoveryTimes,
+  entityType: EntityType,
+  devices: DeviceSummary[] | undefined,
+  people: PersonSummary[] | undefined
+): EntityIdNameMap => {
+  if (
+    (entityType === "device" && devices === undefined) ||
+    (entityType === "person" && people === undefined)
+  ) {
+    return {};
+  }
+
+  return Object.keys(discoveryTimes).reduce(
+    (acc: EntityIdNameMap, entityId) => {
+      if (entityType === "device") {
+        const device = devices?.find(d => d.id + "" === entityId);
+        const entityName =
+          device === undefined
+            ? "Not Found"
+            : device.name !== ""
+            ? device.name
+            : device.mac_address.toUpperCase();
+        return { ...acc, [entityId]: entityName };
+      } else if (entityType === "person") {
+        const person = people?.find(d => d.id + "" === entityId);
+        const entityName = person === undefined ? "Not Found" : person.name;
+        return { ...acc, [entityId]: entityName };
+      } else {
+        return { ...acc };
+      }
+    },
+    {}
   );
 };

@@ -4,21 +4,28 @@ import { EntityIdNameMap } from "./Home";
 import "./Home.css";
 
 interface UnselectedEntitiesProps {
-  entities: EntityIdNameMap;
+  entityIds: string[];
+  entityIdNameMap: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;
 }
 
 const UnselectedEntities: React.FC<UnselectedEntitiesProps> = ({
-  entities,
+  entityIds,
+  entityIdNameMap,
   onEntityClick
 }) => {
   const onBadgeClick = (entityId: string) => () => onEntityClick(entityId);
 
   return (
     <div className="text-center m-auto" style={{ maxWidth: 800 }}>
-      {Object.keys(entities).map(id => (
-        <Badge variant="primary" className="mr-1" onClick={onBadgeClick(id)}>
-          {entities[id]}
+      {entityIds.map(id => (
+        <Badge
+          key={id}
+          variant="primary"
+          className="mr-1"
+          onClick={onBadgeClick(id)}
+        >
+          {entityIdNameMap[id]}
         </Badge>
       ))}
     </div>
