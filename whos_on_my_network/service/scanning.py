@@ -44,7 +44,7 @@ def __save_scan_data(network_id: str, scan_data: List[DiscoveredDevice], verbose
 
     for discovered_device in scan_data:
         device, _ = models.Device.get_or_create(
-            mac_address=discovered_device.mac_address
+            mac_address=discovered_device.mac_address.upper()
         )
         models.Discovery.create(
             scan=scan,
