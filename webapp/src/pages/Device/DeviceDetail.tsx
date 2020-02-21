@@ -15,6 +15,7 @@ import {
   Dropdown
 } from "react-bootstrap";
 import { showInfoToast } from "../../utils/toasts";
+import useAllPeople from "../../hooks/useAllPeople";
 
 interface DeviceDetailProps {
   device: Device;
@@ -25,7 +26,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
   device,
   updateDevice
 }) => {
-  const [people, setPeople] = useState<PersonSummary[]>([]);
+  const { people } = useAllPeople();
   const [name, setName] = useState<string>(device.name);
   const [note, setNote] = useState<string>(device.note);
   const [ownerId, setOwnerId] = useState<number | null>(device.owner_id);
@@ -34,14 +35,6 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
   );
   const [dirty, setDirty] = useState<boolean>(false);
   const [vendor, setVendor] = useState<string>("");
-
-  useEffect(() => {
-    if (device.owner_id !== null) {
-      getPeopleByFilter([device.owner_id])
-        .then(p => setPeople(p))
-        .catch(err => console.error(err));
-    }
-  }, []);
 
   useEffect(() => {
     setName(device.name);
@@ -143,16 +136,16 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   title={
                     ownerId === null
                       ? "Not Set"
-                      : people.length === 0
+                      : people?.length === 0
                       ? ""
-                      : people.find(x => x.id === ownerId)?.name
+                      : people?.find(x => x.id === ownerId)?.name
                   }
                   id="input-group-dropdown-2"
                 >
                   <Dropdown.Item onClick={onOwnerIdChange(null)}>
                     Not Set
                   </Dropdown.Item>
-                  {people
+                  {(people ?? [])
                     .sort((a, b) =>
                       a.name === b.name ? 0 : a.name < b.name ? -1 : 1
                     )
