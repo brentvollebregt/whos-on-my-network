@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Device, PersonSummary } from "../../api/dto";
-import {
-  updateDeviceById,
-  getPeopleByFilter,
-  lookupMacVendor
-} from "../../api";
+import { Device } from "../../api/dto";
+import { updateDeviceById, lookupMacVendor } from "../../api";
 import {
   Spinner,
   InputGroup,

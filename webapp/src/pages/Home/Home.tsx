@@ -23,6 +23,7 @@ import {
   mapToEntityIdNameMap
 } from "./mappings";
 import "./Home.css";
+import { sortDevices, sortPeople } from "../../utils/sorting";
 
 export type EntityType = "device" | "person";
 export type EntityIdNameMap = { [key: string]: string };
@@ -97,6 +98,19 @@ const Home: React.FunctionComponent = () => {
     discoveryTimes,
     selectedEntityIds
   );
+  let sortedEntityIds;
+  if (entityType === "device") {
+    sortedEntityIds = sortDevices(devices)?.map(d => d.id + "");
+  } else {
+    sortedEntityIds = sortPeople(people)?.map(p => p.id + "");
+  }
+  const sortedSelectedEntityIds = (sortedEntityIds ?? []).filter(
+    id => id in selectedDiscoveryTimes
+  );
+  const sortedUnselectedEntityIds = (sortedEntityIds ?? []).filter(
+    id => id in unselectedDiscoveryTimes
+  );
+
   const entityIdNameMap = mapToEntityIdNameMap(
     discoveryTimes,
     entityType,
@@ -115,6 +129,7 @@ const Home: React.FunctionComponent = () => {
 
       <div className="mb-4">
         <ChartSizeWrapper
+          entityIds={sortedSelectedEntityIds}
           entityDiscoveryTimes={selectedDiscoveryTimes}
           entityIdNameMap={entityIdNameMap}
           onEntityClick={onEntityClick}
@@ -148,7 +163,7 @@ const Home: React.FunctionComponent = () => {
         </ButtonToolbar>
 
         <UnselectedEntities
-        entityIds={Object.keys(unselectedDiscoveryTimes)}
+          entityIds={sortedUnselectedEntityIds}
           entityIdNameMap={entityIdNameMap}
           onEntityClick={onEntityClick}
         />

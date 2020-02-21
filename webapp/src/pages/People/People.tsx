@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import {
   Spinner,
   FormControl,
@@ -8,12 +8,10 @@ import {
 } from "react-bootstrap";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
-import { PersonSummary } from "../../api/dto";
-import { getPeopleByFilter, createPerson } from "../../api";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
-import { genericApiErrorMessage } from "../../utils/toasts";
 import PeopleTable from "./PeopleTable";
 import useAllPeople from "../../hooks/useAllPeople";
+import { createPerson } from "../../api";
 
 const People: React.FunctionComponent = () => {
   useTitle(`People - ${Constants.title}`);

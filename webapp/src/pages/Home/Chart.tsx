@@ -9,6 +9,7 @@ import { Circle, Line } from "@vx/shape";
 import { EntityIdNameMap } from "./Home";
 
 export interface ChartProps {
+  entityIds: string[];
   entityDiscoveryTimes: DiscoveryTimes;
   entityIdNameMap: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;
@@ -26,6 +27,7 @@ const margin = {
 };
 
 const Chart: React.FC<ChartProps> = ({
+  entityIds,
   entityDiscoveryTimes,
   entityIdNameMap,
   onEntityClick,
@@ -37,7 +39,10 @@ const Chart: React.FC<ChartProps> = ({
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  const points = Object.keys(entityDiscoveryTimes)
+  // Reverse entity ids in place as the values are populated bottom to top
+  entityIds.reverse();
+
+  const points = entityIds
     .map((d: string) => entityDiscoveryTimes[d].map(date => [d, date]))
     .flatMap(x => x) as [string, DateTime][];
 
@@ -48,11 +53,12 @@ const Chart: React.FC<ChartProps> = ({
 
   const yScale = scaleBand({
     range: [yMax, 0],
-    domain: Object.keys(entityDiscoveryTimes),
+    domain: entityIds,
     padding: 0.2
   });
 
   const onDeviceNameClick = (entityName: string | number | undefined) => () => {
+    console.log(entityName);
     const entityId = Object.keys(entityIdNameMap).reduce(
       (acc: undefined | string, currentEntityId) => {
         return acc !== undefined
@@ -72,7 +78,7 @@ const Chart: React.FC<ChartProps> = ({
     <svg width={width} height={height} className="home-chart">
       <Group top={margin.top} left={margin.left}>
         <Group>
-          {Object.keys(entityDiscoveryTimes).map(deviceId => {
+          {entityIds.map(deviceId => {
             const x1 = xScale(minDate);
             const x2 = xScale(maxDate);
             const y = (yScale(deviceId) ?? 0) + yScale.bandwidth() / 2;

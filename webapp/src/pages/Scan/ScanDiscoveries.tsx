@@ -21,7 +21,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
     getDevicesByFilter(scan.discoveries.map(d => d.device_id))
       .then(d => setDevices(d))
       .catch(err => console.error(err));
-  }, []);
+  }, [scan.discoveries]);
 
   // Get people when devices are loaded
   useEffect(() => {
