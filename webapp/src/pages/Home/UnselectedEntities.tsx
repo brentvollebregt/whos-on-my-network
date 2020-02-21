@@ -1,9 +1,10 @@
 import React from "react";
 import { Badge } from "react-bootstrap";
+import { EntityIdNameMap } from "./Home";
 import "./Home.css";
 
 interface UnselectedEntitiesProps {
-  entities: { [key: string]: string };
+  entities: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;
 }
 

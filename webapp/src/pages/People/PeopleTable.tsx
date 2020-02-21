@@ -2,6 +2,7 @@ import React from "react";
 import { Table } from "react-bootstrap";
 import { navigate } from "hookrouter";
 import { PersonSummary } from "../../api/dto";
+import { sortPeople } from "../../utils/sorting";
 
 interface PeopleTableProps {
   people: PersonSummary[];
@@ -11,9 +12,7 @@ const PeopleTable: React.FunctionComponent<PeopleTableProps> = ({ people }) => {
   const onPersonClick = (personId: number) => () =>
     navigate(`/people/${personId}`);
 
-  const sortedAndFilteredPeople = people
-    ?.slice() // Do not modify the original list
-    .sort((a, b) => (a.name === b.name ? 0 : a.name > b.name ? 1 : -1));
+  const sortedPeople = sortPeople(people);
 
   return (
     <Table striped bordered hover size="sm">
@@ -26,8 +25,8 @@ const PeopleTable: React.FunctionComponent<PeopleTableProps> = ({ people }) => {
         </tr>
       </thead>
       <tbody>
-        {sortedAndFilteredPeople !== undefined &&
-          sortedAndFilteredPeople.map(person => (
+        {sortedPeople !== undefined &&
+          sortedPeople.map(person => (
             <tr
               key={person.id}
               onClick={onPersonClick(person.id)}
