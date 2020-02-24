@@ -1,3 +1,4 @@
+import ast
 import base64
 import time
 from typing import List
@@ -42,8 +43,19 @@ def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
     )
     response = requests.get('http://192.168.1.1/update_clients.asp', headers=headers, params=params, cookies=cookies, verify=False)
 
+    # Get individual JavaScript lines
+    response_lines = response.text.split('\n')
+
+    # Parse out arrays on lines 9,10,11,12,13,14 to get active devices
+    array_names = [('wlList_2g', 9), ('wlList_5g', 10), ('wlList_5g_2', 11), ('wlListInfo_2g', 12), ('wlListInfo_5g', 13), ('wlListInfo_5g_2', 14)]
+    array_string_values = [response_lines[line[1]][len(line[0] + ': '): -1] for line in array_names]
+    array_values = [ast.literal_eval(a) for a in array_string_values]
+    values = [v for array in array_values for v in array]
+    values_filtered = [v for v in values if len(v) == 5]
+    active_devices = [d[0] for d in values_filtered]
+
     # Pull the string we need out of the JavaScript response
-    unsplit_data = response.text.split('\n')[6][len("fromNetworkmapd: '"):-len("'.replace(/&#62/g, \">\").replace(/&#60/g, \"<\").split('<'),")]
+    unsplit_data = response_lines[6][len("fromNetworkmapd: '"):-len("'.replace(/&#62/g, \">\").replace(/&#60/g, \"<\").split('<'),")]
     replaced_and_split = unsplit_data.replace('&#62', '>').replace('&#60', '<').split('<')
 
     # Get devices out of target string
@@ -53,8 +65,12 @@ def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
             continue
 
         device = entry.split('>')
+        mac_address = device[3]
+        if mac_address not in active_devices:
+            continue
+
         values.append(DiscoveredDevice(
-            mac_address=device[3],
+            mac_address=mac_address,
             ip_address=device[2],
             hostname=device[1]
         ))
