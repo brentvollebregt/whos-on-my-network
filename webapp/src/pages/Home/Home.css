@@ -19,3 +19,7 @@
 .home-chart .dot {
   fill: #007bff;
 }
+
+.unselected-entity {
+  cursor: pointer;
+}

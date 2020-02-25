@@ -13,6 +13,7 @@ export interface ChartProps {
   entityDiscoveryTimes: DiscoveryTimes;
   entityIdNameMap: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;
+  onEntityLinkClick: (entityId: string) => void;
   maxDate: DateTime;
   minDate: DateTime;
   width: number;
@@ -22,7 +23,7 @@ export interface ChartProps {
 const margin = {
   top: 0,
   bottom: 40,
-  left: 100,
+  left: 130,
   right: 0
 };
 
@@ -31,6 +32,7 @@ const Chart: React.FC<ChartProps> = ({
   entityDiscoveryTimes,
   entityIdNameMap,
   onEntityClick,
+  onEntityLinkClick,
   maxDate,
   minDate,
   width,
@@ -58,7 +60,6 @@ const Chart: React.FC<ChartProps> = ({
   });
 
   const onDeviceNameClick = (entityName: string | number | undefined) => () => {
-    console.log(entityName);
     const entityId = Object.keys(entityIdNameMap).reduce(
       (acc: undefined | string, currentEntityId) => {
         return acc !== undefined
@@ -71,6 +72,22 @@ const Chart: React.FC<ChartProps> = ({
     );
     if (entityId !== undefined) {
       onEntityClick(entityId);
+    }
+  };
+
+  const onDeviceLinkClick = (entityName: string | number | undefined) => () => {
+    const entityId = Object.keys(entityIdNameMap).reduce(
+      (acc: undefined | string, currentEntityId) => {
+        return acc !== undefined
+          ? acc
+          : entityIdNameMap[currentEntityId] === entityName
+          ? currentEntityId
+          : undefined;
+      },
+      undefined
+    );
+    if (entityId !== undefined) {
+      onEntityLinkClick(entityId);
     }
   };
 
@@ -119,15 +136,11 @@ const Chart: React.FC<ChartProps> = ({
             entityIdNameMap[value]
           }
           tickComponent={({ x, y, formattedValue }) => (
-            <text
-              x={x}
-              y={y}
-              textAnchor="end"
-              dy={3}
-              onClick={onDeviceNameClick(formattedValue)}
-              className="entity-label"
-            >
-              <tspan>{formattedValue}</tspan>
+            <text x={x} y={y} textAnchor="end" dy={3} className="entity-label">
+              <tspan onClick={onDeviceNameClick(formattedValue)}>
+                {formattedValue}
+              </tspan>
+              <tspan onClick={onDeviceLinkClick(formattedValue)}> 🔗</tspan>
             </text>
           )}
         />

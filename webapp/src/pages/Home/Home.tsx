@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Constants from "../../constants";
-import { useTitle } from "hookrouter";
+import { useTitle, navigate } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import { DateTime } from "luxon";
@@ -91,6 +91,14 @@ const Home: React.FunctionComponent = () => {
     }
   };
 
+  const onEntityLinkClick = (entityId: string) => {
+    if (entityType === "device") {
+      navigate(`/devices/${entityId}`);
+    } else {
+      navigate(`/people/${entityId}`);
+    }
+  };
+
   const {
     selectedDiscoveryTimes,
     unselectedDiscoveryTimes
@@ -133,6 +141,7 @@ const Home: React.FunctionComponent = () => {
           entityDiscoveryTimes={selectedDiscoveryTimes}
           entityIdNameMap={entityIdNameMap}
           onEntityClick={onEntityClick}
+          onEntityLinkClick={onEntityLinkClick}
           minDate={getStartDate()}
           maxDate={getEndDate()}
         />

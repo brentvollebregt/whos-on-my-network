@@ -22,7 +22,7 @@ const UnselectedEntities: React.FC<UnselectedEntitiesProps> = ({
         <Badge
           key={id}
           variant="primary"
-          className="mr-1"
+          className="mr-1 unselected-entity"
           onClick={onBadgeClick(id)}
         >
           {entityIdNameMap[id]}
