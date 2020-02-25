@@ -50,9 +50,6 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
   const xMax = width - margin.left - margin.right;
   const yMax = height - margin.top - margin.bottom;
 
-  // Reverse entity ids in place as the values are populated bottom to top
-  entityIds.reverse();
-
   const points = entityIds
     .map((d: string) => entityDiscoveryTimes[d].map(date => [d, date]))
     .flatMap(x => x) as [string, DateTime][];
@@ -64,7 +61,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
 
   const yScale = scaleBand({
     range: [yMax, 0],
-    domain: entityIds,
+    domain: entityIds.slice().reverse(), // Need to reverse (without mutation) to get in the right order
     padding: 0.2
   });
 
