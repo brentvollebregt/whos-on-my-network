@@ -9,25 +9,22 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateTime, Interval } from "luxon";
 
-const dateRanges: { [key: string]: Interval } = {
-  "1 Day": Interval.fromDateTimes(
-    DateTime.local()
-      .minus({ days: 1 })
-      .startOf("day"),
-    DateTime.local().endOf("day")
-  ),
-  "1 Week": Interval.fromDateTimes(
-    DateTime.local()
-      .minus({ weeks: 1 })
-      .startOf("day"),
-    DateTime.local().endOf("day")
-  ),
-  "1 Month": Interval.fromDateTimes(
-    DateTime.local()
-      .minus({ months: 1 })
-      .startOf("day"),
-    DateTime.local().endOf("day")
-  )
+const dateRangeGenerators: { [key: string]: (date: DateTime) => Interval } = {
+  "1 Day": (date: DateTime) =>
+    Interval.fromDateTimes(
+      date.minus({ days: 1 }).startOf("day"),
+      date.endOf("day")
+    ),
+  "1 Week": (date: DateTime) =>
+    Interval.fromDateTimes(
+      date.minus({ weeks: 1 }).startOf("day"),
+      date.endOf("day")
+    ),
+  "1 Month": (date: DateTime) =>
+    Interval.fromDateTimes(
+      date.minus({ months: 1 }).startOf("day"),
+      date.endOf("day")
+    )
 };
 
 interface DateRangeSelector {
@@ -48,8 +45,10 @@ const DateRangeSelector: React.FC<DateRangeSelector> = ({
   const onEndDateSelection = (date: Date | null) =>
     date !== null &&
     setStartAndEndDates(getStartDate(), DateTime.fromJSDate(date));
-  const onDateRangeSelection = (range: string) => () =>
-    setStartAndEndDates(dateRanges[range].start, dateRanges[range].end);
+  const onDateRangeSelection = (range: string) => () => {
+    const interval = dateRangeGenerators[range](DateTime.local());
+    setStartAndEndDates(interval.start, interval.end);
+  };
 
   return (
     <InputGroup>
@@ -87,7 +86,7 @@ const DateRangeSelector: React.FC<DateRangeSelector> = ({
         title="Select Range"
         id="date-range-dropdown"
       >
-        {Object.keys(dateRanges).map(dateRange => (
+        {Object.keys(dateRangeGenerators).map(dateRange => (
           <Dropdown.Item
             onClick={onDateRangeSelection(dateRange)}
             key={dateRange}
