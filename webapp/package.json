@@ -14,6 +14,7 @@
     "@types/react-datepicker": "^2.11.0",
     "@types/react-dom": "^16.9.4",
     "@vx/axis": "0.0.194",
+    "@vx/event": "0.0.194",
     "@vx/group": "0.0.194",
     "@vx/scale": "0.0.194",
     "@vx/shape": "0.0.194",

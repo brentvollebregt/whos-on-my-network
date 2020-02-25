@@ -20,6 +20,10 @@
   fill: #007bff;
 }
 
+.home-chart .hover-detector {
+  fill: transparent;
+}
+
 .unselected-entity {
   cursor: pointer;
 }
