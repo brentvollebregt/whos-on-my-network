@@ -5,7 +5,7 @@ import {
   DropdownButton,
   Dropdown
 } from "react-bootstrap";
-import DatePicker from "react-datepicker";
+import DatePicker, { ReactDatePickerProps } from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { DateTime, Interval } from "luxon";
 
@@ -25,6 +25,14 @@ const dateRangeGenerators: { [key: string]: (date: DateTime) => Interval } = {
       date.minus({ months: 1 }).startOf("day"),
       date.endOf("day")
     )
+};
+
+const datePickerFormatting: Partial<ReactDatePickerProps> = {
+  customInput: <FormControl style={{ borderRadius: 0 }} />,
+  showTimeSelect: true,
+  timeIntervals: 60,
+  timeCaption: "time",
+  dateFormat: "dd MMM yyyy h:mm aa"
 };
 
 interface DateRangeSelector {
@@ -64,9 +72,8 @@ const DateRangeSelector: React.FC<DateRangeSelector> = ({
       <DatePicker
         selected={getStartDate().toJSDate()}
         onChange={onStartDateSelection}
-        customInput={<FormControl style={{ borderRadius: 0 }} />}
         maxDate={getEndDate().toJSDate()}
-        dateFormat="dd/MM/yyyy"
+        {...datePickerFormatting}
       />
       <InputGroup.Text
         style={{ borderRadius: 0, borderLeft: "none", borderRight: "none" }}
@@ -76,9 +83,8 @@ const DateRangeSelector: React.FC<DateRangeSelector> = ({
       <DatePicker
         selected={getEndDate().toJSDate()}
         onChange={onEndDateSelection}
-        customInput={<FormControl style={{ borderRadius: 0 }} />}
         minDate={getStartDate().toJSDate()}
-        dateFormat="dd/MM/yyyy"
+        {...datePickerFormatting}
       />
       <DropdownButton
         as={InputGroup.Append}

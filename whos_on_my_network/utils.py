@@ -8,7 +8,11 @@ def get_utc_datetime():
 
 def to_utc_datetime(date: datetime.datetime):
     """ Sets a datetime's timezone to UTC """
-    return date.replace(tzinfo=datetime.timezone.utc)
+    if date.tzinfo is None:
+        # If there is no timezone, assume this is UTC
+        date = date.replace(tzinfo=datetime.timezone.utc)
+
+    return date.astimezone(datetime.timezone.utc)
 
 
 def remove_timezome(date: datetime.datetime) -> datetime.datetime:
@@ -23,7 +27,7 @@ def datetime_to_iso_string(date: datetime.datetime) -> str:
 
 def iso_string_to_datetime(string: str) -> datetime.datetime:
     """ Convert an ISO string (passed from a JavaScript client) to a datetime """
-    return datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f%z")
+    return to_utc_datetime(datetime.datetime.strptime(string, "%Y-%m-%dT%H:%M:%S.%f%z"))
 
 
 def __serialize_value(value):
