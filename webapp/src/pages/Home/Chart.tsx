@@ -117,19 +117,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
     <>
       <svg width={width} height={height} className="home-chart">
         <Group top={margin.top} left={margin.left}>
-          <rect
-            x={0}
-            y={margin.top}
-            height={yMax}
-            width={xMax}
-            className="hover-detector"
-            onMouseMove={onChartHover(true)}
-            // onMouseLeave={onChartHover(false)}
-          />
-          <Group
-            onMouseMove={onChartHover(true)}
-            // onMouseLeave={onChartHover(false)}
-          >
+          <Group>
             {entityIds.map(deviceId => {
               const x1 = xScale(minDate);
               const x2 = xScale(maxDate);
@@ -146,10 +134,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
               );
             })}
           </Group>
-          <Group
-            onMouseMove={onChartHover(true)}
-            // onMouseLeave={onChartHover(false)}
-          >
+          <Group>
             {points.map((point, i) => {
               const x = point[1].toJSDate();
               const y = point[0];
@@ -166,6 +151,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
               );
             })}
           </Group>
+
           {tooltipData && (
             <rect x={tooltipLeft} y={margin.top} height={yMax} width={2} />
           )}
@@ -203,6 +189,15 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
               textAnchor: "middle"
             })}
           />
+          <rect
+            x={0}
+            y={margin.top}
+            height={yMax}
+            width={xMax}
+            className="hover-detector"
+            onMouseMove={onChartHover(true)}
+            onMouseLeave={onChartHover(false)}
+          />
         </Group>
       </svg>
       {tooltipData && (
@@ -214,7 +209,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
               transform: "translateX(50%)"
             }}
           >
-            {tooltipData.date.toFormat("f")}
+            {tooltipData.date.toFormat("ff")}
           </Tooltip>
         </div>
       )}
