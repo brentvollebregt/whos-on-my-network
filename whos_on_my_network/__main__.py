@@ -23,7 +23,7 @@ def start(host, port):
 @cli.command()
 @click.option('-t', '--refresh-time', default=300, type=int, help="Seconds until the network is re-scanned. Default is 300s.")
 @click.option('-n', '--network-id', default=config.DEFAULT_NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
-@click.option('-a', '--amount', type=int, default=None, help="Amount of times to scan network. Default is no limit (0).")
+@click.option('-a', '--amount', type=int, default=None, help="Amount of times to scan network. Default is no limit.")
 @click.option('-u', '--use-plugin', default=config.DEFAULT_PLUGIN, help="Plugin used to scan network.")
 @click.option('-v', '--verbose', is_flag=True, default=config.VERBOSE, help='Verbose output of scans.')
 def watch(refresh_time: int, network_id: str, amount: Optional[int], use_plugin: Optional[str], verbose: bool):
