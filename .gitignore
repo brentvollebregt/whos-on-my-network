@@ -1,2 +1,4 @@
 .idea/
 *.sqlite
+__pycache__/
+whos_on_my_network/static

@@ -1,0 +1,15 @@
+{
+  "short_name": "Who's On My Network",
+  "name": "Who's On My Network - Active Network Device Scanner",
+  "icons": [
+    {
+      "src": "logo.png",
+      "type": "image/png",
+      "sizes": "760x760"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#000000",
+  "background_color": "#ffffff"
+}

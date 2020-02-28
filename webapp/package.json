@@ -1,0 +1,57 @@
+{
+  "name": "whos-on-my-network-webapp",
+  "version": "0.1.0",
+  "private": true,
+  "dependencies": {
+    "@rehooks/local-storage": "^2.1.1",
+    "@testing-library/jest-dom": "^4.2.4",
+    "@testing-library/react": "^9.4.0",
+    "@testing-library/user-event": "^7.2.1",
+    "@types/hookrouter": "^2.2.1",
+    "@types/jest": "^24.0.25",
+    "@types/node": "^12.12.24",
+    "@types/react": "^16.9.17",
+    "@types/react-datepicker": "^2.11.0",
+    "@types/react-dom": "^16.9.4",
+    "@vx/axis": "0.0.194",
+    "@vx/event": "0.0.194",
+    "@vx/group": "0.0.194",
+    "@vx/scale": "0.0.194",
+    "@vx/shape": "0.0.194",
+    "@vx/tooltip": "0.0.194",
+    "cogo-toast": "^4.2.1",
+    "hookrouter": "^1.2.3",
+    "luxon": "^1.21.3",
+    "react": "^16.12.0",
+    "react-bootstrap": "^1.0.0-beta.16",
+    "react-datepicker": "^2.11.0",
+    "react-dom": "^16.12.0",
+    "react-scripts": "3.3.0",
+    "typescript": "^3.7.4"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "postbuild": "node postbuild.js",
+    "test": "react-scripts test",
+    "eject": "react-scripts eject"
+  },
+  "eslintConfig": {
+    "extends": "react-app"
+  },
+  "browserslist": {
+    "production": [
+      ">0.2%",
+      "not dead",
+      "not op_mini all"
+    ],
+    "development": [
+      "last 1 chrome version",
+      "last 1 firefox version",
+      "last 1 safari version"
+    ]
+  },
+  "devDependencies": {
+    "@types/luxon": "^1.21.0"
+  }
+}
