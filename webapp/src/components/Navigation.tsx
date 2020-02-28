@@ -1,6 +1,7 @@
 import React from "react";
 import { navigate, usePath } from "hookrouter";
 import { Container, Nav, Navbar } from "react-bootstrap";
+import LogoImage from "../img/logo.png";
 
 const navbarLinks: { [key: string]: string } = {
   "/": "Home",
@@ -26,7 +27,7 @@ const Navigation: React.FunctionComponent = () => {
       <Container>
         <Navbar.Brand onClick={goTo("/")}>
           <img
-            src="https://via.placeholder.com/200x30"
+            src={LogoImage}
             height="30"
             className="d-inline-block align-top"
             alt="Emotionify Banner Logo"
