@@ -1,3 +1,5 @@
+from pathlib import Path
+
 from flask import Flask, request, jsonify
 
 from . import config
@@ -11,6 +13,15 @@ from .service import scanning as scanning_service
 
 
 app = Flask(__name__, static_url_path='')
+
+
+def pre_flight_checks() -> bool:
+    """ Checks to make before the server starts. Server can start if any of these fail """
+    # Check if the static folder has been created by the webapp build step
+    if not (Path(__file__).absolute().parent / 'static').exists():
+        print('WARNING: static directory does not exist in module root. Build the webapp to populate this directory.')
+        return False
+    return True
 
 
 @app.route("/", methods=["GET"], endpoint='home')
