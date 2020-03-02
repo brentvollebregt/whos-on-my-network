@@ -1,4 +1,5 @@
 import datetime
+import sys
 
 
 def get_utc_datetime():
@@ -45,3 +46,8 @@ def serialize_dict(_dict: dict) -> dict:
         value = _dict[key]
         _dict[key] = __serialize_value(value)
     return _dict
+
+
+def is_packaged() -> bool:
+    """ Identify whether we are running in a bundled package by PyInstaller """
+    return hasattr(sys, 'frozen') and getattr(sys, 'frozen') and hasattr(sys, '_MEIPASS')
