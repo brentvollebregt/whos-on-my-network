@@ -1,0 +1,57 @@
+on:
+  push:
+    tags:
+      - 'v*'
+
+name: Build and Upload Release Assets
+
+jobs:
+  create-release:
+    name: Create Release and Upload Built Assets
+    runs-on: windows-latest
+    steps:
+      # Checkout
+      - name: Checkout code
+        uses: actions/checkout@v2
+      # Make sure that the git tag and Python module version match. Save the version to an output.
+      - name: Check Tag and Version Match
+        id: check_version
+        shell: bash
+        run: |
+          cd tools
+          bash check_tag_version_match.sh
+          cd ../
+          echo "::set-output name=version::$(git describe --exact-match --tags master)"
+      # Build the React frontend (will be copied into the python module)
+      - name: Build Webapp
+        run: |
+          cd webapp
+          npm install
+          npm run build
+          cd ../
+      # Zip up the module that now contains has the build webapp
+      - name: Zip Module
+        shell: pwsh
+        run: Compress-Archive -Path .\whos_on_my_network, README.md, requirements.txt, run.py -CompressionLevel Optimal -DestinationPath .\whos_on_my_network.zip
+      # Create the release for this version
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ steps.get_version.outputs.version }}
+          release_name: Release ${{ steps.check_version.outputs.version }} (${{ github.ref }})
+          draft: false
+          prerelease: false
+      # Upload the zip to the created release
+      - name: Upload Release Asset
+        id: upload-release-asset 
+        uses: actions/upload-release-asset@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          upload_url: ${{ steps.create_release.outputs.upload_url }}
+          asset_path: ./whos_on_my_network.zip
+          asset_name: whos_on_my_network.zip
+          asset_content_type: application/zip
