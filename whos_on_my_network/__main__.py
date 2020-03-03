@@ -1,12 +1,14 @@
 import click
 from typing import Optional
 
+from . import version
 from . import config
 from .api import app, pre_flight_checks
 from .service import scanning as scanning_service
 
 
 @click.group()
+@click.version_option(version, message='v%(version)s')
 def cli():
     """ Who's On My Network """
 
