@@ -1,12 +1,14 @@
 import click
 from typing import Optional
 
+from . import version
 from . import config
-from .api import app
+from .api import app, pre_flight_checks
 from .service import scanning as scanning_service
 
 
 @click.group()
+@click.version_option(version, message='v%(version)s')
 def cli():
     """ Who's On My Network """
 
@@ -14,9 +16,10 @@ def cli():
 @cli.command()
 @click.option('-h', '--host', 'host', default=config.HOST)
 @click.option('-p', '--port', 'port', type=int, default=config.PORT)
-def start(host, port):
+def start(host: bool, port: bool):
     """ Start the web server """
     print(f'Server starting at http://{host}:{port}')
+    pre_flight_checks()
     app.run(host=host, port=port)
 
 

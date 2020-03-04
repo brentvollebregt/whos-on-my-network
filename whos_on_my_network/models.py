@@ -5,7 +5,7 @@ from . import utils
 
 
 database = peewee.SqliteDatabase(
-    config.DATABASE_SQLITE_FILE_LOCATION,
+    config.DATABASE_FILE_LOCATION,
     pragmas={
         'foreign_keys': 1  # Enforce foreign-key constraints
     }
