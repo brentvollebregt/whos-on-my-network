@@ -6,7 +6,7 @@ This tool allows you to identify and keep records of who's on your network and w
 
 After you scan your network, you can then view devices connected to your network, when they were last seen and keep track of who owns devices (thus allowing you to identify who's on the network).
 
-## Pre-build Module and Binary
+## Pre-built Module and Binary
 
 On every official version change, a [release](https://github.com/brentvollebregt/whos-on-my-network/releases) is made with two assets:
 
@@ -99,7 +99,7 @@ Examples:
 
 ## ❓ How Does This Tool Work?
 
-By default, this tool uses scapy to send ARP packets to all addresses in the provided network range (default is 192.168.1.0/24) to identify what devices are on the network. When a host responds, its MAC address, IP address and hostname are obtained and an entry is added to the SQLite database matched to the current scan.
+By default, this tool uses [scapy](https://scapy.net/) to send ARP packets to all addresses in the provided network range (default is 192.168.1.0/24) to identify what devices are on the network. When a host responds, its MAC address, IP address and hostname are obtained and an entry is added to the SQLite database matched to the current scan.
 
 ## ⚙️ Configuration and Database
 
@@ -108,7 +108,7 @@ When running the module/executable, two files will be created if they do not exi
 - `config.json`: Contains basic configuration for the application
 - `database.sqlite`: Used for scan and user data storage
 
-The location of these files are in the parent directory of the module when not packaged or in `%APPDATA%/WhoIsOnMyNetwork` (Windows) / `$HOME/WhoIsOnMyNetwork` (Linux and MacOS) when using a packaged version of the application.
+The location of these files are in the parent directory of the module when not packaged or in `%APPDATA%/WhoIsOnMyNetwork` (Windows) / `$HOME/WhoIsOnMyNetwork` (Linux and MacOS) when using a packaged version of the application (exe).
 
 > When running the unpacked application, you can force the files to be in the packaged locations by setting the environment variable `FORCE_PACKAGED_MODE` to `true`.
 
@@ -116,7 +116,7 @@ The location of these files are in the parent directory of the module when not p
 
 The two commands `current` and `watch` both have an argument `--use-plugin`. This allows you to specify a custom Python script in the directory `whos_on_my_network/plugins` which contains a function named `scan` that takes two parameters and returns a list of `DiscoveredDevice` objects as defined in `whos_on_my_network.service.scanning`.
 
-An example plugin for the ASUS RT-AC58U router has been provided as `asus-rt-ac58u.py` in the plugins folder. This script logs into the router, identifies who is connected to the router and returns a summary of the information found in the object expected.
+An example plugin for the ASUS RT-AC58U router has been provided as [`asus-rt-ac58u.py` in the plugins folder](whos_on_my_network/plugins/asus-rt-ac58u.py). This script logs into the router, identifies who is connected to the router and returns a summary of the information found in the object expected.
 
 A plugin can also be set as the default scanning method by setting `default_plugin` in `config.json` to the name of the file without the extension; for example:
 
