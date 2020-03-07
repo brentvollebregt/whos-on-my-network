@@ -33,7 +33,21 @@ def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
     response = requests.post('http://router.asus.com/login.cgi', headers=headers, data=data, verify=False)
     token = response.cookies.get('asus_token')
 
-    # Get clients
+    # Get active clients
+    cookies = {
+        'asus_token': token
+    }
+    headers = {
+        'Referer': 'http://router.asus.com/index.asp',
+    }
+    params = (
+        ('_', {str(int(time.time() * 1000))}),
+    )
+    response = requests.get('http://router.asus.com/update_networkmapd.asp', headers=headers, params=params, cookies=cookies, verify=False)
+
+    active_devices = ast.literal_eval(response.text.split('\n')[0].split('= ')[1][:-1])[0]
+
+    # Get client details
     cookies = {
         'asus_token': token
     }
@@ -56,6 +70,9 @@ def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
     values: List[DiscoveredDevice] = []
     for entry in network_map:
         if entry == 'maclist':
+            continue
+
+        if entry not in active_devices:
             continue
 
         mac_address = entry
