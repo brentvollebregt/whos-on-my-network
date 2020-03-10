@@ -13,7 +13,7 @@ On every official version change, a [release](https://github.com/brentvollebregt
 - `whos_on_my_network.zip`: The whos_on_my_network module with the webapp pre-built.
 - `whos_on_my_network_binary.zip`: A Windows executable of whos_on_my_network (does not support plugins)
 
-> Plugins are not available when using the pre-built Windows executable as they could potentially require a third party library that is not packaged in the distribution. Support for building an executable that uses a specific plugin will hopefully be added soon.
+> The pre-built Windows executable does not use a plugin and will default to the built-in method. To make a build containing a particular plugin yourself, execute `bash package.sh {plugin-name}`; this will produce whos_on_my_network.exe which will use the declared plugin.
 
 ## 🛠️ Setup
 
