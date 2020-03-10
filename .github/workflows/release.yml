@@ -54,10 +54,10 @@ jobs:
 
       # Build a binary that uses the default method of scanning
       - name: Build Binary
-        shell: cmd
+        shell: bash
         run: |
           python -m pip install pyinstaller
-          pyinstaller -y -F --add-data "whos_on_my_network/static";"whos_on_my_network/static/" --distpath ./ -n whos_on_my_network.exe run.py
+          sh package.sh
 
       # Zip up the binary
       - name: Zip Module
