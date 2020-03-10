@@ -55,5 +55,21 @@ def current(network_id: str, use_plugin: Optional[str], verbose: bool):
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
 
 
+@cli.command()
+def debug():
+    """ Display debug information """
+    print('General')
+    print(f'\tPackaged: {config.packaged}')
+    print('Config')
+    print(f'\tDefault host: {config.HOST}')
+    print(f'\tDefault port: {config.PORT}')
+    print(f'\tDefault verbose: {config.VERBOSE}')
+    print(f'\tDefault network id: {config.DEFAULT_NETWORK_ID}')
+    print(f'\tDefault plugin: {config.DEFAULT_PLUGIN}')
+    print('Locations')
+    print(f'\tConfig location: {config.config_file}')
+    print(f'\tDatabase location: {config.DATABASE_FILE_LOCATION}')
+
+
 if __name__ == '__main__':
     cli(prog_name='whos_on_my_network')
