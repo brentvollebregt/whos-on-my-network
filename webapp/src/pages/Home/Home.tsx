@@ -7,7 +7,7 @@ import { DateTime } from "luxon";
 import { DiscoveryTimes } from "../../api/dto";
 import { getDeviceDiscoveryTimes, getPersonDiscoveryTimes } from "../../api";
 import UnselectedEntities from "./UnselectedEntities";
-import ChartSizeWrapper from "./ChartSizeWrapper";
+import EntityPlot from "../../components/EntityPlot";
 import {
   ButtonToolbar,
   DropdownButton,
@@ -136,7 +136,7 @@ const Home: React.FunctionComponent = () => {
       />
 
       <div className="mb-4">
-        <ChartSizeWrapper
+        <EntityPlot
           entityIds={sortedSelectedEntityIds}
           entityDiscoveryTimes={selectedDiscoveryTimes}
           entityIdNameMap={entityIdNameMap}
@@ -144,6 +144,7 @@ const Home: React.FunctionComponent = () => {
           onEntityLinkClick={onEntityLinkClick}
           minDate={getStartDate()}
           maxDate={getEndDate()}
+          height={500}
         />
 
         <ButtonToolbar className="mb-2 text-center d-block">

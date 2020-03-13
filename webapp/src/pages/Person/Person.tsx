@@ -8,6 +8,7 @@ import { Person as PersonDTO } from "../../api/dto";
 import { getPersonById } from "../../api";
 import { Spinner } from "react-bootstrap";
 import { genericApiErrorMessage } from "../../utils/toasts";
+import PersonDiscoveriesPlot from "./PersonDiscoveriesPlot";
 
 interface PersonProps {
   id: number;
@@ -33,17 +34,23 @@ const Person: React.FunctionComponent<PersonProps> = ({ id }) => {
         {person?.name} (#{id})
       </h1>
 
-      {person !== undefined ? (
-        <PersonDetail person={person} setPerson={updatePerson} />
-      ) : (
+      {person !== undefined && (
+        <>
+          <PersonDetail person={person} setPerson={updatePerson} />
+          <div className="mt-4">
+            <PersonDiscoveriesPlot person={person} />
+          </div>
+          <div className="mt-4">
+            <PersonDevices id={id} />
+          </div>
+        </>
+      )}
+
+      {person === undefined && (
         <div style={{ textAlign: "center" }}>
           <Spinner animation="border" />
         </div>
       )}
-
-      <div className="mt-4">
-        <PersonDevices id={id} />
-      </div>
     </PageSizeWrapper>
   );
 };

@@ -8,14 +8,14 @@ import { scaleBand, scaleTime } from "@vx/scale";
 import { Circle, Line } from "@vx/shape";
 import { localPoint } from "@vx/event";
 import { WithTooltipProvidedProps } from "@vx/tooltip/lib/enhancers/withTooltip";
-import { EntityIdNameMap } from "./Home";
+import { EntityIdNameMap } from "../../pages/Home/Home";
 
 export interface ChartProps {
-  entityIds: string[];
+  entityIds: string[]; // Required for ordering; Object.keys(entityIdNameMap) will be out of order
   entityDiscoveryTimes: DiscoveryTimes;
   entityIdNameMap: EntityIdNameMap;
-  onEntityClick: (entityId: string) => void;
-  onEntityLinkClick: (entityId: string) => void;
+  onEntityClick?: (entityId: string) => void;
+  onEntityLinkClick?: (entityId: string) => void;
   maxDate: DateTime;
   minDate: DateTime;
   width: number;
@@ -76,7 +76,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
       },
       undefined
     );
-    if (entityId !== undefined) {
+    if (entityId !== undefined && onEntityClick !== undefined) {
       onEntityClick(entityId);
     }
   };
@@ -92,7 +92,7 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
       },
       undefined
     );
-    if (entityId !== undefined) {
+    if (entityId !== undefined && onEntityLinkClick !== undefined) {
       onEntityLinkClick(entityId);
     }
   };
@@ -173,7 +173,9 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
                 <tspan onClick={onDeviceNameClick(formattedValue)}>
                   {formattedValue}
                 </tspan>
-                <tspan onClick={onDeviceLinkClick(formattedValue)}> 🔗</tspan>
+                {onEntityLinkClick !== undefined && (
+                  <tspan onClick={onDeviceLinkClick(formattedValue)}> 🔗</tspan>
+                )}
               </text>
             )}
           />

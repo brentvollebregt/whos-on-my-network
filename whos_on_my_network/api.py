@@ -93,6 +93,17 @@ def update_device_by_id(device_id: int):
     return jsonify(dict_response)
 
 
+@app.route("/api/device/<int:source_device_id>/merge", methods=["POST"])
+def merge_device(source_device_id: int):
+    """ Merge two devices. Device id in url gets merged into device id in body (body device MAC address is used) """
+    destination_device_id: int = request.json['destinationDeviceId']
+
+    device = device_service.merge_devices(source_device_id, destination_device_id)
+
+    dict_response = device.build()
+    return jsonify(dict_response)
+
+
 @app.route("/api/person", methods=["POST"])
 def get_people_by_filter():
     """ Get people using a filter """

@@ -1,9 +1,14 @@
 import React, { useRef, useEffect, useState } from "react";
 import Chart, { ChartProps } from "./Chart";
 
-type ChartSizeWrapperProps = Omit<Omit<ChartProps, "width">, "height">;
+type ChartSizeWrapperProps = Omit<Omit<ChartProps, "width">, "height"> & {
+  height: number;
+};
 
-const ChartSizeWrapper: React.FC<ChartSizeWrapperProps> = props => {
+const ChartSizeWrapper: React.FC<ChartSizeWrapperProps> = ({
+  height,
+  ...props
+}) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState<[number, number]>([0, 0]);
 
@@ -17,7 +22,7 @@ const ChartSizeWrapper: React.FC<ChartSizeWrapperProps> = props => {
   }, [wrapperRef]);
 
   return (
-    <div ref={wrapperRef} style={{ height: 500 }}>
+    <div ref={wrapperRef} style={{ height }}>
       <Chart {...props} width={dimensions[0]} height={dimensions[1]} />
     </div>
   );
