@@ -11,7 +11,7 @@ import { WithTooltipProvidedProps } from "@vx/tooltip/lib/enhancers/withTooltip"
 import { EntityIdNameMap } from "./Home";
 
 export interface ChartProps {
-  entityIds: string[];
+  entityIds: string[]; // Required for ordering; Object.keys(entityIdNameMap) will be out of order
   entityDiscoveryTimes: DiscoveryTimes;
   entityIdNameMap: EntityIdNameMap;
   onEntityClick: (entityId: string) => void;

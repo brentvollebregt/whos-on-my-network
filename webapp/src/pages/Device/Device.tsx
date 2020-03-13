@@ -8,6 +8,7 @@ import { getDeviceById } from "../../api";
 import { Device as DeviceDTO } from "../../api/dto";
 import { Spinner } from "react-bootstrap";
 import { genericApiErrorMessage } from "../../utils/toasts";
+import DeviceDiscoveriesPlot from "./DeviceDiscoveriesPlot";
 
 interface DeviceProps {
   id: number;
@@ -43,6 +44,9 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
       {device !== undefined && (
         <>
           <DeviceDetail device={device} updateDevice={updateDevice} />
+          <div className="mt-4">
+            <DeviceDiscoveriesPlot device={device} />
+          </div>
           <div className="mt-4">
             <DeviceDiscoveries device={device} />
           </div>

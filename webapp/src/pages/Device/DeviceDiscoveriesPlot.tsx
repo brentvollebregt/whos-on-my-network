@@ -1,0 +1,62 @@
+import React, { useState, useEffect } from "react";
+import { Device, DiscoveryTimes } from "../../api/dto";
+import { DateTime } from "luxon";
+import EntityPlot from "../../components/EntityPlot";
+import DateRangeSelector from "../../components/DateRangeSelector";
+import useStoredDatePair from "../../hooks/useStoredDatePair";
+import { getDeviceDiscoveryTimes } from "../../api";
+
+interface DeviceDiscoveriesPlotProps {
+  device: Device;
+}
+
+const defaultStartDate = DateTime.local()
+  .minus({ weeks: 1 })
+  .startOf("day");
+const defaultEndDate = DateTime.local().endOf("day");
+
+const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps> = ({
+  device
+}) => {
+  const {
+    getStartDate,
+    getEndDate,
+    getStartAndEndDates,
+    setStartAndEndDates,
+    storedStartAndEndDates
+  } = useStoredDatePair("device", defaultStartDate, defaultEndDate);
+  const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({
+    [device.id]: []
+  });
+
+  // Fetch discovery times
+  useEffect(() => {
+    getDeviceDiscoveryTimes([device.id], getStartDate(), getEndDate()).then(d =>
+      setDiscoveryTimes(d)
+    );
+  }, [storedStartAndEndDates]);
+
+  const onEntityClick = () => {};
+
+  return (
+    <div>
+      <DateRangeSelector
+        startAndEndDates={getStartAndEndDates()}
+        setStartAndEndDates={setStartAndEndDates}
+      />
+
+      <EntityPlot
+        entityIds={[device.id + ""]}
+        entityDiscoveryTimes={discoveryTimes}
+        entityIdNameMap={{ [device.id]: device.name }}
+        onEntityClick={onEntityClick}
+        onEntityLinkClick={onEntityClick}
+        minDate={getStartDate()}
+        maxDate={getEndDate()}
+        height={100}
+      />
+    </div>
+  );
+};
+
+export default DeviceDiscoveriesPlot;
