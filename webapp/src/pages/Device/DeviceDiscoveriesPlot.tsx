@@ -15,18 +15,16 @@ const defaultStartDate = DateTime.local()
   .startOf("day");
 const defaultEndDate = DateTime.local().endOf("day");
 
-const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps> = ({
-  device
-}) => {
+const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps> = ({ device }) => {
   const {
     getStartDate,
     getEndDate,
     getStartAndEndDates,
     setStartAndEndDates,
-    storedStartAndEndDates
+    storedStartAndEndDates,
   } = useStoredDatePair("device", defaultStartDate, defaultEndDate);
   const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({
-    [device.id]: []
+    [device.id]: [],
   });
 
   // Fetch discovery times
@@ -34,7 +32,7 @@ const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps>
     getDeviceDiscoveryTimes([device.id], getStartDate(), getEndDate()).then(d =>
       setDiscoveryTimes(d)
     );
-  }, [storedStartAndEndDates]);
+  }, [device.id, storedStartAndEndDates]);
 
   return (
     <div>
@@ -45,7 +43,7 @@ const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps>
 
       <EntityPlot
         entityIds={[device.id + ""]}
-        entityDiscoveryTimes={discoveryTimes}
+        entityDiscoveryTimes={{ [device.id]: [], ...discoveryTimes }}
         entityIdNameMap={{ [device.id]: device.name }}
         minDate={getStartDate()}
         maxDate={getEndDate()}

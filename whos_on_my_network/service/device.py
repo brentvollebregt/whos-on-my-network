@@ -94,3 +94,27 @@ def update_device_by_id(device_id: int, name: str, note: str, owner_id: Optional
     device.save()
 
     return get_device_by_id(device.id)
+
+
+def merge_devices(source_device_id: int, destination_device_id: int) -> dto.Device:
+    if source_device_id == destination_device_id:
+        raise Exception("Source device can not be the same as the destination device")
+
+    source_device = models.Device.get(source_device_id)
+    destination_device = models.Device.get(destination_device_id)
+
+    # Update references
+    models.Discovery.update(device=destination_device) \
+        .where(models.Discovery.device == source_device)\
+        .execute()
+
+    # Move details of device being merged into new device
+    description_addition = f'\n\nMerged with {source_device.name} ({source_device.mac_address}):\n{source_device.note}'
+    destination_device.note = destination_device.note + description_addition
+    destination_device.save()
+
+    # Delete old device
+    source_device.delete_instance()
+
+    # Return the new device
+    return get_device_by_id(destination_device_id)

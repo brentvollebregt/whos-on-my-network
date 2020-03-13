@@ -9,17 +9,14 @@ import { Device as DeviceDTO } from "../../api/dto";
 import { Spinner } from "react-bootstrap";
 import { genericApiErrorMessage } from "../../utils/toasts";
 import DeviceDiscoveriesPlot from "./DeviceDiscoveriesPlot";
+import DeviceMergeTool from "./DeviceMergeTool";
 
 interface DeviceProps {
   id: number;
 }
 
 const getDeviceName = (id: number, device: DeviceDTO | undefined) =>
-  device === undefined
-    ? id
-    : device.name === ""
-    ? device.mac_address.toUpperCase()
-    : device.name;
+  device === undefined ? id : device.name === "" ? device.mac_address.toUpperCase() : device.name;
 
 const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
   const [device, setDevice] = useState<DeviceDTO | undefined>(undefined);
@@ -49,6 +46,9 @@ const Device: React.FunctionComponent<DeviceProps> = ({ id }) => {
           </div>
           <div className="mt-4">
             <DeviceDiscoveries device={device} />
+          </div>
+          <div className="mt-4">
+            <DeviceMergeTool device={device} />
           </div>
         </>
       )}
