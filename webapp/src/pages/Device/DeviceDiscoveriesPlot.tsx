@@ -36,8 +36,6 @@ const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps>
     );
   }, [storedStartAndEndDates]);
 
-  const onEntityClick = () => {};
-
   return (
     <div>
       <DateRangeSelector
@@ -49,11 +47,9 @@ const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps>
         entityIds={[device.id + ""]}
         entityDiscoveryTimes={discoveryTimes}
         entityIdNameMap={{ [device.id]: device.name }}
-        onEntityClick={onEntityClick}
-        onEntityLinkClick={onEntityClick}
         minDate={getStartDate()}
         maxDate={getEndDate()}
-        height={100}
+        height={90}
       />
     </div>
   );
