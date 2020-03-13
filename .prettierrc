@@ -1,6 +1,6 @@
 {
   "eslintIntegration": true,
-  "printWidth": 120,
+  "printWidth": 100,
   "trailingComma": "es5",
-  "endOfLine": "lf",
+  "endOfLine": "lf"
 }
