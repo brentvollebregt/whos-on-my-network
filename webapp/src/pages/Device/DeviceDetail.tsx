@@ -18,17 +18,12 @@ interface DeviceDetailProps {
   updateDevice: (device: Device) => void;
 }
 
-const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
-  device,
-  updateDevice
-}) => {
+const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({ device, updateDevice }) => {
   const { people } = useAllPeople();
   const [name, setName] = useState<string>(device.name);
   const [note, setNote] = useState<string>(device.note);
   const [ownerId, setOwnerId] = useState<number | null>(device.owner_id);
-  const [isPrimary, setIsPrimary] = useState<boolean | undefined>(
-    device.is_primary
-  );
+  const [isPrimary, setIsPrimary] = useState<boolean | undefined>(device.is_primary);
   const [dirty, setDirty] = useState<boolean>(false);
   const [vendor, setVendor] = useState<string>("");
 
@@ -87,11 +82,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                 <InputGroup.Prepend>
                   <InputGroup.Text>MAC Address</InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  className="mac-address"
-                  value={device.mac_address}
-                  disabled
-                />
+                <FormControl className="mac-address" value={device.mac_address} disabled />
               </InputGroup>
 
               <InputGroup className="mb-2">
@@ -105,10 +96,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                 <InputGroup.Prepend>
                   <InputGroup.Text>First Seen</InputGroup.Text>
                 </InputGroup.Prepend>
-                <FormControl
-                  value={device.first_seen.toFormat("FF")}
-                  disabled
-                />
+                <FormControl value={device.first_seen.toFormat("FF")} disabled />
               </InputGroup>
 
               <InputGroup className="mb-2">
@@ -138,18 +126,11 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   }
                   id="input-group-dropdown-2"
                 >
-                  <Dropdown.Item onClick={onOwnerIdChange(null)}>
-                    Not Set
-                  </Dropdown.Item>
+                  <Dropdown.Item onClick={onOwnerIdChange(null)}>Not Set</Dropdown.Item>
                   {(people ?? [])
-                    .sort((a, b) =>
-                      a.name === b.name ? 0 : a.name < b.name ? -1 : 1
-                    )
+                    .sort((a, b) => (a.name === b.name ? 0 : a.name < b.name ? -1 : 1))
                     .map(person => (
-                      <Dropdown.Item
-                        key={person.id}
-                        onClick={onOwnerIdChange(person.id)}
-                      >
+                      <Dropdown.Item key={person.id} onClick={onOwnerIdChange(person.id)}>
                         {person.name}
                       </Dropdown.Item>
                     ))}
@@ -166,12 +147,8 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   title={isPrimary === undefined ? "" : isPrimary ? "✔️" : "❌"}
                   id="input-group-dropdown-2"
                 >
-                  <Dropdown.Item onClick={onIsPrimaryChange(true)}>
-                    ✔️
-                  </Dropdown.Item>
-                  <Dropdown.Item onClick={onIsPrimaryChange(false)}>
-                    ❌
-                  </Dropdown.Item>
+                  <Dropdown.Item onClick={onIsPrimaryChange(true)}>✔️</Dropdown.Item>
+                  <Dropdown.Item onClick={onIsPrimaryChange(false)}>❌</Dropdown.Item>
                 </DropdownButton>
               </InputGroup>
             </div>
@@ -193,11 +170,7 @@ const DeviceDetail: React.FunctionComponent<DeviceDetailProps> = ({
                   onChange={onNoteChange}
                 />
                 <div style={{ textAlign: "right" }}>
-                  <Button
-                    variant="primary"
-                    disabled={!dirty}
-                    onClick={saveChanges}
-                  >
+                  <Button variant="primary" disabled={!dirty} onClick={saveChanges}>
                     Save Changes
                   </Button>
                 </div>

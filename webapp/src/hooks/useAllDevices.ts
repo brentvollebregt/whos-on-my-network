@@ -5,9 +5,7 @@ import { getDevicesByFilter } from "../api";
 import { genericApiErrorMessage } from "../utils/toasts";
 
 const useAllDevices = () => {
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
+  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(undefined);
 
   const refresh = () => {
     getDevicesByFilter()

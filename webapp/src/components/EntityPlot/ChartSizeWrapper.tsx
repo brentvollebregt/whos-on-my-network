@@ -5,19 +5,13 @@ type ChartSizeWrapperProps = Omit<Omit<ChartProps, "width">, "height"> & {
   height: number;
 };
 
-const ChartSizeWrapper: React.FC<ChartSizeWrapperProps> = ({
-  height,
-  ...props
-}) => {
+const ChartSizeWrapper: React.FC<ChartSizeWrapperProps> = ({ height, ...props }) => {
   const wrapperRef = useRef<HTMLDivElement | null>(null);
   const [dimensions, setDimensions] = useState<[number, number]>([0, 0]);
 
   useEffect(() => {
     if (wrapperRef.current !== null) {
-      setDimensions([
-        wrapperRef.current.clientWidth,
-        wrapperRef.current.clientHeight
-      ]);
+      setDimensions([wrapperRef.current.clientWidth, wrapperRef.current.clientHeight]);
     }
   }, [wrapperRef]);
 

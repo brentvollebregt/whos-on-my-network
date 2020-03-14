@@ -9,10 +9,7 @@ interface PersonDetailProps {
   setPerson: (person: Person) => void;
 }
 
-const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({
-  person,
-  setPerson
-}) => {
+const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({ person, setPerson }) => {
   const [name, setName] = useState<string>("");
   const [note, setNote] = useState<string>("");
   const [dirty, setDirty] = useState<boolean>(false);
@@ -55,11 +52,7 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({
               <InputGroup.Text>First Seen</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              value={
-                person.first_seen === null
-                  ? "Never"
-                  : person.first_seen.toFormat("FF")
-              }
+              value={person.first_seen === null ? "Never" : person.first_seen.toFormat("FF")}
               disabled
             />
           </InputGroup>
@@ -69,14 +62,8 @@ const PersonDetail: React.FunctionComponent<PersonDetailProps> = ({
               <InputGroup.Text>Last Seen</InputGroup.Text>
             </InputGroup.Prepend>
             <FormControl
-              value={
-                person.last_seen === null
-                  ? "Never"
-                  : person.last_seen.toRelative() ?? ""
-              }
-              title={
-                person.last_seen === null ? "" : person.last_seen.toFormat("FF")
-              }
+              value={person.last_seen === null ? "Never" : person.last_seen.toRelative() ?? ""}
+              title={person.last_seen === null ? "" : person.last_seen.toFormat("FF")}
               disabled
             />
           </InputGroup>

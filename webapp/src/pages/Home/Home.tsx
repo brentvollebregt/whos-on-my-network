@@ -8,20 +8,11 @@ import { DiscoveryTimes } from "../../api/dto";
 import { getDeviceDiscoveryTimes, getPersonDiscoveryTimes } from "../../api";
 import UnselectedEntities from "./UnselectedEntities";
 import EntityPlot from "../../components/EntityPlot";
-import {
-  ButtonToolbar,
-  DropdownButton,
-  ButtonGroup,
-  Dropdown,
-  Button
-} from "react-bootstrap";
+import { ButtonToolbar, DropdownButton, ButtonGroup, Dropdown, Button } from "react-bootstrap";
 import useStoredDatePair from "../../hooks/useStoredDatePair";
 import useAllPeople from "../../hooks/useAllPeople";
 import useAllDevices from "../../hooks/useAllDevices";
-import {
-  mapToSelectedAndUnselectedDiscoveryTimes,
-  mapToEntityIdNameMap
-} from "./mappings";
+import { mapToSelectedAndUnselectedDiscoveryTimes, mapToEntityIdNameMap } from "./mappings";
 import "./Home.css";
 import { sortDevices, sortPeople } from "../../utils/sorting";
 
@@ -85,9 +76,7 @@ const Home: React.FunctionComponent = () => {
     if (selectedEntityIds.indexOf(entityId) === -1) {
       setSelectedEntityIds([...selectedEntityIds, entityId]);
     } else {
-      setSelectedEntityIds([
-        ...selectedEntityIds.filter(id => id !== entityId)
-      ]);
+      setSelectedEntityIds([...selectedEntityIds.filter(id => id !== entityId)]);
     }
   };
 
@@ -102,10 +91,7 @@ const Home: React.FunctionComponent = () => {
   const {
     selectedDiscoveryTimes,
     unselectedDiscoveryTimes
-  } = mapToSelectedAndUnselectedDiscoveryTimes(
-    discoveryTimes,
-    selectedEntityIds
-  );
+  } = mapToSelectedAndUnselectedDiscoveryTimes(discoveryTimes, selectedEntityIds);
   let sortedEntityIds;
   if (entityType === "device") {
     sortedEntityIds = sortDevices(devices)?.map(d => d.id + "");
@@ -119,12 +105,7 @@ const Home: React.FunctionComponent = () => {
     id => id in unselectedDiscoveryTimes
   );
 
-  const entityIdNameMap = mapToEntityIdNameMap(
-    discoveryTimes,
-    entityType,
-    devices,
-    people
-  );
+  const entityIdNameMap = mapToEntityIdNameMap(discoveryTimes, entityType, devices, people);
 
   return (
     <PageSizeWrapper>
@@ -151,16 +132,10 @@ const Home: React.FunctionComponent = () => {
           <DropdownButton
             as={ButtonGroup}
             id="entity-selection"
-            title={`Entity Type: ${
-              entityType === "device" ? "Device" : "People"
-            }`}
+            title={`Entity Type: ${entityType === "device" ? "Device" : "People"}`}
           >
-            <Dropdown.Item onClick={() => setEntityType("device")}>
-              Device
-            </Dropdown.Item>
-            <Dropdown.Item onClick={() => setEntityType("person")}>
-              People
-            </Dropdown.Item>
+            <Dropdown.Item onClick={() => setEntityType("device")}>Device</Dropdown.Item>
+            <Dropdown.Item onClick={() => setEntityType("person")}>People</Dropdown.Item>
           </DropdownButton>
           <ButtonGroup className="ml-2">
             <Button variant="primary" onClick={selectAllEntities}>

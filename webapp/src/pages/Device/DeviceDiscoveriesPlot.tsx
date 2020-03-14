@@ -21,10 +21,10 @@ const DeviceDiscoveriesPlot: React.FunctionComponent<DeviceDiscoveriesPlotProps>
     getEndDate,
     getStartAndEndDates,
     setStartAndEndDates,
-    storedStartAndEndDates,
+    storedStartAndEndDates
   } = useStoredDatePair("device", defaultStartDate, defaultEndDate);
   const [discoveryTimes, setDiscoveryTimes] = useState<DiscoveryTimes>({
-    [device.id]: [],
+    [device.id]: []
   });
 
   // Fetch discovery times

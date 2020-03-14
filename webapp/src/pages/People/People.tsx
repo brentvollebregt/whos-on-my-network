@@ -1,11 +1,5 @@
 import React, { useState } from "react";
-import {
-  Spinner,
-  FormControl,
-  Button,
-  InputGroup,
-  ButtonToolbar
-} from "react-bootstrap";
+import { Spinner, FormControl, Button, InputGroup, ButtonToolbar } from "react-bootstrap";
 import Constants from "../../constants";
 import { useTitle } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
@@ -36,11 +30,7 @@ const People: React.FunctionComponent = () => {
           <InputGroup.Prepend>
             <InputGroup.Text>Search</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl
-            type="text"
-            placeholder="Person Name"
-            onChange={onTextFilter}
-          />
+          <FormControl type="text" placeholder="Person Name" onChange={onTextFilter} />
         </InputGroup>
         <Button variant="outline-secondary" onClick={onAddPerson}>
           Add Person

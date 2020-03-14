@@ -59,14 +59,8 @@ const Scans: React.FunctionComponent = () => {
         <tbody>
           {scans !== undefined &&
             scans.map(scan => (
-              <tr
-                key={scan.id}
-                onClick={onScanClick(scan.id)}
-                className="pointer"
-              >
-                <td title={scan.scan_time.toFormat("FF")}>
-                  {scan.scan_time.toRelative()}
-                </td>
+              <tr key={scan.id} onClick={onScanClick(scan.id)} className="pointer">
+                <td title={scan.scan_time.toFormat("FF")}>{scan.scan_time.toRelative()}</td>
                 <td>{scan.network_id}</td>
                 <td>{scan.devices_discovered_count}</td>
                 <td>{scan.people_seen_count}</td>

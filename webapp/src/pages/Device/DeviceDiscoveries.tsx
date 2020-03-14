@@ -8,9 +8,7 @@ interface DeviceDiscoveriesProps {
   device: Device;
 }
 
-const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
-  device
-}) => {
+const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({ device }) => {
   const [scans, setScans] = useState<ScanSummary[] | undefined>(undefined);
 
   useEffect(() => {
@@ -19,8 +17,7 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
       .catch(err => console.error(err));
   }, [device.last_10_discoveries]);
 
-  const onDiscoveryClick = (scanId: number) => () =>
-    navigate(`/scans/${scanId}`);
+  const onDiscoveryClick = (scanId: number) => () => navigate(`/scans/${scanId}`);
 
   return (
     <Table striped bordered hover size="sm">
@@ -42,9 +39,7 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({
                 onClick={onDiscoveryClick(discovery.scan_id)}
                 className="pointer"
               >
-                <td title={scan?.scan_time.toFormat("FF")}>
-                  {scan?.scan_time.toRelative()}
-                </td>
+                <td title={scan?.scan_time.toFormat("FF")}>{scan?.scan_time.toRelative()}</td>
                 <td>{scan?.network_id}</td>
                 <td>{discovery.hostname}</td>
                 <td>{discovery.ip_address}</td>

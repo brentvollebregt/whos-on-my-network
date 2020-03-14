@@ -15,9 +15,7 @@ const defaultStartDate = DateTime.local()
   .startOf("day");
 const defaultEndDate = DateTime.local().endOf("day");
 
-const PersonDiscoveriesPlot: React.FunctionComponent<PersonDiscoveriesPlotProps> = ({
-  person
-}) => {
+const PersonDiscoveriesPlot: React.FunctionComponent<PersonDiscoveriesPlotProps> = ({ person }) => {
   const {
     getStartDate,
     getEndDate,

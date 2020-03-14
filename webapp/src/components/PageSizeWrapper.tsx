@@ -5,9 +5,7 @@ interface PageSizeWrapperProps {
   children: ReactNode;
 }
 
-const PageSizeWrapper: React.FunctionComponent<PageSizeWrapperProps> = ({
-  children
-}) => {
+const PageSizeWrapper: React.FunctionComponent<PageSizeWrapperProps> = ({ children }) => {
   return (
     <Container>
       <Row className="justify-content-md-center">

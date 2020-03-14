@@ -6,12 +6,10 @@ const useStoredDatePair = (
   defaultStartDate: DateTime,
   defaultEndDate: DateTime
 ) => {
-  const [storedStartAndEndDates, setStoredStartAndEndDates] = useLocalStorage<
-    [string, string]
-  >(storageKey + "_selectedDates", [
-    defaultStartDate.toISO(),
-    defaultEndDate.toISO()
-  ]);
+  const [storedStartAndEndDates, setStoredStartAndEndDates] = useLocalStorage<[string, string]>(
+    storageKey + "_selectedDates",
+    [defaultStartDate.toISO(), defaultEndDate.toISO()]
+  );
 
   const getStartDate = () =>
     storedStartAndEndDates === null
@@ -19,14 +17,9 @@ const useStoredDatePair = (
       : DateTime.fromISO(storedStartAndEndDates[0]);
 
   const getEndDate = () =>
-    storedStartAndEndDates === null
-      ? defaultEndDate
-      : DateTime.fromISO(storedStartAndEndDates[1]);
+    storedStartAndEndDates === null ? defaultEndDate : DateTime.fromISO(storedStartAndEndDates[1]);
 
-  const getStartAndEndDates = (): [DateTime, DateTime] => [
-    getStartDate(),
-    getEndDate()
-  ];
+  const getStartAndEndDates = (): [DateTime, DateTime] => [getStartDate(), getEndDate()];
 
   const setStartAndEndDates = (startDate: DateTime, endDate: DateTime) => {
     setStoredStartAndEndDates([startDate.toISO(), endDate.toISO()]);
