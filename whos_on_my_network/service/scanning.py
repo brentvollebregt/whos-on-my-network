@@ -60,8 +60,12 @@ def __save_scan_data(network_id: str, scan_data: List[DiscoveredDevice], verbose
     return scan.id
 
 
-def __get_plugin(name: str):
+def __get_plugin(name: Optional[str]):
     """ Import a plugin by name to use as a network scanner """
+    # If no plugin has been specified, fall back to the internal default
+    if name is None:
+        return __scan_network
+
     # Import the plugin
     plugin = importlib.import_module(f'.plugins.{name}', 'whos_on_my_network')
 
@@ -74,11 +78,8 @@ def __get_plugin(name: str):
 
 def scan_network_single(network_id: str, use_plugin: Optional[str], verbose: bool = False):
     """ Scan the provided network once """
-    if use_plugin is None:
-        scan_data = __scan_network(network_id, verbose, config.PLUGIN_CONFIG)
-    else:
-        plugin = __get_plugin(use_plugin)
-        scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
+    plugin = __get_plugin(use_plugin)
+    scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
 
     scan_id = __save_scan_data(network_id, scan_data, verbose)
     return scan_id
@@ -92,11 +93,8 @@ def scan_network_repeatedly(network_id: str, delay: int, amount: Optional[int], 
         return
 
     while True:
-        if use_plugin is None:
-            scan_data = __scan_network(network_id, verbose, config.PLUGIN_CONFIG)
-        else:
-            plugin = __get_plugin(use_plugin)
-            scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
+        plugin = __get_plugin(use_plugin)
+        scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
 
         __save_scan_data(network_id, scan_data, verbose)
         scan_count += 1
