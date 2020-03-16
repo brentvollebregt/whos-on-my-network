@@ -16,9 +16,7 @@ interface PersonProps {
 
 const Person: React.FunctionComponent<PersonProps> = ({ id }) => {
   const [person, setPerson] = useState<PersonDTO | undefined>(undefined);
-  useTitle(
-    `Person: ${person === undefined ? id : person.name} - ${Constants.title}`
-  );
+  useTitle(`Person: ${person === undefined ? id : person.name} - ${Constants.title}`);
 
   useEffect(() => {
     getPersonById(id)

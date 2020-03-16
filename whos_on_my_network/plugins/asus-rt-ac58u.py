@@ -1,7 +1,14 @@
-# Tested with ASUS RT-AC58U (3.0.0.4.382.51939 - 2019/12/23)
+"""
+Plugin to support ASUS RT-AC58U (3.0.0.4.382.51939 - 2019/12/23)
+
+Configuration values:
+- username: Username to use to log into the router
+- password: Password to use to log into the router
+"""
 
 import ast
 import base64
+import os
 import time
 from typing import List
 
@@ -10,12 +17,24 @@ import requests
 from ..service.scanning import DiscoveredDevice
 
 
-ROUTER_USERNAME = 'admin'
-ROUTER_PASSWORD = 'admin'  # Change password
+def __get_config(provided_config: dict):
+    """
+    Try to get username and password out of the provided configuration.
+    Fall back to environment variables if not found otherwise otherwise use 'admin'.
+    """
+    username = provided_config['username'] if 'username' in provided_config else os.getenv('ROUTER_USERNAME', 'admin')
+    password = provided_config['password'] if 'password' in provided_config else os.getenv('ROUTER_PASSWORD', 'admin')
+
+    return {
+        'username': username,
+        'password': password,
+    }
 
 
-def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
+def scan(network_id: str, verbose: bool, plugin_config: dict) -> List[DiscoveredDevice]:
     """ A dirty way of obtaining devices connected to an Asus RT-AC58U router """
+
+    config = __get_config(plugin_config)
 
     # Login to get cookie
     headers = {
@@ -28,7 +47,7 @@ def scan(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
         'action_wait': '5',
         'current_page': 'Main_Login.asp',
         'next_page': 'index.asp',
-        'login_authorization': base64.b64encode(f'{ROUTER_USERNAME}:{ROUTER_PASSWORD}'.encode()).decode()
+        'login_authorization': base64.b64encode(f'{config["username"]}:{config["password"]}'.encode()).decode()
     }
     response = requests.post('http://router.asus.com/login.cgi', headers=headers, data=data, verify=False)
     token = response.cookies.get('asus_token')

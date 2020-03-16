@@ -17,13 +17,7 @@ const Navigation: React.FunctionComponent = () => {
   const goTo = (location: string) => () => navigate(location);
 
   return (
-    <Navbar
-      collapseOnSelect
-      expand="md"
-      bg="light"
-      variant="light"
-      sticky="top"
-    >
+    <Navbar collapseOnSelect expand="md" bg="light" variant="light" sticky="top">
       <Container>
         <Navbar.Brand onClick={goTo("/")}>
           <img
@@ -38,12 +32,7 @@ const Navigation: React.FunctionComponent = () => {
         <Navbar.Collapse id="responsive-navbar-nav">
           <Nav className="mr-auto">
             {Object.keys(navbarLinks).map(path => (
-              <Nav.Link
-                key={path}
-                href="#"
-                onClick={goTo(path)}
-                active={currentPath === path}
-              >
+              <Nav.Link key={path} href="#" onClick={goTo(path)} active={currentPath === path}>
                 {navbarLinks[path]}
               </Nav.Link>
             ))}

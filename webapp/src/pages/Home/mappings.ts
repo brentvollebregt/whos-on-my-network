@@ -42,25 +42,22 @@ export const mapToEntityIdNameMap = (
     return {};
   }
 
-  return Object.keys(discoveryTimes).reduce(
-    (acc: EntityIdNameMap, entityId) => {
-      if (entityType === "device") {
-        const device = devices?.find(d => d.id + "" === entityId);
-        const entityName =
-          device === undefined
-            ? "Not Found"
-            : device.name !== ""
-            ? device.name
-            : device.mac_address.toUpperCase();
-        return { ...acc, [entityId]: entityName };
-      } else if (entityType === "person") {
-        const person = people?.find(d => d.id + "" === entityId);
-        const entityName = person === undefined ? "Not Found" : person.name;
-        return { ...acc, [entityId]: entityName };
-      } else {
-        return { ...acc };
-      }
-    },
-    {}
-  );
+  return Object.keys(discoveryTimes).reduce((acc: EntityIdNameMap, entityId) => {
+    if (entityType === "device") {
+      const device = devices?.find(d => d.id + "" === entityId);
+      const entityName =
+        device === undefined
+          ? "Not Found"
+          : device.name !== ""
+          ? device.name
+          : device.mac_address.toUpperCase();
+      return { ...acc, [entityId]: entityName };
+    } else if (entityType === "person") {
+      const person = people?.find(d => d.id + "" === entityId);
+      const entityName = person === undefined ? "Not Found" : person.name;
+      return { ...acc, [entityId]: entityName };
+    } else {
+      return { ...acc };
+    }
+  }, {});
 };

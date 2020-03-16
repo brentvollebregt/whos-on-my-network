@@ -152,27 +152,15 @@ const Chart: React.FC<ChartProps & WithTooltipProvidedProps<TooltipData>> = ({
             })}
           </Group>
 
-          {tooltipData && (
-            <rect x={tooltipLeft} y={margin.top} height={yMax} width={2} />
-          )}
+          {tooltipData && <rect x={tooltipLeft} y={margin.top} height={yMax} width={2} />}
           <AxisLeft
             hideAxisLine={true}
             hideTicks={true}
             scale={yScale}
-            tickFormat={(value: string, tickIndex: number) =>
-              entityIdNameMap[value]
-            }
+            tickFormat={(value: string, tickIndex: number) => entityIdNameMap[value]}
             tickComponent={({ x, y, formattedValue }) => (
-              <text
-                x={x}
-                y={y}
-                textAnchor="end"
-                dy={3}
-                className="entity-label"
-              >
-                <tspan onClick={onDeviceNameClick(formattedValue)}>
-                  {formattedValue}
-                </tspan>
+              <text x={x} y={y} textAnchor="end" dy={3} className="entity-label">
+                <tspan onClick={onDeviceNameClick(formattedValue)}>{formattedValue}</tspan>
                 {onEntityLinkClick !== undefined && (
                   <tspan onClick={onDeviceLinkClick(formattedValue)}> 🔗</tspan>
                 )}

@@ -11,7 +11,7 @@ DATABASE_FILENAME = 'database.sqlite'
 PACKAGED_PLUGIN_FILE = '.packagedplugin'
 
 
-packaged = utils.is_packaged() or os.getenv('FORCE_PACKAGED_MODE', 'false') == 'true'
+packaged = utils.is_packaged() or os.getenv('FORCE_PACKAGED_MODE', 'false').lower() == 'true'
 
 
 def __get_data_folder() -> Path:
@@ -35,6 +35,9 @@ def __get_default_configuration() -> dict:
 
     if not packaged:
         default_config['default_plugin'] = None
+
+    if not packaged or __get_packaged_plugin() is not None:
+        default_config['plugin_config'] = {}
 
     return default_config
 
@@ -70,3 +73,4 @@ PORT = int(str(os.getenv('PORT', config_data['port'])))
 VERBOSE = str(os.getenv('VERBOSE', config_data['verbose'])).lower() == 'true'
 DEFAULT_NETWORK_ID = os.getenv('DEFAULT_NETWORK_ID', config_data['default_network_id'])
 DEFAULT_PLUGIN = __get_packaged_plugin() if packaged else os.getenv('DEFAULT_PLUGIN', config_data['default_plugin'])
+PLUGIN_CONFIG = config_data['plugin_config'] if 'plugin_config' in config_data else {}

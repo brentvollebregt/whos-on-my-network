@@ -8,12 +8,8 @@ interface ScanDiscoveriesProps {
   scan: Scan;
 }
 
-const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
-  scan
-}) => {
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
+const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({ scan }) => {
+  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(undefined);
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
 
   // Get devices
@@ -36,8 +32,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
     }
   }, [devices]);
 
-  const onDiscoveryClick = (deviceId: number) => () =>
-    navigate(`/devices/${deviceId}`);
+  const onDiscoveryClick = (deviceId: number) => () => navigate(`/devices/${deviceId}`);
 
   return (
     <Table striped bordered hover size="sm">
@@ -56,9 +51,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
           scan.discoveries.map(discovery => {
             const device = devices?.find(d => d.id === discovery.device_id);
             const person =
-              device !== undefined
-                ? people?.find(p => p.id === device.owner_id)
-                : undefined;
+              device !== undefined ? people?.find(p => p.id === device.owner_id) : undefined;
             return (
               <tr
                 key={discovery.id}
@@ -68,13 +61,7 @@ const ScanDiscoveries: React.FunctionComponent<ScanDiscoveriesProps> = ({
                 <td className="mac-address">{device?.mac_address}</td>
                 <td>{device?.name}</td>
                 <td>{person?.name}</td>
-                <td>
-                  {device === undefined
-                    ? undefined
-                    : device.is_primary
-                    ? "✔️"
-                    : "❌"}
-                </td>
+                <td>{device === undefined ? undefined : device.is_primary ? "✔️" : "❌"}</td>
                 <td>{discovery.hostname}</td>
                 <td>{discovery.ip_address}</td>
               </tr>

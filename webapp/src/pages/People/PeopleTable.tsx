@@ -9,8 +9,7 @@ interface PeopleTableProps {
 }
 
 const PeopleTable: React.FunctionComponent<PeopleTableProps> = ({ people }) => {
-  const onPersonClick = (personId: number) => () =>
-    navigate(`/people/${personId}`);
+  const onPersonClick = (personId: number) => () => navigate(`/people/${personId}`);
 
   const sortedPeople = sortPeople(people);
 
@@ -27,28 +26,12 @@ const PeopleTable: React.FunctionComponent<PeopleTableProps> = ({ people }) => {
       <tbody>
         {sortedPeople !== undefined &&
           sortedPeople.map(person => (
-            <tr
-              key={person.id}
-              onClick={onPersonClick(person.id)}
-              className="pointer"
-            >
+            <tr key={person.id} onClick={onPersonClick(person.id)} className="pointer">
               <td>{person.name}</td>
               <td>{person.device_count}</td>
-              <td>
-                {person.first_seen === null
-                  ? "Never"
-                  : person.first_seen.toFormat("ff")}
-              </td>
-              <td
-                title={
-                  person.last_seen === null
-                    ? "Never"
-                    : person.last_seen.toFormat("ff")
-                }
-              >
-                {person.last_seen === null
-                  ? "Never"
-                  : person.last_seen.toRelative()}
+              <td>{person.first_seen === null ? "Never" : person.first_seen.toFormat("ff")}</td>
+              <td title={person.last_seen === null ? "Never" : person.last_seen.toFormat("ff")}>
+                {person.last_seen === null ? "Never" : person.last_seen.toRelative()}
               </td>
             </tr>
           ))}

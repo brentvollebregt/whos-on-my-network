@@ -24,14 +24,11 @@ const Devices: React.FunctionComponent = () => {
   const [ownerFilter, setOwnerFilter] = useState<number | null>(null);
   const [isPrimaryFilter, setIsPrimaryFilter] = useState<boolean | null>(null);
 
-  const onDeviceClick = (deviceId: number) => () =>
-    navigate(`/devices/${deviceId}`);
+  const onDeviceClick = (deviceId: number) => () => navigate(`/devices/${deviceId}`);
   const onTextFilter = (event: React.FormEvent<HTMLInputElement>) =>
     setTextFilter(event.currentTarget.value);
-  const onOwnerFilter = (ownerId: number | null) => () =>
-    setOwnerFilter(ownerId);
-  const onIsPrimaryFilter = (value: boolean | null) => () =>
-    setIsPrimaryFilter(value);
+  const onOwnerFilter = (ownerId: number | null) => () => setOwnerFilter(ownerId);
+  const onIsPrimaryFilter = (value: boolean | null) => () => setIsPrimaryFilter(value);
 
   const getOwnerName = (ownerId: number | null) => {
     if (people === undefined || ownerId === null) {
@@ -65,22 +62,14 @@ const Devices: React.FunctionComponent = () => {
           <InputGroup.Prepend>
             <InputGroup.Text>Search</InputGroup.Text>
           </InputGroup.Prepend>
-          <FormControl
-            type="text"
-            placeholder="Device Name / MAC"
-            onChange={onTextFilter}
-          />
+          <FormControl type="text" placeholder="Device Name / MAC" onChange={onTextFilter} />
         </InputGroup>
         <DropdownButton
           className="ml-1"
           id="owner-filter-dropdown"
-          title={`Owner: ${
-            ownerFilter === null ? "" : getOwnerName(ownerFilter)
-          }`}
+          title={`Owner: ${ownerFilter === null ? "" : getOwnerName(ownerFilter)}`}
         >
-          <Dropdown.Item onClick={onOwnerFilter(null)}>
-            Don't Filter
-          </Dropdown.Item>
+          <Dropdown.Item onClick={onOwnerFilter(null)}>Don't Filter</Dropdown.Item>
           {people !== undefined &&
             people.map(p => (
               <Dropdown.Item key={p.id} onClick={onOwnerFilter(p.id)}>
@@ -91,13 +80,9 @@ const Devices: React.FunctionComponent = () => {
         <DropdownButton
           className="ml-1"
           id="is_primary-filter-dropdown"
-          title={`Primary: ${
-            isPrimaryFilter === null ? "" : isPrimaryFilter ? "✔️" : "❌"
-          }`}
+          title={`Primary: ${isPrimaryFilter === null ? "" : isPrimaryFilter ? "✔️" : "❌"}`}
         >
-          <Dropdown.Item onClick={onIsPrimaryFilter(null)}>
-            Don't Filter
-          </Dropdown.Item>
+          <Dropdown.Item onClick={onIsPrimaryFilter(null)}>Don't Filter</Dropdown.Item>
           <Dropdown.Item onClick={onIsPrimaryFilter(true)}>✔️</Dropdown.Item>
           <Dropdown.Item onClick={onIsPrimaryFilter(false)}>❌</Dropdown.Item>
         </DropdownButton>
@@ -117,19 +102,13 @@ const Devices: React.FunctionComponent = () => {
         <tbody>
           {sortedAndFilteredDevices !== undefined &&
             sortedAndFilteredDevices.map(device => (
-              <tr
-                key={device.id}
-                onClick={onDeviceClick(device.id)}
-                className="pointer"
-              >
+              <tr key={device.id} onClick={onDeviceClick(device.id)} className="pointer">
                 <td className="mac-address">{device.mac_address}</td>
                 <td>{device.name}</td>
                 <td>{getOwnerName(device.owner_id)}</td>
                 <td>{device.is_primary ? "✔️" : "❌"}</td>
                 <td>{device.first_seen.toFormat("ff")}</td>
-                <td title={device.last_seen.toFormat("FF")}>
-                  {device.last_seen.toRelative()}
-                </td>
+                <td title={device.last_seen.toFormat("FF")}>{device.last_seen.toRelative()}</td>
               </tr>
             ))}
         </tbody>

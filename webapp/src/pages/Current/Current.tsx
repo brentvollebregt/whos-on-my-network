@@ -3,11 +3,7 @@ import Constants from "../../constants";
 import { useTitle, navigate } from "hookrouter";
 import PageSizeWrapper from "../../components/PageSizeWrapper";
 import { Button, Spinner } from "react-bootstrap";
-import {
-  runSingleScan,
-  getPeopleByFilter,
-  getDevicesByFilter
-} from "../../api";
+import { runSingleScan, getPeopleByFilter, getDevicesByFilter } from "../../api";
 import { Scan, PersonSummary, DeviceSummary } from "../../api/dto";
 import { genericApiErrorMessage } from "../../utils/toasts";
 import { ScanDetail, ScanDiscoveries } from "../Scan";
@@ -18,9 +14,7 @@ const Current: React.FunctionComponent = () => {
 
   const [scanning, setScanning] = useState(false);
   const [scan, setScan] = useState<Scan | undefined>(undefined);
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
+  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(undefined);
   const [people, setPeople] = useState<PersonSummary[] | undefined>(undefined);
 
   // Run a single scan
@@ -67,9 +61,7 @@ const Current: React.FunctionComponent = () => {
       <div className="text-center my-3">
         <Button disabled={scanning} onClick={runScan}>
           Run Scan Now
-          {scanning && (
-            <Spinner animation="border" size="sm" className="ml-2" />
-          )}
+          {scanning && <Spinner animation="border" size="sm" className="ml-2" />}
         </Button>
       </div>
 

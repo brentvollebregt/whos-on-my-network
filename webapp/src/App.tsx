@@ -12,10 +12,8 @@ import Current from "./pages/Current";
 import { useRoutes, useRedirect } from "hookrouter";
 import { isInt } from "./utils/logic";
 
-const urlIdValidator = (
-  id: string,
-  Component: React.FunctionComponent<{ id: number }>
-) => (isInt(id) ? <Component id={parseInt(id)} /> : <NotFound />);
+const urlIdValidator = (id: string, Component: React.FunctionComponent<{ id: number }>) =>
+  isInt(id) ? <Component id={parseInt(id)} /> : <NotFound />;
 
 const App: React.FC = () => {
   const routes = {

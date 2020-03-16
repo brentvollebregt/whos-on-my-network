@@ -9,9 +9,7 @@ interface PersonDevicesProps {
 }
 
 const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
-  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(
-    undefined
-  );
+  const [devices, setDevices] = useState<DeviceSummary[] | undefined>(undefined);
 
   useEffect(() => {
     getDevicesByFilter(undefined, undefined, id, undefined)
@@ -19,8 +17,7 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
       .catch(err => console.error(err));
   }, [id]);
 
-  const onDeviceClick = (deviceId: number) => () =>
-    navigate(`/devices/${deviceId}`);
+  const onDeviceClick = (deviceId: number) => () => navigate(`/devices/${deviceId}`);
 
   const sortedDevices = devices
     ?.slice() // Do not modify the original list
@@ -52,11 +49,7 @@ const PersonDevices: React.FunctionComponent<PersonDevicesProps> = ({ id }) => {
         <tbody>
           {sortedDevices !== undefined &&
             sortedDevices.map(device => (
-              <tr
-                key={device.id}
-                onClick={onDeviceClick(device.id)}
-                className="pointer"
-              >
+              <tr key={device.id} onClick={onDeviceClick(device.id)} className="pointer">
                 <td className="mac-address">{device.mac_address}</td>
                 <td>{device.name}</td>
                 <td>{device.is_primary ? "✔️" : "❌"}</td>
