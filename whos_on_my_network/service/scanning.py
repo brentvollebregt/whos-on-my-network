@@ -7,6 +7,7 @@ from typing import Optional, List
 
 from scapy.all import arping, ARP, Ether
 
+from .. import config
 from .. import models
 
 
@@ -17,7 +18,7 @@ class DiscoveredDevice:
     hostname: str
 
 
-def __scan_network(network_id: str, verbose: bool = False) -> List[DiscoveredDevice]:
+def __scan_network(network_id: str, verbose: bool, plugin_config: dict) -> List[DiscoveredDevice]:
     """ Built in method to scan a network """
     scan_data: List[DiscoveredDevice] = []
 
@@ -74,10 +75,10 @@ def __get_plugin(name: str):
 def scan_network_single(network_id: str, use_plugin: Optional[str], verbose: bool = False):
     """ Scan the provided network once """
     if use_plugin is None:
-        scan_data = __scan_network(network_id, verbose)
+        scan_data = __scan_network(network_id, verbose, config.PLUGIN_CONFIG)
     else:
         plugin = __get_plugin(use_plugin)
-        scan_data = plugin(network_id, verbose)
+        scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
 
     scan_id = __save_scan_data(network_id, scan_data, verbose)
     return scan_id
@@ -92,10 +93,10 @@ def scan_network_repeatedly(network_id: str, delay: int, amount: Optional[int], 
 
     while True:
         if use_plugin is None:
-            scan_data = __scan_network(network_id, verbose)
+            scan_data = __scan_network(network_id, verbose, config.PLUGIN_CONFIG)
         else:
             plugin = __get_plugin(use_plugin)
-            scan_data = plugin(network_id, verbose)
+            scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
 
         __save_scan_data(network_id, scan_data, verbose)
         scan_count += 1
