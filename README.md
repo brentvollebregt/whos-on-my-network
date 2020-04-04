@@ -97,6 +97,14 @@ Examples:
 | `python -m whos_on_my_network start`                          | Will start the server up at `localhost:8080`.   |
 | `python -m whos_on_my_network --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
 
+## 🧪 Development Setup
+
+When running the client (webapp/) in development mode using npm start, the client will use the REACT_APP_API_ROOT environment variable value to decide where to send requests.
+
+The same process for production and development is used for the server; running `python -m whos_on_my_network` or `run.py` in a debugger will allow you to set breakpoints and see what is going on.
+
+> Examples of using the Python application can be found in `.vscode/launch.json`.
+
 ## ❓ How Does This Tool Work?
 
 By default, this tool uses [scapy](https://scapy.net/) to send ARP packets to all addresses in the provided network range (default is 192.168.1.0/24) to identify what devices are on the network. When a host responds, its MAC address, IP address and hostname are obtained and an entry is added to the SQLite database matched to the current scan.
