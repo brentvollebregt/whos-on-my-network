@@ -1,4 +1,8 @@
-# Who's on my Network?
+<div style="text-align: center">
+    <a href="https://github.com/brentvollebregt/whos-on-my-network"><img src="https://nitratine.net/posts/whos-on-my-network/whos-on-my-network-logo.png" alt="Who's On My Network Banner" style="background: white;"></a>
+</div>
+<p align="center">Keep and eye on who is on your network and when.</p>
+<p align="center"><a href="https://github.com/brentvollebregt/whos-on-my-network/releases">📥 Get the latest release</a></p>
 
 ![Build and Upload Release Assets](https://github.com/brentvollebregt/whos-on-my-network/workflows/Build%20and%20Upload%20Release%20Assets/badge.svg)
 
@@ -96,6 +100,14 @@ Examples:
 | ------------------------------------------------------------- | ----------------------------------------------- |
 | `python -m whos_on_my_network start`                          | Will start the server up at `localhost:8080`.   |
 | `python -m whos_on_my_network --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
+
+## Screenshots
+
+![Who's On My Network Overview Demo](https://nitratine.net/posts/whos-on-my-network/overview-screenshot.png)
+![Who's On My Network Devices Screenshot](https://nitratine.net/posts/whos-on-my-network/devices-screenshot.png)
+![Who's On My Network Scan Screenshot](https://nitratine.net/posts/whos-on-my-network/person-screenshot.png)
+
+See more in [my blog post](https://nitratine.net/blog/post/whos-on-my-network/).
 
 ## 🧪 Development Setup
 
