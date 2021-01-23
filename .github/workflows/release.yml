@@ -46,6 +46,8 @@ jobs:
           npm install
           npm run build
           cd ../
+        env:
+          CI: false
 
       # Zip up the module that now contains has the build webapp
       - name: Zip Module
