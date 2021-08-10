@@ -32,8 +32,10 @@ To setup the project, you will need to clone it, install Python dependencies and
 
 1. Clone this git repository: `git clone https://github.com/brentvollebregt/whos-on-my-network`
 2. cd into the project: `cd whos-on-my-network`
-3. Install Python dependencies: `python -m pip install -r requirements.txt`
-4. Build the webapp: `cd webapp && npm i && npm run build`
+3. Create a Python venv: `python -m venv .venv`
+4. Activate the Python venv: `.venv/Scripts/activate.bat`
+5. Install Python dependencies: `python -m pip install -r requirements.txt`
+6. Build the webapp: `cd webapp && npm i && npm run build`
 
 ## 🖥️ Usage
 
