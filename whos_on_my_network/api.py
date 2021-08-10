@@ -24,7 +24,14 @@ def pre_flight_checks() -> bool:
     return True
 
 
-@app.route("/", methods=["GET"], endpoint='home')
+@app.route("/", methods=["GET"])
+@app.route("/scans", methods=["GET"])
+@app.route("/scans/<int:id>", methods=["GET"])
+@app.route("/devices", methods=["GET"])
+@app.route("/devices/<int:id>", methods=["GET"])
+@app.route("/people", methods=["GET"])
+@app.route("/people/<int:id>", methods=["GET"])
+@app.route("/current", methods=["GET"])
 def root():
     """ Serve React application to all frontend routes """
     return app.send_static_file('index.html')
