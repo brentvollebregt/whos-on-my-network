@@ -32,7 +32,7 @@ def pre_flight_checks() -> bool:
 @app.route("/people", methods=["GET"])
 @app.route("/people/<int:id>", methods=["GET"])
 @app.route("/current", methods=["GET"])
-def root():
+def root(id=None):
     """ Serve React application to all frontend routes """
     return app.send_static_file('index.html')
 
