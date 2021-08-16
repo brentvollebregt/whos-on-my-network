@@ -1,7 +1,7 @@
 on:
   push:
     tags:
-      - 'v*'
+      - "v*"
 
 name: Build and Upload Release Assets
 
@@ -43,7 +43,7 @@ jobs:
       - name: Build Webapp
         run: |
           cd webapp
-          npm install
+          npm ci
           npm run build
           cd ../
         env:
