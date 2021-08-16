@@ -2,5 +2,6 @@
   "eslintIntegration": true,
   "printWidth": 100,
   "trailingComma": "none",
-  "endOfLine": "lf"
+  "endOfLine": "lf",
+  "arrowParens": "avoid"
 }

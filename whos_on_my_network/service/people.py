@@ -72,3 +72,8 @@ def update_person_by_id(person_id: int, name: str, note: str) -> dto.Person:
     person.save()
 
     return get_person_by_id(person_id)
+
+def delete_person_by_id(person_id: int) -> None:
+    person = models.Person.get(person_id)
+
+    person.delete_instance(recursive=True)
