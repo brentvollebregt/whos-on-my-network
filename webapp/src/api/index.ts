@@ -278,6 +278,17 @@ export function updatePersonById(personId: number, name: string, note: string): 
   });
 }
 
+export function deletePersonById(personId: number): Promise<boolean> {
+  return fetch(`${Config.api.root}/api/person/${personId}`, {
+    method: "DELETE",
+    headers: {
+      "Content-Type": "application/json"
+    }
+  }).then(r => {
+    return r.status === 200;
+  });
+}
+
 export function getDeviceDiscoveryTimes(
   ids: number[] | undefined,
   startDate: DateTime,

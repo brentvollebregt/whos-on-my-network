@@ -155,6 +155,16 @@ def update_person_by_id(person_id: int):
     return jsonify(dict_response)
 
 
+@app.route("/api/person/<int:person_id>", methods=["DELETE"])
+def delete_person_by_id(person_id: int):
+    """ Delete a person by id """
+    try:
+        people_service.delete_person_by_id(person_id)
+        return "Person deleted", 200
+    except:
+        return "A person with that id does not exist", 400
+
+
 @app.route("/api/device/discovery-times", methods=["POST"])
 def get_device_discovery_times():
     """ Get times devices were discovered by id """
