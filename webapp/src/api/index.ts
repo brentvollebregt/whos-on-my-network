@@ -362,6 +362,10 @@ export function runSingleScan(): Promise<Scan | undefined> {
           discoveries: payload.discoveries
         };
       });
+    } else if (r.status === 500) {
+      return r.text().then(text => {
+        throw Error(text);
+      });
     } else {
       return undefined;
     }

@@ -5,7 +5,7 @@ import PageSizeWrapper from "../../components/PageSizeWrapper";
 import { Button, Spinner } from "react-bootstrap";
 import { runSingleScan, getPeopleByFilter, getDevicesByFilter } from "../../api";
 import { Scan, PersonSummary, DeviceSummary } from "../../api/dto";
-import { genericApiErrorMessage } from "../../utils/toasts";
+import { genericApiErrorMessage, showErrorToast } from "../../utils/toasts";
 import { ScanDetail, ScanDiscoveries } from "../Scan";
 import { PeopleTable } from "../People";
 
@@ -21,10 +21,14 @@ const Current: React.FunctionComponent = () => {
   const runScan = () => {
     setScanning(true);
     setScan(undefined);
-    runSingleScan().then(s => {
-      setScan(s);
-      setScanning(false);
-    });
+    runSingleScan()
+      .then(s => {
+        setScan(s);
+      })
+      .catch((e: Error) => {
+        showErrorToast("Server error", e.message);
+      })
+      .finally(() => setScanning(false));
   };
 
   // Get devices when scan changes
