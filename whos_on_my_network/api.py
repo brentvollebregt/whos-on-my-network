@@ -201,7 +201,11 @@ def get_mac_address_vendor(mac_address: str):
 @app.route("/api/run/single-scan", methods=["GET"])
 def run_single_scan():
     """ Run a single scan and return the scan id """
-    scan_id = scanning_service.scan_network_single(config.DEFAULT_NETWORK_ID, config.DEFAULT_PLUGIN, False)
+    try:
+        scan_id = scanning_service.scan_network_single(config.DEFAULT_NETWORK_ID, config.DEFAULT_PLUGIN, False)
+    except scanning_service.ScanException as exception:
+        return str(exception), 500
+        
     scan = scan_service.get_scan_by_id(scan_id)
 
     dict_response = scan.build()

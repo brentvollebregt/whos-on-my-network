@@ -19,6 +19,8 @@ On every official version change, a [release](https://github.com/brentvollebregt
 
 > The pre-built Windows executable does not use a plugin and will default to the built-in method. To make a build containing a particular plugin yourself, execute `bash package.sh {plugin-name}`; this will produce whos_on_my_network.exe which will use the declared plugin.
 
+> If you are using Windows, you will also need to install [Npcap](https://nmap.org/npcap/#download).
+
 ## 🛠️ Setup
 
 To setup the project, you will need to clone it, install Python dependencies and then build the webapp.
@@ -27,6 +29,7 @@ To setup the project, you will need to clone it, install Python dependencies and
 
 - Python 3.6
 - Node
+- [Npcap](https://nmap.org/npcap/#download) (Windows Only)
 
 ### Setup Steps
 

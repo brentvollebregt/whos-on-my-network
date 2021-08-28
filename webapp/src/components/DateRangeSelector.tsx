@@ -21,12 +21,12 @@ const datePickerFormatting: Partial<ReactDatePickerProps> = {
   dateFormat: "dd MMM yyyy h:mm aa"
 };
 
-interface DateRangeSelector {
+interface DateRangeSelectorProps {
   startAndEndDates: [DateTime, DateTime];
   setStartAndEndDates: (startDate: DateTime, endDate: DateTime) => void;
 }
 
-const DateRangeSelector: React.FC<DateRangeSelector> = ({
+const DateRangeSelector: React.FC<DateRangeSelectorProps> = ({
   startAndEndDates,
   setStartAndEndDates
 }) => {

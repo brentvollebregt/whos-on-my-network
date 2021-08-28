@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Device, DiscoveryTimes, Person } from "../../api/dto";
+import { DiscoveryTimes, Person } from "../../api/dto";
 import { DateTime } from "luxon";
 import EntityPlot from "../../components/EntityPlot";
 import DateRangeSelector from "../../components/DateRangeSelector";
@@ -10,9 +10,7 @@ interface PersonDiscoveriesPlotProps {
   person: Person;
 }
 
-const defaultStartDate = DateTime.local()
-  .minus({ weeks: 1 })
-  .startOf("day");
+const defaultStartDate = DateTime.local().minus({ weeks: 1 }).startOf("day");
 const defaultEndDate = DateTime.local().endOf("day");
 
 const PersonDiscoveriesPlot: React.FunctionComponent<PersonDiscoveriesPlotProps> = ({ person }) => {
