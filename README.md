@@ -104,7 +104,7 @@ Examples:
 | Command                                                       | Description                                     |
 | ------------------------------------------------------------- | ----------------------------------------------- |
 | `python -m whos_on_my_network start`                          | Will start the server up at `localhost:8080`.   |
-| `python -m whos_on_my_network --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
+| `python -m whos_on_my_network start --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
 
 ## Screenshots
 
