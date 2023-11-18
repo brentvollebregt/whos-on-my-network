@@ -101,9 +101,9 @@ The `start` command starts the server that serves the webapp.
 
 Examples:
 
-| Command                                                       | Description                                     |
-| ------------------------------------------------------------- | ----------------------------------------------- |
-| `python -m whos_on_my_network start`                          | Will start the server up at `localhost:8080`.   |
+| Command                                                             | Description                                     |
+| ------------------------------------------------------------------- | ----------------------------------------------- |
+| `python -m whos_on_my_network start`                                | Will start the server up at `localhost:8080`.   |
 | `python -m whos_on_my_network start --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
 
 ## Screenshots
@@ -151,6 +151,10 @@ A plugin can also be set as the default scanning method by setting `default_plug
   "port": 8080,
   "verbose": false,
   "default_network_id": "192.168.1.0/24",
-  "default_plugin": "asus-rt-ac58u"
+  "default_plugin": "asus-rt-ac58u",
+  "plugin_config": {
+    "username": "admin",
+    "password": "admin"
+  }
 }
 ```
