@@ -1,5 +1,5 @@
 """
-Plugin to support ASUS RT-AC58U (3.0.0.4.382.51939 - 2019/12/23)
+Scanner to support ASUS RT-AC58U (3.0.0.4.382.51939 - 2019/12/23)
 
 Configuration values:
 - username: Username to use to log into the router

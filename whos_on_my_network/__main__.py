@@ -27,25 +27,25 @@ def start(host: bool, port: bool):
 @click.option('-t', '--refresh-time', default=300, type=int, help="Seconds until the network is re-scanned. Default is 300s.")
 @click.option('-n', '--network-id', default=config.DEFAULT_NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
 @click.option('-a', '--amount', type=int, default=None, help="Amount of times to scan network. Default is no limit.")
-@click.option('-u', '--use-plugin', default=config.DEFAULT_PLUGIN, help="Plugin used to scan network.")
+@click.option('-s', '--scanner', default=config.DEFAULT_PLUGIN, help="Scanner to scan the network.")
 @click.option('-v', '--verbose', is_flag=True, default=config.VERBOSE, help='Verbose output of scans.')
-def watch(refresh_time: int, network_id: str, amount: Optional[int], use_plugin: Optional[str], verbose: bool):
+def watch(refresh_time: int, network_id: str, amount: Optional[int], scanner: str, verbose: bool):
     """ Watch and record who is on a network periodically """
     print("Scanning... Press Ctrl+C to stop.")
     try:
-        scanning_service.scan_network_repeatedly(network_id, refresh_time, amount, use_plugin, verbose)
+        scanning_service.scan_network_repeatedly(network_id, refresh_time, amount, scanner, verbose)
     except KeyboardInterrupt:
         print("Stopped")
 
 
 @cli.command()
 @click.option('-n', '--network-id', default=config.DEFAULT_NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
-@click.option('-u', '--use-plugin', default=config.DEFAULT_PLUGIN, help="Plugin used to scan network.")
+@click.option('-s', '--scanner', default=config.DEFAULT_PLUGIN, help="Scanner to scan the network.")
 @click.option('-v', '--verbose', is_flag=True, default=config.VERBOSE, help='Verbose output of scans.')
-def current(network_id: str, use_plugin: Optional[str], verbose: bool):
+def current(network_id: str, scanner: str, verbose: bool):
     """ Look at who is currently on the network """
     print("Scanning...")
-    scan_id = scanning_service.scan_network_single(network_id, use_plugin, verbose)
+    scan_id = scanning_service.scan_network_single(network_id, scanner, verbose)
     discoveries = scanning_service.get_discoveries_from_scan(scan_id)
 
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')

@@ -1,5 +1,5 @@
 """
-Plugin to support NetComm Wireless NF18ACV VDSL/ADSL2+ Dual Band AC1600 Gigabit Gateway with VoIP (version unknown)
+Scanner to support NetComm Wireless NF18ACV VDSL/ADSL2+ Dual Band AC1600 Gigabit Gateway with VoIP (version unknown)
 
 Configuration values:
 - routerIpAddress: IP address of the router

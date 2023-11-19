@@ -34,7 +34,7 @@ def __get_default_configuration() -> dict:
     }
 
     if not packaged:
-        default_config['default_plugin'] = None
+        default_config['default_plugin'] = "default"
 
     if not packaged or __get_packaged_plugin() is not None:
         default_config['plugin_config'] = {}
@@ -49,7 +49,7 @@ def __get_packaged_plugin() -> Optional[str]:
         with open(packaged_plugin_file, 'r') as f:
             return f.read()
 
-    return None
+    return "default"
 
 
 # Make sure the root exists
