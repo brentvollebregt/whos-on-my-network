@@ -26,7 +26,7 @@ def __get_config():
     }
 
 
-def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
+def scan(verbose: bool) -> List[DiscoveredDevice]:
     """A dirty way of obtaining devices connected to an Asus RT-AC58U router"""
     config = __get_config()
 

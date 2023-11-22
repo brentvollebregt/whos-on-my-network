@@ -202,7 +202,7 @@ def get_mac_address_vendor(mac_address: str):
 def run_single_scan():
     """Run a single scan and return the scan id"""
     try:
-        scan_id = scanning_service.scan_network_single(config.NETWORK_ID, config.SCANNER, False)
+        scan_id = scanning_service.scan_network_single(config.SCANNER, False)
     except scanning_service.ScanException as exception:
         return str(exception), 500
 

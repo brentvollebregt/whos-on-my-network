@@ -19,7 +19,6 @@ class Scan(BaseModel):
     scan_time = peewee.DateTimeField(
         default=lambda: utils.remove_timezome(utils.get_utc_datetime())
     )  # UTC (no timezone)
-    network_id = peewee.TextField()
     # discoveries = Discovery[] (backref from Discovery.scan)
 
 
@@ -54,3 +53,17 @@ class Discovery(BaseModel):
 
 database.connect()
 database.create_tables([Scan, Person, Device, Discovery])
+
+
+# "Migrations"
+# Since we are not using a proper migration system, these run on every application startup.
+# We will not look into a migration system unless it's required - as we didn't start out with one (this is to try and keep existing databases ok for longer).
+
+# The column `network_id` was removed from the table `scan` - drop this column
+scan_network_id_column_exists_query = database.execute_sql(
+    "SELECT COUNT(*) FROM pragma_table_info('scan') WHERE name='network_id'"
+)
+scan_network_id_column_exists_result = scan_network_id_column_exists_query.fetchone()[0]
+if scan_network_id_column_exists_result == 1:
+    with database.atomic():
+        database.execute_sql(f"ALTER TABLE scan DROP COLUMN network_id")

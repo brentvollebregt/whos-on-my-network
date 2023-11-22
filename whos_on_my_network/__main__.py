@@ -25,27 +25,25 @@ def start(port: bool):
 @click.option(
     "-t", "--refresh-time", default=300, type=int, help="Seconds until the network is re-scanned. Default is 300s."
 )
-@click.option("-n", "--network-id", default=config.NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
 @click.option("-a", "--amount", type=int, default=None, help="Amount of times to scan network. Default is no limit.")
 @click.option("-s", "--scanner", default=config.SCANNER, help="Scanner to scan the network.")
 @click.option("-v", "--verbose", is_flag=True, default=config.VERBOSE, help="Verbose output of scans.")
-def watch(refresh_time: int, network_id: str, amount: Optional[int], scanner: str, verbose: bool):
+def watch(refresh_time: int, amount: Optional[int], scanner: str, verbose: bool):
     """Watch and record who is on a network periodically"""
     print("Scanning... Press Ctrl+C to stop.")
     try:
-        scanning_service.scan_network_repeatedly(network_id, refresh_time, amount, scanner, verbose)
+        scanning_service.scan_network_repeatedly(refresh_time, amount, scanner, verbose)
     except KeyboardInterrupt:
         print("Stopped")
 
 
 @cli.command()
-@click.option("-n", "--network-id", default=config.NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
 @click.option("-s", "--scanner", default=config.SCANNER, help="Scanner to scan the network.")
 @click.option("-v", "--verbose", is_flag=True, default=config.VERBOSE, help="Verbose output of scans.")
-def current(network_id: str, scanner: str, verbose: bool):
+def current(scanner: str, verbose: bool):
     """Look at who is currently on the network"""
     print("Scanning...")
-    scan_id = scanning_service.scan_network_single(network_id, scanner, verbose)
+    scan_id = scanning_service.scan_network_single(scanner, verbose)
     discoveries = scanning_service.get_discoveries_from_scan(scan_id)
 
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
@@ -62,7 +60,6 @@ def debug():
     print(f"\tDatabase path: {config.DATABASE_PATH}")
     print(f"\tPort: {config.PORT}")
     print(f"\tVerbose: {config.VERBOSE}")
-    print(f"\tNetwork id: {config.NETWORK_ID}")
     print(f"\tScanner: {config.SCANNER}")
 
 

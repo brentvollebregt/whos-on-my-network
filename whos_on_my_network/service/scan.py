@@ -62,7 +62,6 @@ def get_scans_by_filter(
             dto.ScanSummary(
                 id=scan.id,
                 scan_time=utils.to_utc_datetime(scan.scan_time),
-                network_id=scan.network_id,
                 devices_discovered_count=len(discovered_devices_ids),
                 people_seen_count=len(discovered_devices_people_ids),
                 primary_devices_seen_count=len(primary_discovered_devices_ids),
@@ -92,6 +91,5 @@ def get_scan_by_id(scan_id: int) -> dto.Scan:
     return dto.Scan(
         id=scan.id,
         scan_time=utils.to_utc_datetime(scan.scan_time),
-        network_id=scan.network_id,
         discoveries=discovery_dtos,
     )

@@ -9,9 +9,9 @@ from ..scanners.asus_rt_ac58u import scan as scan_asus_rt_ac58u
 from ..scanners.netcom_wireless_nf18acv import scan as scan_netcom_wireless_nf18acv
 
 
-def __save_scan_data(network_id: str, scan_data: List[DiscoveredDevice], verbose: bool = False) -> int:
+def __save_scan_data(scan_data: List[DiscoveredDevice], verbose: bool = False) -> int:
     """Save a list of DiscoveredDevice objects"""
-    scan = models.Scan.create(network_id=network_id)
+    scan = models.Scan.create()
 
     if verbose:
         print(f'Scan at {scan.scan_time.strftime("%d-%m-%y %H:%M:%S")}')
@@ -43,18 +43,16 @@ def __get_scanner(name: str):
     raise Exception(f'No scanner confiugred with the name "{name}"')
 
 
-def scan_network_single(network_id: str, scanner_name: str, verbose: bool = False):
+def scan_network_single(scanner_name: str, verbose: bool = False):
     """Scan the provided network once"""
     scanner = __get_scanner(scanner_name)
-    scan_data = scanner(network_id, verbose)
+    scan_data = scanner(verbose)
 
-    scan_id = __save_scan_data(network_id, scan_data, verbose)
+    scan_id = __save_scan_data(scan_data, verbose)
     return scan_id
 
 
-def scan_network_repeatedly(
-    network_id: str, delay: int, amount: Optional[int], scanner_name: str, verbose: bool = False
-):
+def scan_network_repeatedly(delay: int, amount: Optional[int], scanner_name: str, verbose: bool = False):
     """Repeatedly scan the provided network"""
     scan_count = 0
 
@@ -63,9 +61,9 @@ def scan_network_repeatedly(
 
     while True:
         scanner = __get_scanner(scanner_name)
-        scan_data = scanner(network_id, verbose)
+        scan_data = scanner(verbose)
 
-        __save_scan_data(network_id, scan_data, verbose)
+        __save_scan_data(scan_data, verbose)
         scan_count += 1
 
         if amount is None or scan_count < amount:

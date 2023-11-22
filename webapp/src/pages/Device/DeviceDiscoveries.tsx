@@ -24,7 +24,6 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({ de
       <thead>
         <tr>
           <th>Time</th>
-          <th>Network Id</th>
           <th>Hostname</th>
           <th>IP Address</th>
         </tr>
@@ -40,7 +39,6 @@ const DeviceDiscoveries: React.FunctionComponent<DeviceDiscoveriesProps> = ({ de
                 className="pointer"
               >
                 <td title={scan?.scan_time.toFormat("FF")}>{scan?.scan_time.toRelative()}</td>
-                <td>{scan?.network_id}</td>
                 <td>{discovery.hostname}</td>
                 <td>{discovery.ip_address}</td>
               </tr>

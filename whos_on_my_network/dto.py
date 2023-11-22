@@ -28,10 +28,9 @@ class Discovery(ToJsonSupport):
 
 
 class Scan(ToJsonSupport):
-    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, discoveries: List["Discovery"]):
+    def __init__(self, id: int, scan_time: datetime.datetime, discoveries: List["Discovery"]):
         self.id = id
         self.scan_time = scan_time
-        self.network_id = network_id
         self.discoveries = discoveries
 
 
@@ -40,14 +39,12 @@ class ScanSummary(ToJsonSupport):
         self,
         id: int,
         scan_time: datetime.datetime,
-        network_id: str,
         devices_discovered_count: int,
         people_seen_count: int,
         primary_devices_seen_count: int,
     ):
         self.id = id
         self.scan_time = scan_time
-        self.network_id = network_id
         self.devices_discovered_count = devices_discovered_count
         self.people_seen_count = people_seen_count
         self.primary_devices_seen_count = primary_devices_seen_count
