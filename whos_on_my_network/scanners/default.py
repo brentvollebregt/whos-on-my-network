@@ -1,5 +1,8 @@
 """
 Default scanner using scapy
+
+Configuration environment values:
+[None]
 """
 
 import socket
@@ -7,14 +10,14 @@ from typing import List
 
 from scapy.all import arping, ARP, Ether, Scapy_Exception
 
-from ..service.scanning import DiscoveredDevice
+from ..service.types import DiscoveredDevice
 
 
 class ScanException(Exception):
     pass
 
 
-def scan(network_id: str, verbose: bool, plugin_config: dict) -> List[DiscoveredDevice]:
+def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
     """ Built in method to scan a network """
     scan_data: List[DiscoveredDevice] = []
 
