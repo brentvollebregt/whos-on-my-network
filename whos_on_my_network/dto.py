@@ -9,12 +9,12 @@ class ToJsonSupport:
         _dict = self.__dict__
         for key in _dict:
             value = _dict[key]
-            if hasattr(value, 'build') and callable(value.build):
+            if hasattr(value, "build") and callable(value.build):
                 _dict[key] = value.build()
             elif type(value) == datetime.datetime:
                 _dict[key] = utils.datetime_to_iso_string(value)
             elif type(value) == list:
-                _dict[key] = [i.build() if hasattr(i, 'build') else i for i in value]
+                _dict[key] = [i.build() if hasattr(i, "build") else i for i in value]
         return _dict
 
 
@@ -28,7 +28,7 @@ class Discovery(ToJsonSupport):
 
 
 class Scan(ToJsonSupport):
-    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, discoveries: List['Discovery']):
+    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, discoveries: List["Discovery"]):
         self.id = id
         self.scan_time = scan_time
         self.network_id = network_id
@@ -36,7 +36,15 @@ class Scan(ToJsonSupport):
 
 
 class ScanSummary(ToJsonSupport):
-    def __init__(self, id: int, scan_time: datetime.datetime, network_id: str, devices_discovered_count: int, people_seen_count: int, primary_devices_seen_count: int):
+    def __init__(
+        self,
+        id: int,
+        scan_time: datetime.datetime,
+        network_id: str,
+        devices_discovered_count: int,
+        people_seen_count: int,
+        primary_devices_seen_count: int,
+    ):
         self.id = id
         self.scan_time = scan_time
         self.network_id = network_id
@@ -46,7 +54,14 @@ class ScanSummary(ToJsonSupport):
 
 
 class Person(ToJsonSupport):
-    def __init__(self, id: int, name: str, note: str, first_seen: Optional[datetime.datetime], last_seen: Optional[datetime.datetime]):
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        note: str,
+        first_seen: Optional[datetime.datetime],
+        last_seen: Optional[datetime.datetime],
+    ):
         self.id = id
         self.name = name
         self.note = note
@@ -55,7 +70,15 @@ class Person(ToJsonSupport):
 
 
 class PersonSummary(ToJsonSupport):
-    def __init__(self, id: int, name: str, note: str, device_count: int, first_seen: Optional[datetime.datetime], last_seen: Optional[datetime.datetime]):
+    def __init__(
+        self,
+        id: int,
+        name: str,
+        note: str,
+        device_count: int,
+        first_seen: Optional[datetime.datetime],
+        last_seen: Optional[datetime.datetime],
+    ):
         self.id = id
         self.name = name
         self.note = note
@@ -65,8 +88,20 @@ class PersonSummary(ToJsonSupport):
 
 
 class Device(ToJsonSupport):
-    """ Full details of a device """
-    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime, last_10_discoveries: List['Discovery']):
+    """Full details of a device"""
+
+    def __init__(
+        self,
+        id: int,
+        mac_address: str,
+        name: str,
+        note: str,
+        owner_id: int,
+        is_primary: bool,
+        first_seen: datetime.datetime,
+        last_seen: datetime.datetime,
+        last_10_discoveries: List["Discovery"],
+    ):
         self.id = id
         self.mac_address = mac_address
         self.name = name
@@ -79,8 +114,19 @@ class Device(ToJsonSupport):
 
 
 class DeviceSummary(ToJsonSupport):
-    """ Reduced details of a device for batch device requests """
-    def __init__(self, id: int, mac_address: str, name: str, note: str, owner_id: int, is_primary: bool, first_seen: datetime.datetime, last_seen: datetime.datetime):
+    """Reduced details of a device for batch device requests"""
+
+    def __init__(
+        self,
+        id: int,
+        mac_address: str,
+        name: str,
+        note: str,
+        owner_id: int,
+        is_primary: bool,
+        first_seen: datetime.datetime,
+        last_seen: datetime.datetime,
+    ):
         self.id = id
         self.mac_address = mac_address
         self.name = name

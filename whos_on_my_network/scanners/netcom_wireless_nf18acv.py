@@ -17,14 +17,14 @@ from ..service.types import DiscoveredDevice
 
 
 def __get_config():
-    router_ip_address = os.getenv('SCANNER_ROUTER_IP_ADDRESS', '192.168.20.1')
+    router_ip_address = os.getenv("SCANNER_ROUTER_IP_ADDRESS", "192.168.20.1")
     return {
-        'router_ip_address': router_ip_address,
+        "router_ip_address": router_ip_address,
     }
 
 
 def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
-    """ A dirty way of obtaining devices connected to a NetComm Wireless NF18ACV router """
+    """A dirty way of obtaining devices connected to a NetComm Wireless NF18ACV router"""
     config = __get_config()
 
     response = requests.get(f'http://{config["router_ip_address"]}/js/summary.js', verify=False)
@@ -45,10 +45,6 @@ def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
         ip_address = parts[2]
         hostname = parts[0]
 
-        values.append(DiscoveredDevice(
-            mac_address=mac_address,
-            ip_address=ip_address,
-            hostname=hostname
-        ))
+        values.append(DiscoveredDevice(mac_address=mac_address, ip_address=ip_address, hostname=hostname))
 
     return values

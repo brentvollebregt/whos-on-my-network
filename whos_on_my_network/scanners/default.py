@@ -18,7 +18,7 @@ class ScanException(Exception):
 
 
 def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
-    """ Built in method to scan a network """
+    """Built in method to scan a network"""
     scan_data: List[DiscoveredDevice] = []
 
     try:
@@ -29,7 +29,7 @@ def scan(network_id: str, verbose: bool) -> List[DiscoveredDevice]:
     except OSError as exception:  # This happens when running the application using the vs code launch config
         # b'Error opening adapter: The system cannot find the device specified. (20)'
         raise ScanException("Npcap must be installed for Windows hosts")
-        
+
     for s, r in answered:
         mac_address = r[Ether].src
         ip_address = s[ARP].pdst
