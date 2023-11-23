@@ -12,3 +12,6 @@ whos_on_my_network/static
 database.sqlite
 README.md
 run.py
+Dockerfile
+docker-compose.dev.yml
+docker-compose.yml

@@ -21,4 +21,5 @@ RUN pip install -r requirements.txt
 EXPOSE 3000
 ENV PORT 3000
 
-CMD ["python", "-m", "whos_on_my_network", "start"]
+ENTRYPOINT ["python", "-m", "whos_on_my_network"]
+CMD ["start"]
