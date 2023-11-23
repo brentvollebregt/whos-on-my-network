@@ -1,0 +1,16 @@
+version: "3"
+
+services:
+  main:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: whos-on-my-network
+    container_name: whos-on-my-network
+    environment:
+      - DATABASE_PATH=/data/database.sqlite
+      - SCANNER=netcom_wireless_nf18acv
+    ports:
+      - "8081:3000"
+    volumes:
+      - ./database.sqlite:/data/database.sqlite
