@@ -2,10 +2,7 @@ version: "3"
 
 services:
   frontend:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: whos-on-my-network
+    image: "ghcr.io/brentvollebregt/whos-on-my-network:master"
     container_name: whos-on-my-network
     environment:
       - DATABASE_PATH=/data/database.sqlite
@@ -16,10 +13,7 @@ services:
       - ./database.sqlite:/data/database.sqlite
     command: ["start"]
   watch:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    image: whos-on-my-network
+    image: "ghcr.io/brentvollebregt/whos-on-my-network:master"
     container_name: whos-on-my-network-watch
     environment:
       - DATABASE_PATH=/data/database.sqlite
