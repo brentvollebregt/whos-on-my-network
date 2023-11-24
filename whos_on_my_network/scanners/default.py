@@ -35,9 +35,11 @@ def scan(verbose: bool) -> List[DiscoveredDevice]:
         answered, _ = arping(config["network_id"], verbose=0)
     except Scapy_Exception as exception:  # This happens when running the module using python in the cmd
         # Interface is invalid (no pcap match found) !
+        print(f"Got a Scapy_Exception when calling arping: {exception}")
         raise ScanException("Npcap must be installed for Windows hosts")
     except OSError as exception:  # This happens when running the application using the vs code launch config
         # b'Error opening adapter: The system cannot find the device specified. (20)'
+        print(f"Got an OSError when calling arping: {exception}")
         raise ScanException("Npcap must be installed for Windows hosts")
 
     for s, r in answered:
