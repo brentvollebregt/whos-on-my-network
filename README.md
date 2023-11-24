@@ -2,43 +2,52 @@
     <a href="https://github.com/brentvollebregt/whos-on-my-network"><img src="https://nitratine.net/posts/whos-on-my-network/whos-on-my-network-logo.png" alt="Who's On My Network Banner" style="background: white;"></a>
 </div>
 <p align="center">Keep and eye on who is on your network and when.</p>
-<p align="center"><a href="https://github.com/brentvollebregt/whos-on-my-network/releases">📥 Get the latest release</a></p>
-
-![Build and Upload Release Assets](https://github.com/brentvollebregt/whos-on-my-network/workflows/Build%20and%20Upload%20Release%20Assets/badge.svg)
 
 This tool allows you to identify and keep records of who's on your network and when.
 
 After you scan your network, you can then view devices connected to your network, when they were last seen and keep track of who owns devices (thus allowing you to identify who's on the network).
 
-## Pre-built Module and Binary
-
-On every official version change, a [release](https://github.com/brentvollebregt/whos-on-my-network/releases) is made with two assets:
-
-- `whos_on_my_network.zip`: The whos_on_my_network module with the webapp pre-built.
-- `whos_on_my_network_binary.zip`: A Windows executable of whos_on_my_network (does not support plugins)
-
-> The pre-built Windows executable does not use a plugin and will default to the built-in method. To make a build containing a particular plugin yourself, execute `bash package.sh {plugin-name}`; this will produce whos_on_my_network.exe which will use the declared plugin.
-
-> If you are using Windows, you will also need to install [Npcap](https://nmap.org/npcap/#download).
-
 ## 🛠️ Setup
 
-To setup the project, you will need to clone it, install Python dependencies and then build the webapp.
+### Docker Compose
 
-### Requirements
+[docker-compose.yml](./docker-compose.yml) contains a basic example that hosts the site and checks your network every 5min.
+
+> You can create an empty `database.sqlite` when first starting the app.
+
+### Local Docker Compose
+
+[docker-compose.dev.yml](./docker-compose.dev.yml) contains a basic example that hosts the site and checks your network every 5min. This builds an image locally.
+
+```
+docker compose --file .\docker-compose.dev.yml build
+docker compose --file .\docker-compose.dev.yml up
+```
+
+### 🧪 Local Non-Docker (Development)
+
+Requirements:
 
 - Python 3.6
-- Node
+- Node 16
 - [Npcap](https://nmap.org/npcap/#download) (Windows Only)
 
-### Setup Steps
+Setup:
 
 1. Clone this git repository: `git clone https://github.com/brentvollebregt/whos-on-my-network`
-2. cd into the project: `cd whos-on-my-network`
+2. Go into the project: `cd whos-on-my-network`
 3. Create a Python venv: `python -m venv .venv`
 4. Activate the Python venv: `.venv/Scripts/activate.bat`
 5. Install Python dependencies: `python -m pip install -r requirements.txt`
 6. Build the webapp: `cd webapp && npm i && npm run build`
+7. Create a .env file: `cd .. && cp .env.example .env`
+8. Run the application: `python -m whos_on_my_network start`
+
+When running the client (webapp/) in development mode using npm start, the client will use the REACT_APP_API_ROOT environment variable value to decide where to send requests.
+
+The same process for production and development is used for the server; running `python -m whos_on_my_network` or `run.py` in a debugger will allow you to set breakpoints and see what is going on.
+
+> Examples of using the Python application can be found in `.vscode/launch.json`.
 
 ## 🖥️ Usage
 
@@ -54,18 +63,17 @@ The `current` command allows you to run a single scan and see who's currently on
 
 Arguments:
 
-| Argument         | Description                                    |
-| ---------------- | ---------------------------------------------- |
-| -n, --network-id | Network id to scan. Default is 192.168.1.0/24. |
-| -u, --use-plugin | Plugin used to scan network. (see below)       |
-| -v, --verbose    | Verbose output of scans.                       |
+| Argument      | Description                                     |
+| ------------- | ----------------------------------------------- |
+| -s, --scanner | Scanner to use to scan the network. (see below) |
+| -v, --verbose | Verbose output of scans.                        |
 
 Examples:
 
-| Command                                                              | Description                                                                                                            |
-| -------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
-| `python -m whos_on_my_network current`                               | Will scan the network once using all defaults and output a table displaying MAC addresses, IP addresses and hostnames. |
-| `python -m whos_on_my_network current --network-id "192.168.2.0/24"` | Will scan the network once for IP addresses in 192.168.2.0/24 and output a table displaying findings.                  |
+| Command                                                                              | Description                                                                                                            |
+| ------------------------------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------- |
+| `python -m whos_on_my_network current`                                               | Will scan the network once using all defaults and output a table displaying MAC addresses, IP addresses and hostnames. |
+| `NETWORK_ID="192.168.2.0/24" python -m whos_on_my_network current --scanner default` | Will scan the network once for IP addresses in 192.168.2.0/24 and output a table displaying findings.                  |
 
 ### Scanning Using `watch`
 
@@ -76,35 +84,48 @@ The `watch` command allows you to run multiple scans on a network with a delay i
 | Argument           | Description                                               |
 | ------------------ | --------------------------------------------------------- |
 | -t, --refresh-time | Seconds until the network is re-scanned. Default is 300s. |
-| -n, --network-id   | Network id to scan. Default is 192.168.1.0/24.            |
 | -a, --amount       | Amount of times to scan the network. Default is no limit. |
-| -u, --use-plugin   | Plugin used to scan network. (see below)                  |
+| -s, --scanner      | Scanner to use to scan the network. (see below)           |
 | -v, --verbose      | Verbose output of scans.                                  |
 
 Examples:
 
-| Command                                                              | Description                                                          |
-| -------------------------------------------------------------------- | -------------------------------------------------------------------- |
-| `python -m whos_on_my_network watch`                                 | Will repeatedly scan the network using all defaults.                 |
-| `python -m whos_on_my_network watch --refresh-time 60`               | Will repeatedly scan the network once every minute.                  |
-| `python -m whos_on_my_network current --network-id "192.168.2.0/24"` | Will repeatedly scan the network for IP addresses in 192.168.2.0/24. |
-| `python -m whos_on_my_network current --amount 5`                    | Will scan the network five times and then stop.                      |
+| Command                                                | Description                                          |
+| ------------------------------------------------------ | ---------------------------------------------------- |
+| `python -m whos_on_my_network watch`                   | Will repeatedly scan the network using all defaults. |
+| `python -m whos_on_my_network watch --refresh-time 60` | Will repeatedly scan the network once every minute.  |
+| `python -m whos_on_my_network current --amount 5`      | Will scan the network five times and then stop.      |
 
 ### Hosting the Webapp and Server Using `start`
 
 The `start` command starts the server that serves the webapp.
 
-| Argument   | Description                           |
-| ---------- | ------------------------------------- |
-| -h, --host | The hostname used to host the server. |
-| -p, --port | The port used to host the server.     |
+| Argument   | Description                       |
+| ---------- | --------------------------------- |
+| -p, --port | The port used to host the server. |
 
 Examples:
 
-| Command                                                             | Description                                     |
-| ------------------------------------------------------------------- | ----------------------------------------------- |
-| `python -m whos_on_my_network start`                                | Will start the server up at `localhost:8080`.   |
-| `python -m whos_on_my_network start --host 192.168.1.2 --port 7000` | Will start the server up at `192.168.1.2:7000`. |
+| Command                                          | Description                                   |
+| ------------------------------------------------ | --------------------------------------------- |
+| `python -m whos_on_my_network start`             | Will start the server up at `localhost:8080`. |
+| `python -m whos_on_my_network start --port 7000` | Will start the server up at `localhost:7000`. |
+
+## ⚙️ Configuration
+
+Configuration is managed through environment variables. If an option is not supplied in the CLI, it will fallback to the related environment variables and that will fallback on default values.
+
+| Environment Variable | Default Value       | Description                                                                     |
+| -------------------- | ------------------- | ------------------------------------------------------------------------------- |
+| `DATABASE_PATH`      | `./database.sqlite` | The location of the SQLite file to use                                          |
+| `PORT`               | `8080`              | The port to host the site when using `start`                                    |
+| `VERBOSE`            | `false`             | Print extra messages                                                            |
+| `SCANNER`            | `default`           | The scanner to use - see the "Custom Scanners" header below for details on this |
+| `NETWORK_ID`         | `192.168.1.0/24`    | [Not required] Used by the default scanner to identify which IPs to check       |
+
+Individual scanners can also have extra config, see the "Custom Scanners" header below for details on this.
+
+> You can clone `.env.example` and use a .env file to set environment variables locally.
 
 ## Screenshots
 
@@ -114,47 +135,12 @@ Examples:
 
 See more in [my blog post](https://nitratine.net/blog/post/whos-on-my-network/).
 
-## 🧪 Development Setup
+## 🔌 Custom Scanners
 
-When running the client (webapp/) in development mode using npm start, the client will use the REACT_APP_API_ROOT environment variable value to decide where to send requests.
+If you have another method of checking devices on a network, you can add a custom scanner to `/whos_on_my_network/scanners`. `asus_rt_ac58u.py` and `netcom_wireless_nf18acv.py` are examples of custom scanners - you are welcome to submit your own.
 
-The same process for production and development is used for the server; running `python -m whos_on_my_network` or `run.py` in a debugger will allow you to set breakpoints and see what is going on.
-
-> Examples of using the Python application can be found in `.vscode/launch.json`.
+To configure the scanner, you can use the `SCANNER` environment variable and also set any specific environment variables the scanner may need. For example, `asus_rt_ac58u.py` takes a `SCANNER_ROUTER_USERNAME` and `SCANNER_ROUTER_PASSWORD` to login to the ASUS router web interface, so these are supplied as environment variables.
 
 ## ❓ How Does This Tool Work?
 
 By default, this tool uses [scapy](https://scapy.net/) to send ARP packets to all addresses in the provided network range (default is 192.168.1.0/24) to identify what devices are on the network. When a host responds, its MAC address, IP address and hostname are obtained and an entry is added to the SQLite database matched to the current scan.
-
-## ⚙️ Configuration and Database
-
-When running the module/executable, two files will be created if they do not exist already:
-
-- `config.json`: Contains basic configuration for the application
-- `database.sqlite`: Used for scan and user data storage
-
-The location of these files are in the parent directory of the module when not packaged or in `%APPDATA%/WhoIsOnMyNetwork` (Windows) / `$HOME/WhoIsOnMyNetwork` (Linux and MacOS) when using a packaged version of the application (exe).
-
-> When running the unpacked application, you can force the files to be in the packaged locations by setting the environment variable `FORCE_PACKAGED_MODE` to `true`.
-
-## 🔌 Plugins
-
-The two commands `current` and `watch` both have an argument `--use-plugin`. This allows you to specify a custom Python script in the directory `whos_on_my_network/plugins` which contains a function named `scan` that takes two parameters and returns a list of `DiscoveredDevice` objects as defined in `whos_on_my_network.service.scanning`.
-
-An example plugin for the ASUS RT-AC58U router has been provided as [`asus-rt-ac58u.py` in the plugins folder](whos_on_my_network/plugins/asus-rt-ac58u.py). This script logs into the router, identifies who is connected to the router and returns a summary of the information found in the object expected.
-
-A plugin can also be set as the default scanning method by setting `default_plugin` in `config.json` to the name of the file without the extension; for example:
-
-```json
-{
-  "host": "0.0.0.0",
-  "port": 8080,
-  "verbose": false,
-  "default_network_id": "192.168.1.0/24",
-  "default_plugin": "asus-rt-ac58u",
-  "plugin_config": {
-    "username": "admin",
-    "password": "admin"
-  }
-}
-```

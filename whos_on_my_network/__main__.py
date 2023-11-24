@@ -8,68 +8,60 @@ from .service import scanning as scanning_service
 
 
 @click.group()
-@click.version_option(version, message='v%(version)s')
+@click.version_option(version, message="v%(version)s")
 def cli():
-    """ Who's On My Network """
+    """Who's On My Network"""
 
 
 @cli.command()
-@click.option('-h', '--host', 'host', default=config.HOST)
-@click.option('-p', '--port', 'port', type=int, default=config.PORT)
-def start(host: bool, port: bool):
-    """ Start the web server """
-    print(f'Server starting at http://{host}:{port}')
+@click.option("-p", "--port", "port", type=int, default=config.PORT)
+def start(port: bool):
+    """Start the web server"""
     pre_flight_checks()
-    app.run(host=host, port=port)
+    app.run(host="0.0.0.0", port=port)
 
 
 @cli.command()
-@click.option('-t', '--refresh-time', default=300, type=int, help="Seconds until the network is re-scanned. Default is 300s.")
-@click.option('-n', '--network-id', default=config.DEFAULT_NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
-@click.option('-a', '--amount', type=int, default=None, help="Amount of times to scan network. Default is no limit.")
-@click.option('-u', '--use-plugin', default=config.DEFAULT_PLUGIN, help="Plugin used to scan network.")
-@click.option('-v', '--verbose', is_flag=True, default=config.VERBOSE, help='Verbose output of scans.')
-def watch(refresh_time: int, network_id: str, amount: Optional[int], use_plugin: Optional[str], verbose: bool):
-    """ Watch and record who is on a network periodically """
+@click.option(
+    "-t", "--refresh-time", default=300, type=int, help="Seconds until the network is re-scanned. Default is 300s."
+)
+@click.option("-a", "--amount", type=int, default=None, help="Amount of times to scan network. Default is no limit.")
+@click.option("-s", "--scanner", default=config.SCANNER, help="Scanner to scan the network.")
+@click.option("-v", "--verbose", is_flag=True, default=config.VERBOSE, help="Verbose output of scans.")
+def watch(refresh_time: int, amount: Optional[int], scanner: str, verbose: bool):
+    """Watch and record who is on a network periodically"""
     print("Scanning... Press Ctrl+C to stop.")
     try:
-        scanning_service.scan_network_repeatedly(network_id, refresh_time, amount, use_plugin, verbose)
+        scanning_service.scan_network_repeatedly(refresh_time, amount, scanner, verbose)
     except KeyboardInterrupt:
         print("Stopped")
 
 
 @cli.command()
-@click.option('-n', '--network-id', default=config.DEFAULT_NETWORK_ID, help="Network id to scan. Default is 192.168.1.0/24.")
-@click.option('-u', '--use-plugin', default=config.DEFAULT_PLUGIN, help="Plugin used to scan network.")
-@click.option('-v', '--verbose', is_flag=True, default=config.VERBOSE, help='Verbose output of scans.')
-def current(network_id: str, use_plugin: Optional[str], verbose: bool):
-    """ Look at who is currently on the network """
+@click.option("-s", "--scanner", default=config.SCANNER, help="Scanner to scan the network.")
+@click.option("-v", "--verbose", is_flag=True, default=config.VERBOSE, help="Verbose output of scans.")
+def current(scanner: str, verbose: bool):
+    """Look at who is currently on the network"""
     print("Scanning...")
-    scan_id = scanning_service.scan_network_single(network_id, use_plugin, verbose)
+    scan_id = scanning_service.scan_network_single(scanner, verbose)
     discoveries = scanning_service.get_discoveries_from_scan(scan_id)
 
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
     print(f'| {"MAC Address":^17} | {"IP Address":^15} | {"Hostname":^30} |')
     for discovery in discoveries:
-        print(f'| {discovery.device.mac_address:<17} | {discovery.ip_address:^15} | {discovery.hostname:^30} |')
+        print(f"| {discovery.device.mac_address:<17} | {discovery.ip_address:^15} | {discovery.hostname:^30} |")
     print(f'+-{"-"*17}---{"-"*15}---{"-"*30}-+')
 
 
 @cli.command()
 def debug():
-    """ Display debug information """
-    print('General')
-    print(f'\tPackaged: {config.packaged}')
-    print('Config')
-    print(f'\tDefault host: {config.HOST}')
-    print(f'\tDefault port: {config.PORT}')
-    print(f'\tDefault verbose: {config.VERBOSE}')
-    print(f'\tDefault network id: {config.DEFAULT_NETWORK_ID}')
-    print(f'\tDefault plugin: {config.DEFAULT_PLUGIN}')
-    print('Locations')
-    print(f'\tConfig location: {config.config_file}')
-    print(f'\tDatabase location: {config.DATABASE_FILE_LOCATION}')
+    """Display debug information"""
+    print("Config")
+    print(f"\tDatabase path: {config.DATABASE_PATH}")
+    print(f"\tPort: {config.PORT}")
+    print(f"\tVerbose: {config.VERBOSE}")
+    print(f"\tScanner: {config.SCANNER}")
 
 
-if __name__ == '__main__':
-    cli(prog_name='whos_on_my_network')
+if __name__ == "__main__":
+    cli(prog_name="whos_on_my_network")

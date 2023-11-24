@@ -23,14 +23,7 @@ const ScanDetail: React.FunctionComponent<ScanDetailProps> = ({ scan }) => {
           <FormControl value={scan.scan_time.toFormat("FF")} disabled />
         </InputGroup>
       </div>
-      <div>
-        <InputGroup className="mb-2">
-          <InputGroup.Prepend>
-            <InputGroup.Text>Network Id</InputGroup.Text>
-          </InputGroup.Prepend>
-          <FormControl value={scan.network_id} disabled />
-        </InputGroup>
-      </div>
+      <div />
     </div>
   );
 };

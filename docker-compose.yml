@@ -1,0 +1,23 @@
+version: "3"
+
+services:
+  frontend:
+    image: "ghcr.io/brentvollebregt/whos-on-my-network:master"
+    container_name: whos-on-my-network
+    environment:
+      - DATABASE_PATH=/data/database.sqlite
+      - SCANNER=default
+    ports:
+      - "8081:3000"
+    volumes:
+      - ./database.sqlite:/data/database.sqlite
+    command: ["start"]
+  watch:
+    image: "ghcr.io/brentvollebregt/whos-on-my-network:master"
+    container_name: whos-on-my-network-watch
+    environment:
+      - DATABASE_PATH=/data/database.sqlite
+      - SCANNER=default
+    volumes:
+      - ./database.sqlite:/data/database.sqlite
+    command: ["watch"]

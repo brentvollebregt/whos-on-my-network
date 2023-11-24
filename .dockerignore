@@ -1,0 +1,17 @@
+.github
+.venv
+.vscode
+webapp/build
+webapp/node_modules
+whos_on_my_network/static
+**/__pycache__
+.env
+.env.example
+.gitignore
+.prettierrc
+database.sqlite
+README.md
+run.py
+Dockerfile
+docker-compose.dev.yml
+docker-compose.yml
