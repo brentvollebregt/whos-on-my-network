@@ -13,6 +13,9 @@ RUN cd ./webapp && npm ci && npm run build
 FROM python:3.9.18-alpine3.18 AS runner
 WORKDIR /app
 
+RUN apk update
+RUN apk add libpcap-dev libpcap gcc
+
 COPY . .
 COPY --from=frontend_builder /app/whos_on_my_network/static ./whos_on_my_network/static
 
