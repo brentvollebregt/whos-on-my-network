@@ -6,11 +6,12 @@ services:
     container_name: whos-on-my-network
     environment:
       - DATABASE_PATH=/data/database.sqlite
+      - PORT=9000
       - SCANNER=default
-    ports:
-      - "8081:3000"
+      - NETWORK_ID=192.168.1.0/24
     volumes:
       - ./database.sqlite:/data/database.sqlite
+    network_mode: host
     command: ["start"]
   watch:
     image: "ghcr.io/brentvollebregt/whos-on-my-network:master"
@@ -18,6 +19,8 @@ services:
     environment:
       - DATABASE_PATH=/data/database.sqlite
       - SCANNER=default
+      - NETWORK_ID=192.168.1.0/24
     volumes:
       - ./database.sqlite:/data/database.sqlite
+    network_mode: host
     command: ["watch"]

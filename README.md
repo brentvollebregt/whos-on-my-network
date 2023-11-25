@@ -13,7 +13,9 @@ After you scan your network, you can then view devices connected to your network
 
 [docker-compose.yml](./docker-compose.yml) contains a basic example that hosts the site and checks your network every 5min.
 
-> You can create an empty `database.sqlite` when first starting the app.
+You can create an empty `database.sqlite` file when first starting the app.
+
+> See [the "Known issues" section at the top of the default scanner](./scanners/default.py) for issues you might come across when using the default scanner in docker.
 
 ### Local Docker Compose
 

@@ -3,6 +3,32 @@ Default scanner using scapy
 
 Configuration environment values:
 - NETWORK_ID: The network id to be scanned, for example, "192.168.1.0/24"
+
+Known issues:
+
+- Not Working on Windows and MacOS in Docker
+
+    Even when using the `host` network mode in docker, Windows and MacOS still use internal
+    networks for the running container. While devices are still reachable and scanners that
+    query specific IPs (like netcom_wireless_nf18acv.py) will work, the default scanner will
+    not as it uses ARP packets to detect devices.
+
+    ARP packets work by broadcasting packets using MAC addresses, and since docker is running
+    in a different network to the host, these packets are not routed out of the docker network
+    to the host's network.
+
+    To fix this, either run the application directly on the host or build a scanner that queries
+    devices some other way.
+
+- Not Detecting Device Names Automatically
+
+    We use `socket.getfqdn` (similar to `socket.gethostbyaddr`) to get device hostnames - these
+    hostnames are then used to pre-populate device names. It has been witnessed on some devices
+    that hostnames are unable to be found.
+
+    If executing `python -c "import socket; print(socket.getfqdn('<target IP with a known hostname>'))"`
+    on the host system simply prints out the original IP address, this shows the issue is on the
+    host and is not caused by docker (if using docker).
 """
 
 import os
