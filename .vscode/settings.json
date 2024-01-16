@@ -3,7 +3,7 @@
   "editor.rulers": [120],
   "editor.tabSize": 2,
   "editor.codeActionsOnSave": {
-    "source.fixAll.tslint": true
+    "source.fixAll.tslint": "explicit"
   },
   "python.defaultInterpreterPath": ".venv\\Scripts\\python.exe",
   "search.exclude": {
