@@ -10,9 +10,7 @@ import { genericApiErrorMessage } from "../../utils/toasts";
 import DateRangeSelector from "../../components/DateRangeSelector";
 import useStoredDatePair from "../../hooks/useStoredDatePair";
 
-const defaultStartDate = DateTime.local()
-  .minus({ weeks: 1 })
-  .startOf("day");
+const defaultStartDate = DateTime.local().minus({ weeks: 1 }).startOf("day");
 const defaultEndDate = DateTime.local().endOf("day");
 
 const Scans: React.FunctionComponent = () => {
@@ -50,7 +48,6 @@ const Scans: React.FunctionComponent = () => {
         <thead>
           <tr>
             <th>Time</th>
-            <th>Network Id</th>
             <th>Devices</th>
             <th>People</th>
             <th>Primary Devices</th>
@@ -61,7 +58,6 @@ const Scans: React.FunctionComponent = () => {
             scans.map(scan => (
               <tr key={scan.id} onClick={onScanClick(scan.id)} className="pointer">
                 <td title={scan.scan_time.toFormat("FF")}>{scan.scan_time.toRelative()}</td>
-                <td>{scan.network_id}</td>
                 <td>{scan.devices_discovered_count}</td>
                 <td>{scan.people_seen_count}</td>
                 <td>{scan.primary_devices_seen_count}</td>

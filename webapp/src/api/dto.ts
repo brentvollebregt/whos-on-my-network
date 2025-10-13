@@ -11,14 +11,12 @@ export interface Discovery {
 export interface Scan {
   id: number;
   scan_time: DateTime;
-  network_id: string;
   discoveries: Discovery[];
 }
 
 export interface ScanSummary {
   id: number;
   scan_time: DateTime;
-  network_id: string;
   devices_discovered_count: number;
   people_seen_count: number;
   primary_devices_seen_count: number;

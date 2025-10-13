@@ -7,8 +7,10 @@ from .. import models
 from .. import utils
 
 
-def get_discovery_times_for_devices(ids: Optional[List[int]], start_date: Optional[datetime], end_date: Optional[datetime]) -> Dict[int, datetime]:
-    """ Gets times a device was seen in a scan """
+def get_discovery_times_for_devices(
+    ids: Optional[List[int]], start_date: Optional[datetime], end_date: Optional[datetime]
+) -> Dict[int, datetime]:
+    """Gets times a device was seen in a scan"""
     ids_definite_list = ids if ids is not None else []
 
     start_date_no_timezone = utils.remove_timezome(start_date) if start_date is not None else None
@@ -16,15 +18,15 @@ def get_discovery_times_for_devices(ids: Optional[List[int]], start_date: Option
 
     devices: List[models.Device] = models.Device.select(
         models.Device,
-    ).where(
-        (ids is None) | (models.Device.id.in_(ids_definite_list))
+    ).where((ids is None) | (models.Device.id.in_(ids_definite_list)))
+    discoveries = (
+        models.Discovery.select(models.Discovery, models.Scan)
+        .where(
+            ((start_date is None) | (models.Scan.scan_time >= start_date_no_timezone))
+            & ((end_date is None) | (models.Scan.scan_time <= end_date_no_timezone))
+        )
+        .join(models.Scan)
     )
-    discoveries = models.Discovery.select(
-        models.Discovery, models.Scan
-    ).where(
-        ((start_date is None) | (models.Scan.scan_time >= start_date_no_timezone))
-        & ((end_date is None) | (models.Scan.scan_time <= end_date_no_timezone))
-    ).join(models.Scan)
 
     devices_with_discoveries: List[models.Device] = peewee.prefetch(devices, discoveries)
     device_seen_times: Dict[int, datetime] = {}
@@ -35,20 +37,25 @@ def get_discovery_times_for_devices(ids: Optional[List[int]], start_date: Option
     return device_seen_times
 
 
-def get_discovery_times_for_people(ids: Optional[List[int]], start_date: Optional[datetime], end_date: Optional[datetime]) -> Dict[int, datetime]:
-    """ Gets times a person was seen in a scan  """
+def get_discovery_times_for_people(
+    ids: Optional[List[int]], start_date: Optional[datetime], end_date: Optional[datetime]
+) -> Dict[int, datetime]:
+    """Gets times a person was seen in a scan"""
     ids_definite_list = ids if ids is not None else []
 
-    people: List[models.Person] = models.Person.select(
-        models.Person,
-        peewee.fn.GROUP_CONCAT(models.Device.id)
-            .python_value(lambda id_list: [int(id) for id in id_list.split(',') if id != ''] if id_list is not None else [])
-            .alias('device_ids')
-    ).where(
-        (ids is None) | (models.Person.id.in_(ids_definite_list))
-    ) \
-        .join(models.Device, peewee.JOIN.LEFT_OUTER) \
+    people: List[models.Person] = (
+        models.Person.select(
+            models.Person,
+            peewee.fn.GROUP_CONCAT(models.Device.id)
+            .python_value(
+                lambda id_list: [int(id) for id in id_list.split(",") if id != ""] if id_list is not None else []
+            )
+            .alias("device_ids"),
+        )
+        .where((ids is None) | (models.Person.id.in_(ids_definite_list)))
+        .join(models.Device, peewee.JOIN.LEFT_OUTER)
         .group_by(models.Person.id)
+    )
 
     device_ids = [device_id for person in people for device_id in person.device_ids]
     device_discovery_times = get_discovery_times_for_devices(device_ids, start_date, end_date)

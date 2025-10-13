@@ -9,21 +9,24 @@
       "type": "python",
       "request": "launch",
       "module": "whos_on_my_network",
-      "args": ["start"]
+      "args": ["start"],
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "name": "Watch Devices on Network (5min intervals)",
       "type": "python",
       "request": "launch",
       "module": "whos_on_my_network",
-      "args": ["watch", "-t", "300", "-v"]
+      "args": ["watch", "-t", "300", "-v"],
+      "envFile": "${workspaceFolder}/.env"
     },
     {
       "name": "Scan Current Devices",
       "type": "python",
       "request": "launch",
       "module": "whos_on_my_network",
-      "args": ["current"]
+      "args": ["current"],
+      "envFile": "${workspaceFolder}/.env"
     }
   ]
 }

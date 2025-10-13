@@ -1,61 +1,23 @@
-import dataclasses
-import importlib
-import inspect
-import socket
 import time
 from typing import Optional, List
 
-from scapy.all import arping, ARP, Ether, Scapy_Exception
 
-from .. import config
 from .. import models
+from .types import DiscoveredDevice
+from ..scanners.default import scan as scan_default
+from ..scanners.asus_rt_ac58u import scan as scan_asus_rt_ac58u
+from ..scanners.netcom_wireless_nf18acv import scan as scan_netcom_wireless_nf18acv
 
 
-@dataclasses.dataclass
-class DiscoveredDevice:
-    mac_address: str
-    ip_address: str
-    hostname: str
-
-class ScanException(Exception):
-    pass
-
-def __scan_network(network_id: str, verbose: bool, plugin_config: dict) -> List[DiscoveredDevice]:
-    """ Built in method to scan a network """
-    scan_data: List[DiscoveredDevice] = []
-
-    try:
-        answered, _ = arping(network_id, verbose=0)
-    except Scapy_Exception as exception:  # This happens when running the module using python in the cmd
-        # Interface is invalid (no pcap match found) !
-        raise ScanException("Npcap must be installed for Windows hosts")
-    except OSError as exception:  # This happens when running the application using the vs code launch config
-        # b'Error opening adapter: The system cannot find the device specified. (20)'
-        raise ScanException("Npcap must be installed for Windows hosts")
-        
-    for s, r in answered:
-        mac_address = r[Ether].src
-        ip_address = s[ARP].pdst
-        hostname = socket.getfqdn(ip_address)
-
-        scan_data.append(DiscoveredDevice(mac_address, ip_address, hostname))
-
-    return scan_data
-
-
-def __save_scan_data(network_id: str, scan_data: List[DiscoveredDevice], verbose: bool = False) -> int:
-    """ Save a list of DiscoveredDevice objects """
-    scan = models.Scan.create(
-        network_id=network_id
-    )
+def __save_scan_data(scan_data: List[DiscoveredDevice], verbose: bool = False) -> int:
+    """Save a list of DiscoveredDevice objects"""
+    scan = models.Scan.create()
 
     if verbose:
         print(f'Scan at {scan.scan_time.strftime("%d-%m-%y %H:%M:%S")}')
 
     for discovered_device in scan_data:
-        device, _ = models.Device.get_or_create(
-            mac_address=discovered_device.mac_address.upper()
-        )
+        device, _ = models.Device.get_or_create(mac_address=discovered_device.mac_address.upper())
         models.Discovery.create(
             scan=scan,
             device=device,
@@ -64,48 +26,44 @@ def __save_scan_data(network_id: str, scan_data: List[DiscoveredDevice], verbose
         )
 
         if verbose:
-            print(f'{discovered_device.mac_address} : {discovered_device.ip_address} : {discovered_device.hostname}')
+            print(f"{discovered_device.mac_address} : {discovered_device.ip_address} : {discovered_device.hostname}")
 
     return scan.id
 
 
-def __get_plugin(name: Optional[str]):
-    """ Import a plugin by name to use as a network scanner """
-    # If no plugin has been specified, fall back to the internal default
-    if name is None:
-        return __scan_network
+def __get_scanner(name: str):
+    """Get the scanner to use"""
+    if name == "default":
+        return scan_default
+    if name == "asus_rt_ac58u":
+        return scan_asus_rt_ac58u
+    if name == "netcom_wireless_nf18acv":
+        return scan_netcom_wireless_nf18acv
 
-    # Import the plugin
-    plugin = importlib.import_module(f'.plugins.{name}', 'whos_on_my_network')
-
-    # Validate the plugin
-    assert hasattr(plugin, 'scan') and inspect.isfunction(plugin.scan), \
-        'A function named "scan" does not exist in this plugin'
-
-    return plugin.scan
+    raise Exception(f'No scanner confiugred with the name "{name}"')
 
 
-def scan_network_single(network_id: str, use_plugin: Optional[str], verbose: bool = False):
-    """ Scan the provided network once """
-    plugin = __get_plugin(use_plugin)
-    scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
+def scan_network_single(scanner_name: str, verbose: bool = False):
+    """Scan the provided network once"""
+    scanner = __get_scanner(scanner_name)
+    scan_data = scanner(verbose)
 
-    scan_id = __save_scan_data(network_id, scan_data, verbose)
+    scan_id = __save_scan_data(scan_data, verbose)
     return scan_id
 
 
-def scan_network_repeatedly(network_id: str, delay: int, amount: Optional[int], use_plugin: Optional[str], verbose: bool = False):
-    """ Repeatedly scan the provided network """
+def scan_network_repeatedly(delay: int, amount: Optional[int], scanner_name: str, verbose: bool = False):
+    """Repeatedly scan the provided network"""
     scan_count = 0
 
     if amount == 0:
         return
 
     while True:
-        plugin = __get_plugin(use_plugin)
-        scan_data = plugin(network_id, verbose, config.PLUGIN_CONFIG)
+        scanner = __get_scanner(scanner_name)
+        scan_data = scanner(verbose)
 
-        __save_scan_data(network_id, scan_data, verbose)
+        __save_scan_data(scan_data, verbose)
         scan_count += 1
 
         if amount is None or scan_count < amount:
@@ -115,6 +73,6 @@ def scan_network_repeatedly(network_id: str, delay: int, amount: Optional[int], 
 
 
 def get_discoveries_from_scan(scan_id: int) -> List[models.Discovery]:
-    """ Get the discoveries from a scan joined with the associated device """
+    """Get the discoveries from a scan joined with the associated device"""
     scan = models.Scan.get(models.Scan.id == scan_id)
     return models.Discovery().select().where(models.Discovery.scan == scan).join(models.Device)

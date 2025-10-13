@@ -42,7 +42,6 @@ export function getScansByFilter(
         return payload.map((s: any) => ({
           id: s.id,
           scan_time: parsePythonTime(s.scan_time),
-          network_id: s.network_id,
           devices_discovered_count: s.devices_discovered_count,
           people_seen_count: s.people_seen_count,
           primary_devices_seen_count: s.primary_devices_seen_count
@@ -61,7 +60,6 @@ export function getScanById(scanId: number): Promise<Scan | undefined> {
         return {
           id: payload.id,
           scan_time: parsePythonTime(payload.scan_time),
-          network_id: payload.network_id,
           discoveries: payload.discoveries
         };
       });
@@ -358,7 +356,6 @@ export function runSingleScan(): Promise<Scan | undefined> {
         return {
           id: payload.id,
           scan_time: parsePythonTime(payload.scan_time),
-          network_id: payload.network_id,
           discoveries: payload.discoveries
         };
       });
