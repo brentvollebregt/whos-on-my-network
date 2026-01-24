@@ -51,4 +51,4 @@ jobs:
           owner: ${{ github.repository_owner }}
           package-name: ${{ github.event.repository.name }}
           package-type: "container"
-          min-versions-to-keep: 2
+          min-versions-to-keep: 12
